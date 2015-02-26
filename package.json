@@ -1,0 +1,9 @@
+{
+  "name": "js-mobilejs-sdk",
+  "version": "0.0.1",
+  "description": "Wrapper all around Visualize.js calls",
+  "devDependencies": {
+    "grunt-contrib-coffee": "^0.13.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

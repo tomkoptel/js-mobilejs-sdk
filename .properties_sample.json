@@ -1,0 +1,8 @@
+{
+  "env": {
+    "platform": "android",
+    "project": {
+      "dst": "../jaspersoft/js-android-app/app/src/main/assets/"
+    }
+  }
+}
