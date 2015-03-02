@@ -1,1 +1,4 @@
-user = new User()
+(($) ->
+  mobileClient = new JasperMobile.AndroidClient()
+  mobileClient.run()
+) jQuery
