@@ -6,29 +6,6 @@ module.exports = (grunt) ->
       ios:
         dashboard: 'dashboard-ios-mobilejs-sdk.js'
 
-  frameworkPaths =
-    'js.mobile.logger': 'main/logger'
-    'js.mobile.context': 'main/context'
-    'js.mobile.client': 'main/client'
-    'js.mobile.callback.implementor': 'main/callback_implementor'
-    'js.mobile.callback.bridge': 'main/callback_bridge'
-    'js.mobile.dashboard.wrapper': 'main/dashboard/dashboard_wrapper'
-    'js.mobile.dashboard.window': 'main/dashboard/dashboard_window'
-    'js.mobile.dashboard.controller': 'main/dashboard/dashboard_controller'
-    'js.mobile.view': 'main/view/view'
-
-  androidSpecPaths =
-    'js.mobile.android.callback.implementor': 'android/callback_implementor'
-    'js.mobile.android.client': 'android/client'
-    'js.mobile.android.logger': 'android/logger'
-
-  merge = (dest, objs...) ->
-    for obj in objs
-      dest[k] = v for k, v of obj
-    dest
-  androidPaths = merge frameworkPaths, androidSpecPaths
-  # grunt.log.write JSON.stringify(androidPaths, null, 2)
-
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
@@ -62,23 +39,25 @@ module.exports = (grunt) ->
           timeout: 1000
 
     requirejs:
-      compile:
+      android:
         options:
-          baseUrl: 'build'
+          mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/#{globalConfig.dst.android.dashboard}"
           include: ['android/main.js']
-          optimize: 'none'
-          logLevel: 0
-          paths: androidPaths
+          paths:
+            'js.mobile.android.callback.implementor': 'android/callback_implementor'
+            'js.mobile.android.client': 'android/client'
+            'js.mobile.android.logger': 'android/logger'
 
     watch: all:
-      files: ['src/**/*.coffee', 'spec/**/*.coffee']
-      tasks: ['buildDev', 'buildTest', 'test']
+      files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
+      tasks: ['buildDev', 'requirejs:compile']
 
   grunt.registerTask('test', 'simplemocha:dev')
   grunt.registerTask('buildConfig', 'coffee:config')
   grunt.registerTask('buildDev', 'coffee:dev')
   grunt.registerTask('buildTest', 'coffee:test')
+  grunt.registerTask('requirejs:compile', ['requirejs:android'])
   grunt.registerTask('buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile'])
 
   grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) ->
