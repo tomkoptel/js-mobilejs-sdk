@@ -32,8 +32,22 @@ module.exports = (grunt) ->
           singleRun: true
           browsers: ['PhantomJS']
           files: [
-            "build/#{properties.outputs.dashboard.android}"
-            "bower_components/jquery/dist/jquery.min.js"
+            {
+              'pattern': 'test/spec/*.js'
+              'included': false
+            }
+            {
+              'pattern': 'build/main/*.js'
+              'included': true
+            }
+            {
+              'pattern': 'build/android/*.js'
+              'included': true
+            }
+            "test/test.config.js"
+          ]
+          exclude: [
+            'build/**/*main.js'
           ]
 
     requirejs:
