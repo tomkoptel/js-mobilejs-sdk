@@ -6,7 +6,7 @@ jQuery = require('jquery')
 
 source = path.resolve(__dirname, '../../fixtures/dumy_dashboard.html')
 
-#JasperMobile = require(path.resolve(__dirname, '../chore'))
+JasperMobile = require(path.resolve(__dirname, '../chore'))
 #console.log JasperMobile.Logger
 
 dom = fs.readFileSync(source, "utf8") + ""

@@ -1,24 +1,22 @@
-root = window ? exports
-root.JasperMobile or= {}
+define 'js.mobile.dashboard.wrapper', ->
+  class DashboardWrapper
+    @_instance: null
 
-class JasperMobile.DashboardWrapper
-  @_instance: null
+    @getInstance: (context) ->
+      @_instance ||= new DashboardWrapper context
 
-  @getInstance: (context) ->
-    @_instance ||= new DashboardWrapper context
+    @wrapScreen: (width, height) ->
+      @_instance.wrapScreen width, height
 
-  @wrapScreen: (width, height) ->
-    @_instance.wrapScreen width, height
+    constructor: (@context) ->
 
-  constructor: (@context) ->
+    wrapScreen: (width, height) ->
+      window = new DashboardWindow(width, height)
+      @context.setWindow window
+      @dashboardController = new DashboardController @context
+      dashboardController.injectViewport()
+      dashboardController.scaleDashboard()
+      dashboardController.attachDashletLoadListeners()
 
-  wrapScreen: (width, height) ->
-    window = new DashboardWindow(width, height)
-    @context.setWindow window
-    @dashboardController = new DashboardController @context
-    dashboardController.injectViewport()
-    dashboardController.scaleDashboard()
-    dashboardController.attachDashletLoadListeners()
-
-  minimizeDashlet: ->
-    @dashboardController.minimizeDashlet()
+    minimizeDashlet: ->
+      @dashboardController.minimizeDashlet()

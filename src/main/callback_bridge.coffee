@@ -1,11 +1,9 @@
-root = window ? exports
-root.JasperMobile or= {}
+define 'js.mobile.callback.bridge', ->
+  class CallbackBridge
+    constructor: (@concreteImplementor, @logger) ->
 
-class JasperMobile.CallbackBridge
-  constructor: (@concreteImplementor, @logger) ->
+    onMaximize: (title) ->
+      @concreteImplementor.onMaximize(title)
 
-  onMaximize: (title) ->
-    @concreteImplementor.onMaximize(title)
-
-  onLoaded: ->
-    @concreteImplementor.onLoaded()
+    onLoaded: ->
+      @concreteImplementor.onLoaded()

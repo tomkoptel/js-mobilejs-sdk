@@ -1,4 +1,4 @@
-(($) ->
-  mobileClient = new JasperMobile.AndroidClient()
-  mobileClient.run()
-) jQuery
+require ['js.mobile.android.client'], (AndroidClient) ->
+  (($) ->
+    new AndroidClient().run()
+  ) jQuery

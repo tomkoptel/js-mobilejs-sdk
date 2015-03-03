@@ -6,25 +6,28 @@ module.exports = (grunt) ->
       ios:
         dashboard: 'dashboard-ios-mobilejs-sdk.js'
 
-  framework = [
-    'src/main/scope.coffee'
-    'src/main/callback_implementor.coffee'
-    'src/main/callback_bridge.coffee'
-    'src/main/client.coffee'
-    'src/main/logger.coffee'
-    'src/main/context.coffee'
-    'src/main/view/view.coffee'
-    'src/main/dashboard/dashboard_window.coffee'
-    'src/main/dashboard/dashboard_wrapper.coffee'
-    'src/main/dashboard/dashboard_controller.coffee'
-  ]
-  androidSpecificDep = [
-    'src/android/callback_implementor.coffee'
-    'src/android/client.coffee'
-    'src/android/logger.coffee'
-    'src/android/main.coffee'
-  ]
-  androidDep = framework.concat androidSpecificDep
+  frameworkPaths =
+    'js.mobile.logger': 'main/logger'
+    'js.mobile.context': 'main/context'
+    'js.mobile.client': 'main/client'
+    'js.mobile.callback.implementor': 'main/callback_implementor'
+    'js.mobile.callback.bridge': 'main/callback_bridge'
+    'js.mobile.dashboard.wrapper': 'main/dashboard/dashboard_wrapper'
+    'js.mobile.dashboard.window': 'main/dashboard/dashboard_window'
+    'js.mobile.dashboard.controller': 'main/dashboard/dashboard_controller'
+    'js.mobile.view': 'main/view/view'
+
+  androidSpecPaths =
+    'js.mobile.android.callback.implementor': 'android/callback_implementor'
+    'js.mobile.android.client': 'android/client'
+    'js.mobile.android.logger': 'android/logger'
+
+  merge = (dest, objs...) ->
+    for obj in objs
+      dest[k] = v for k, v of obj
+    dest
+  androidPaths = merge frameworkPaths, androidSpecPaths
+  # grunt.log.write JSON.stringify(androidPaths, null, 2)
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-simple-mocha'
@@ -33,6 +36,7 @@ module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
     globalConfig: globalConfig,
+
     coffee:
       compileJoined:
         options: join: true
@@ -42,6 +46,13 @@ module.exports = (grunt) ->
         src: [ '**/*.coffee' ]
         dest: 'build'
         ext: '.js'
+      config:
+        expand: true
+        cwd: 'config'
+        src: [ '*.coffee' ]
+        dest: 'build/config'
+        ext: '.js'
+
     simplemocha:
       dev:
         src: 'build/spec/main.spec.js'
@@ -53,21 +64,22 @@ module.exports = (grunt) ->
     requirejs:
       compile:
         options:
-          baseUrl: '.'
-          out: "build/optimized-file.js"
-          include: ['build/main/main.js']
+          baseUrl: 'build'
+          out: "build/#{globalConfig.dst.android.dashboard}"
+          include: ['android/main.js']
           optimize: 'none'
-          paths:
-            main: './build/main/main'
-            logger1: './build/main/logger'
+          logLevel: 0
+          paths: androidPaths
 
     watch: all:
       files: ['src/**/*.coffee', 'spec/**/*.coffee']
       tasks: ['buildDev', 'buildTest', 'test']
 
   grunt.registerTask('test', 'simplemocha:dev')
+  grunt.registerTask('buildConfig', 'coffee:config')
   grunt.registerTask('buildDev', 'coffee:dev')
   grunt.registerTask('buildTest', 'coffee:test')
+  grunt.registerTask('buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile'])
 
   grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) ->
     fs = require('fs')

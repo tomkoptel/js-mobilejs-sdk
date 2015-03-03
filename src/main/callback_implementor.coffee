@@ -1,7 +1,5 @@
-root = window ? exports
-root.JasperMobile or= {}
-
-class JasperMobile.CallbackImplementor
-  requestScreenSize: ->
-  onMaximize: (title) ->
-  onLoaded: ->
+define 'js.mobile.callback.implementor', ->
+  class CallbackImplementor
+    requestScreenSize: ->
+    onMaximize: (title) ->
+    onLoaded: ->

@@ -1,5 +1,5 @@
-define 'client', ->
-  class MobileClient
+define 'js.mobile.client', ->
+  class Client
     constructor: (@bridge) ->
       @logger = @bridge.logger
 

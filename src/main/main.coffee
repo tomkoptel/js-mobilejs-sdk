@@ -1,2 +1,2 @@
-require ['logger1'], (Logger1) ->
-  new Logger1()
+require ['js.mobile.logger'], (Logger1) ->
+  new Logger()

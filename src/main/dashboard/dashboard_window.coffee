@@ -1,5 +1,3 @@
-root = window ? exports
-root.JasperMobile or= {}
-
-class JasperMobile.DashboardWindow
-  constructor: (@width, @height) ->
+define 'js.mobile.dashboard.window', ->
+  class JasperMobile.DashboardWindow
+    constructor: (@width, @height) ->

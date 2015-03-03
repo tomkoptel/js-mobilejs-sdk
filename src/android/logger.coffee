@@ -1,7 +1,3 @@
-root = window ? exports
-root.JasperMobile or= {}
-
-Logger = JasperMobile.Logger
-
-class JasperMobile.AndroidLogger extends Logger
-  log: (message) ->
+define 'js.mobile.android.logger', ['js.mobile.logger'], (Logger) ->
+  class AndroidLogger extends Logger
+    log: (message) ->

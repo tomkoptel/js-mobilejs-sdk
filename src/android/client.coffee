@@ -1,17 +1,18 @@
-root = window ? exports
-root.JasperMobile or= {}
+define 'js.mobile.android.client',
+  [
+    'js.mobile.client',
+    'js.mobile.android.callback.implementor',
+    'js.mobile.android.logger',
+    'js.mobile.callback.bridge',
+    'js.mobile.context',
+    'js.mobile.dashboard.wrapper'
+  ],
+  (MobileClient, AndroidCallbackImplementor, AndroidLogger, CallbackBridge, Context, DashboardWrapper) ->
 
-MobileClient = JasperMobile.MobileClient
-AndroidCallbackImplementor = JasperMobile.AndroidCallbackImplementor
-AndroidLogger = JasperMobile.AndroidLogger
-CallbackBridge = JasperMobile.CallbackBridge
-Context = JasperMobile.Context
-DashboardWrapper = JasperMobile.DashboardWrapper
-
-class JasperMobile.AndroidClient extends MobileClient
-  run: ->
-    callbackImplementor = new AndroidCallbackImplementor()
-    logger = new AndroidLogger()
-    callbackBridge = new CallbackBridge(callbackImplementor, logger)
-    context = new Context(callbackBridge)
-    DashboardWrapper.getInstance(context)
+    class AndroidClient extends MobileClient
+      run: ->
+        callbackImplementor = new AndroidCallbackImplementor()
+        logger = new AndroidLogger()
+        callbackBridge = new CallbackBridge(callbackImplementor, logger)
+        context = new Context(callbackBridge)
+        DashboardWrapper.getInstance(context)

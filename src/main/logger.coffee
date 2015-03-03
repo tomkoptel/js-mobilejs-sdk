@@ -1,3 +1,3 @@
-define 'logger1', ->
-  class Logger1
+define 'js.mobile.logger', ->
+  class Logger
     log: (message) ->
