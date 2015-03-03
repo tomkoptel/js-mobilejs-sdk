@@ -1,18 +1,13 @@
 module.exports = (grunt) ->
-  globalConfig =
-    dst:
-      android:
-        dashboard: 'dashboard-android-mobilejs-sdk.js'
-      ios:
-        dashboard: 'dashboard-ios-mobilejs-sdk.js'
+  properties = grunt.file.readJSON('common_properties.json')
 
+  grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
-    globalConfig: globalConfig,
 
     coffee:
       compileJoined:
@@ -26,7 +21,7 @@ module.exports = (grunt) ->
       config:
         expand: true
         cwd: 'config'
-        src: [ '*.coffee' ]
+        src: [ '**/*.coffee' ]
         dest: 'build/config'
         ext: '.js'
 
@@ -42,7 +37,7 @@ module.exports = (grunt) ->
       android:
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
-          out: "build/#{globalConfig.dst.android.dashboard}"
+          out: "build/#{properties.outputs.dashboard.android}"
           include: ['android/main.js']
           paths:
             'js.mobile.android.callback.implementor': 'android/callback_implementor'
@@ -53,56 +48,15 @@ module.exports = (grunt) ->
       files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
       tasks: ['buildDev', 'requirejs:compile']
 
-  grunt.registerTask('test', 'simplemocha:dev')
-  grunt.registerTask('buildConfig', 'coffee:config')
-  grunt.registerTask('buildDev', 'coffee:dev')
-  grunt.registerTask('buildTest', 'coffee:test')
-  grunt.registerTask('requirejs:compile', ['requirejs:android'])
-  grunt.registerTask('buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile'])
 
-  grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) ->
-    fs = require('fs')
-    properties = grunt.file.readJSON('.properties.json')
+  grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) =>
+    mobileTask = require('./build/config/task/grunt-mobile-move')
+    mobileTask.call(@, grunt, platform, dst)
 
-    copyFunc = (platform, dst) ->
-      path = require('path')
-      dashboard_src = globalConfig.dst[platform].dashboard
-      source = path.resolve(__dirname, "./build/#{dashboard_src}")
-      destination = path.resolve(__dirname, dst + dashboard_src)
-      grunt.log.write("Source: #{source} \nDestination: #{destination} \n")
-
-      if source?
-        if not fs.existsSync(source)
-            grunt.log.error 'Boom! Source was: ' + source
-            return false
-        else
-          grunt.log.write("Start copying... \n")
-          grunt.file.copy source, destination, {}
-          grunt.log.write("Finished copying... \n")
-
-    if not platform?
-      if properties.env.platform?
-        platform = properties.env.platform
-      else
-        grunt.log.error 'Platform not detected. Either setup it in .properties.json or call grunt build:move:[ios|android]:/path/to/project/'
-        return false
-
-    if not dst?
-      grunt.log.write("No 'dst' argument peeking env 'properties.env.project.dst' \n")
-
-      dst = properties.env.project.dst
-      if not dst?
-        grunt.log.error 'Destination is missing. Either setup it in .properties.json or call grunt build:move:[ios|android]:/path/to/project/'
-        return false
-
-    if not fs.existsSync(dst)
-        grunt.log.error 'Invalid destination: ' + dst
-        return false
-    else
-      copyFunc(platform, dst)
-
-    return true
-
-  grunt.registerTask 'moveDev', ['coffee', 'build:move']
-
-  return
+  grunt.registerTask 'test', 'simplemocha:dev'
+  grunt.registerTask 'buildConfig', 'coffee:config'
+  grunt.registerTask 'buildDev', 'coffee:dev'
+  grunt.registerTask 'buildTest', 'coffee:test'
+  grunt.registerTask 'requirejs:compile', ['requirejs:android']
+  grunt.registerTask 'buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile']
+  grunt.registerTask 'moveDev', ['buildR']

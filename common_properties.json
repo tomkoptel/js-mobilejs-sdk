@@ -1,0 +1,8 @@
+{
+  "outputs": {
+    "dashboard": {
+      "android" : "dashboard-android-mobilejs-sdk.js",
+      "ios" : "dashboard-android-mobilejs-sdk.js"
+    }
+  }
+}
