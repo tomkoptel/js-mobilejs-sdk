@@ -29,3 +29,6 @@ node_modules
 # Project specific ignore
 build
 .properties.json
+
+# Ignore bower
+bower_components

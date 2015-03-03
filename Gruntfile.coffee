@@ -3,9 +3,9 @@ module.exports = (grunt) ->
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
+  grunt.loadNpmTasks 'grunt-karma'
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
 
@@ -25,13 +25,16 @@ module.exports = (grunt) ->
         dest: 'build/config'
         ext: '.js'
 
-    simplemocha:
-      dev:
-        src: 'build/spec/main.spec.js'
+    karma:
+      unit:
         options:
-          reporter: 'spec'
-          slow: 200
-          timeout: 1000
+          frameworks: ['jasmine', 'requirejs']
+          singleRun: true
+          browsers: ['PhantomJS']
+          files: [
+            "build/#{properties.outputs.dashboard.android}"
+            "bower_components/jquery/dist/jquery.min.js"
+          ]
 
     requirejs:
       android:
@@ -53,7 +56,6 @@ module.exports = (grunt) ->
     mobileTask = require('./build/config/task/grunt-mobile-move')
     mobileTask.call(@, grunt, platform, dst)
 
-  grunt.registerTask 'test', 'simplemocha:dev'
   grunt.registerTask 'buildConfig', 'coffee:config'
   grunt.registerTask 'buildDev', 'coffee:dev'
   grunt.registerTask 'buildTest', 'coffee:test'

@@ -16,6 +16,10 @@ Project designed as node.js module.
 
 -	Install grunt CLI dependency **globaly** `npm install -g grunt-cli`
 
+-	We also using bower for 3-d party libraries during testing. Install as global dep `npm install -g bower`
+
+-	Install bower dependencies `bower install`
+
 General Tasks
 -------------
 

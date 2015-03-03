@@ -1,0 +1,24 @@
+{
+  "name": "js-mobilejs-sdk",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Jaspersoft/js-mobilejs-sdk",
+  "authors": [
+    "Tom Koptel <tom.koptel@gmail.com>"
+  ],
+  "description": "Wrapper all around Visualize.js calls",
+  "keywords": [
+    "visualize.js"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
