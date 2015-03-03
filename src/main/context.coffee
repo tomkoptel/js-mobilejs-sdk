@@ -1,9 +1,7 @@
-root = window ? exports
-root.JasperMobile or= {}
+define 'context', ->
+  class Context
+    constructor: (@bridge) ->
+      @logger = @bridge.logger
 
-class JasperMobile.Context
-  constructor: (@bridge) ->
-    @logger = @bridge.logger
-
-  setWindow: (window) ->
-    @window = window
+    setWindow: (window) ->
+      @window = window

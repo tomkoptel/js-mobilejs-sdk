@@ -29,6 +29,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-simple-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
     globalConfig: globalConfig,
@@ -36,17 +37,11 @@ module.exports = (grunt) ->
       compileJoined:
         options: join: true
       dev:
-        files:
-          'build/<%= globalConfig.dst.android.dashboard %>': androidDep
-          'build/<%= globalConfig.dst.ios.dashboard %>': []
-          'build/chore.js': [
-            'src/main/scope.coffee'
-            'src/main/logger.coffee'
-            'src/main/blah.coffee'
-          ]
-      test:
-        files:
-          'build/spec/main.spec.js' : 'spec/*.spec.coffee'
+        expand: true
+        cwd: 'src'
+        src: [ '**/*.coffee' ]
+        dest: 'build'
+        ext: '.js'
     simplemocha:
       dev:
         src: 'build/spec/main.spec.js'
@@ -54,6 +49,18 @@ module.exports = (grunt) ->
           reporter: 'spec'
           slow: 200
           timeout: 1000
+
+    requirejs:
+      compile:
+        options:
+          baseUrl: '.'
+          out: "build/optimized-file.js"
+          include: ['build/main/main.js']
+          optimize: 'none'
+          paths:
+            main: './build/main/main'
+            logger1: './build/main/logger'
+
     watch: all:
       files: ['src/**/*.coffee', 'spec/**/*.coffee']
       tasks: ['buildDev', 'buildTest', 'test']
