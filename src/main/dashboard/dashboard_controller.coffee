@@ -1,68 +1,94 @@
-define 'js.mobile.dashboard.controller', ->
-  class JasperMobile.DashboardController
+define 'js.mobile.dashboard.controller', ['js.mobile.view'], (View) ->
+  class DashboardController
 
     constructor: (@context) ->
-      @logger = @context.bridge.logger
-      @callback = @context.bridge
-      @container = new View(jQuery('#frame'), @context)
+      @logger = @context.logger
+      @callback = @context.callback
+      @container = new View el: jQuery('#frame'), context: @context
+      @dashletsLoaded = false
 
-    injectViewport: ->
-      viewPort = document.querySelector('meta[name=viewport]')
-      viewPort.setAttribute 'content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes'
-
-    scaleDashboard: ->
-      @container.scaleView()
-
-    attachDashletLoadListeners: ->
-      _self = @
-      timeInterval = setInterval((->
-        dashlets = jQuery('.dashlet')
-
-        if dashlets.length > 0
-          _self.callback.onLoaded()
-          _disableDashlets()
-
-          window.clearInterval timeInterval
-          timeIntervalDashletContent = setInterval((->
-            dashletContent = jQuery('.dashletContent > div.content')
-            #var dashboardContentLength = jQuery.trim( dashletContent.html() ).length;
-            if dashletContent.length == dashlets.length
-              _overrideDashletTouches()
-              window.clearInterval timeIntervalDashletContent
-            return
-          ), 100)
-        return
-      ), 100)
-
-    _disableDashlets: ->
-      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
-      elements = new View(dashletElements, @context)
-      elements.disable()
+    initialize: ->
+      @_injectViewport()
+      @_scaleDashboard()
+      @_attachDashletLoadListeners()
 
     minimizeDashlet: ->
       @logger.log "minimize dashlet"
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
-      scaleDashboard()
-      _disableDashlets()
 
-    maximizeDashlet: (dashlet) ->
-      dashletView = new View(dashlet, @context)
-      dashletView.enable()
+      @_disableDashlets()
+      @callback.onMinimize()
+
+    # Private
+
+    _injectViewport: ->
+      viewPort = document.querySelector 'meta[name=viewport]'
+      viewPort.setAttribute 'content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes'
+
+    _scaleDashboard: ->
+      @container.scaleView()
+
+    _attachDashletLoadListeners: ->
+      self = @
+
+      jQuery(document).bind 'DOMNodeInserted', (e) ->
+        dashlets = jQuery('.dashlet')
+        self._removeRedundantArtifacts()
+
+        if dashlets.length > 0
+          dashletContent = jQuery('.dashletContent > div.content')
+          if dashletContent.length is dashlets.length and not self.dashletsLoaded
+            self.dashletsLoaded = true
+            self._configureDashboard()
+
+        return
+
+    _configureDashboard: ->
+      @_overrideDashletTouches()
+      @_disableDashlets()
+      @_removeRedundantArtifacts()
+      @callback.onDashletsLoaded()
+
+    _removeRedundantArtifacts: ->
+      jQuery('.header').hide()
+      jQuery('.dashletToolbar').hide()
+      jQuery('.show_chartTypeSelector_wrapper').hide()
+      jQuery('.column.decorated').css 'margin', '0px'
+      jQuery('.column.decorated').css 'border', 'none'
+      jQuery('.dashboardViewer .dashboardContainer > .content > .body').css 'top', '0px'
+      jQuery('.column.decorated > .content > .body').css 'top', '0px'
+      jQuery('.column > .content > .body').css 'top', '0px'
+
+    _disableDashlets: ->
+      @logger.log "disable dashlet touches"
+      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
+      dashlets = new View el: dashletElements, context: @context
+      dashlets.disable()
+
+    _overrideDashletTouches: ->
+      @logger.log "override dashlet touches"
+
+      dashlets = jQuery('div.dashboardCanvas > div.content > div.body > div')
+      dashlets.unbind()
+      self = @
+
+      dashlets.click ->
+        dashlet = jQuery(@)
+        innerLabel = dashlet.find('.innerLabel > p')
+        if innerLabel? and innerLabel.text?
+          title = innerLabel.text()
+          if title? and title.length > 0
+            self._maximizeDashlet dashlet, title
+
+    _maximizeDashlet: (dashlet, title) ->
+      @logger.log "maximizing dashlet"
+      @logger.log "context: " + @context
+
+      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
+      dashlets = new View el: dashletElements, context: @context
+      dashlets.enable()
+
+      @callback.onMaximize title
 
       button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0])
       button.click()
-      return
-
-  # Private
-
-    _overrideDashletTouches: ->
-      elems = jQuery('div.dashboardCanvas > div.content > div.body > div')
-      elems.unbind()
-      _self = @
-
-      elems.click ->
-        title = jQuery(this).find('.innerLabel > p')[0].textContent
-        _self.callback.onMaximize(title)
-        #_castElSizeToScreenSize("#frame", "200%", "200%")
-        _self.maximizeDashlet(this)
-        return

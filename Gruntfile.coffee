@@ -48,6 +48,18 @@ module.exports = (grunt) ->
           ]
           exclude: [
             'build/**/*main.js'
+            'test/stub/*'
+          ]
+      android_dashboard_script:
+        options:
+          frameworks: ['jasmine', 'requirejs']
+          singleRun: true
+          browsers: ['PhantomJS']
+          files: [
+            'test/stub/android.js'
+            'bower_components/jquery/dist/jquery.min.js'
+            "build/#{properties.outputs.dashboard.android}"
+            "test/android.config.js"
           ]
 
     requirejs:
@@ -63,7 +75,7 @@ module.exports = (grunt) ->
 
     watch: all:
       files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
-      tasks: ['buildDev', 'requirejs:compile']
+      tasks: ['buildR', 'build:move']
 
 
   grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) =>

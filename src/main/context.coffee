@@ -1,7 +1,6 @@
 define 'js.mobile.context', ->
   class Context
-    constructor: (@bridge) ->
-      @logger = @bridge.logger
+    constructor: (options) ->
+      {@logger, @callback} = options
 
-    setWindow: (window) ->
-      @window = window
+    setWindow: (@window) ->

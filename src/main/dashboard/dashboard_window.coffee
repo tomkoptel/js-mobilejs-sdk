@@ -1,3 +1,3 @@
 define 'js.mobile.dashboard.window', ->
-  class JasperMobile.DashboardWindow
+  class DashboardWindow
     constructor: (@width, @height) ->

@@ -1,24 +1,28 @@
 define 'js.mobile.view', ->
   class View
-    constructor: (@context, @el) ->
-
-    setSize: (width, height) ->
-      @context.logger.log 'set size ' + @el.toString()
-      @el.css 'width', width
-      @el.css 'height', height
+    constructor: (options) ->
+      {@context, @el} = options
+      @logger = @context.logger
 
     scaleView: ->
       windowWidth = @context.window.width
       windowHeight = @context.window.height
-      setSize windowWidth, windowHeight
+      @setSize windowWidth, windowHeight
+
+    setSize: (width, height) ->
+      @logger.log "Set size. Width: #{width}. Height: #{height}"
+      @el.css 'width', width
+      @el.css 'height', height
 
     disable: ->
-      _setInteractive false
+      @_setInteractive false
 
     enable: ->
-      _setInteractive true
+      @_setInteractive true
+
+    # Private
 
     _setInteractive: (enable) ->
-      @logger.log "set interection " + @el.toString()
       pointerMode = if enable then "auto" else "none"
-      @el.css("pointer-events", pointerMode)
+      @logger.log "Toggle interaction: " + pointerMode
+      @el.css "pointer-events", pointerMode
