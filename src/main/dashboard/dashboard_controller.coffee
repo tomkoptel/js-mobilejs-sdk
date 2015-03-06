@@ -23,7 +23,7 @@ define 'js.mobile.dashboard.controller', ['js.mobile.view'], (View) ->
 
     _injectViewport: ->
       viewPort = document.querySelector 'meta[name=viewport]'
-      viewPort.setAttribute 'content', 'width=device-width; minimum-scale=0.1; maximum-scale=1; user-scalable=yes'
+      viewPort.setAttribute 'content', "width=device-width, height=device-height, user-scalable=yes"
 
     _scaleDashboard: ->
       @container.scaleView()
@@ -58,6 +58,9 @@ define 'js.mobile.dashboard.controller', ['js.mobile.view'], (View) ->
       jQuery('.dashboardViewer .dashboardContainer > .content > .body').css 'top', '0px'
       jQuery('.column.decorated > .content > .body').css 'top', '0px'
       jQuery('.column > .content > .body').css 'top', '0px'
+      jQuery('body').css '-webkit-transform', 'translateZ(0) !important'
+      jQuery('body').css '-webkit-backface-visibility', 'hidden !important'
+
 
     _disableDashlets: ->
       @logger.log "disable dashlet touches"
