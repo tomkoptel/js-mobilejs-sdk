@@ -11,3 +11,6 @@ requirejs.config
     'js.mobile.dashboard.window': 'main/dashboard/dashboard_window'
     'js.mobile.dashboard.controller': 'main/dashboard/dashboard_controller'
     'js.mobile.view': 'main/view/view'
+    'fastclick': '../bower_components/fastclick/lib/fastclick'
+  shim:
+    'fastclick': {'exports': 'fastclick'}
