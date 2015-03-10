@@ -6,19 +6,22 @@ module.exports = (grunt, platform, dst) ->
 
   copyFunc = (platform, dst) ->
     path = require('path')
-    dashboard_src = commonProperties.outputs.dashboard[platform]
-    source = path.resolve(__dirname, "../../#{dashboard_src}")
-    destination = path.resolve(__dirname, "../../../#{dst}/#{dashboard_src}")
-    grunt.log.write("Source: #{source} \nDestination: #{destination} \n")
+    source_dir = path.resolve(__dirname, "../../lib")
+    files = fs.readdirSync(source_dir)
 
-    if source?
-      if not fs.existsSync(source)
-          grunt.log.error 'Boom! Source was: ' + source
-          return false
-      else
-        grunt.log.write("Start copying... \n")
-        grunt.file.copy source, destination, {}
-        grunt.log.write("Finished copying... \n")
+    for file in files
+      source = path.resolve(__dirname, "../../lib/#{file}")
+      destination = path.resolve(__dirname, "../../../#{dst}/#{file}")
+      grunt.log.write("Source: #{source} \nDestination: #{destination} \n")
+
+      if source?
+        if not fs.existsSync(source)
+            grunt.log.error 'Boom! Source was: ' + source
+            return false
+        else
+          grunt.log.write("Start copying... \n")
+          grunt.file.copy source, destination, {}
+          grunt.log.write("Finished copying... \n")
 
   if not platform?
     if globalProperties.env.platform?

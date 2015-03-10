@@ -62,15 +62,20 @@ module.exports = (grunt) ->
           ]
 
     requirejs:
-      android:
+      android_dashboard_script:
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
-          out: "build/#{properties.outputs.dashboard.android}"
+          out: "build/lib/#{properties.outputs.dashboard.android}"
           include: ['android/main.js']
           paths:
             'js.mobile.android.callback.implementor': 'android/callback_implementor'
             'js.mobile.android.client': 'android/client'
             'js.mobile.android.logger': 'android/logger'
+      legacy_dashboard_script:
+          options:
+            mainConfigFile: 'build/config/requirejs_config.js'
+            out: "build/lib/#{properties.outputs.dashboard.legacy}"
+            include: ['main/fastclick/main.js']
 
     watch: all:
       files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
@@ -84,6 +89,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'buildConfig', 'coffee:config'
   grunt.registerTask 'buildDev', 'coffee:dev'
   grunt.registerTask 'buildTest', 'coffee:test'
-  grunt.registerTask 'requirejs:compile', ['requirejs:android']
+  grunt.registerTask 'requirejs:compile', ['requirejs:android_dashboard_script', 'requirejs:legacy_dashboard_script']
   grunt.registerTask 'buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile']
   grunt.registerTask 'moveDev', ['buildR']

@@ -1,6 +1,7 @@
 {
   "outputs": {
     "dashboard": {
+      "legacy" : "dashboard-legacy-mobilejs-sdk.js",
       "android" : "dashboard-android-mobilejs-sdk.js",
       "ios" : "dashboard-android-mobilejs-sdk.js"
     }
