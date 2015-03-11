@@ -1,5 +1,6 @@
 define 'js.mobile.report.callback', ->
   class ReportCallback
+    onScriptLoaded: ->
     onLoadStart: ->
     onLoadDone: (parameters) ->
     onLoadError: (error) ->

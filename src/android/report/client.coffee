@@ -11,3 +11,4 @@ define 'js.mobile.android.report.client', (require) ->
       logger = new AndroidLogger()
       context = new Context callback: callbackImplementor, logger: logger
       MobileReport.getInstance(context)
+      callbackImplementor.onScriptLoaded()

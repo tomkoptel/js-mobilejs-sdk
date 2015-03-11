@@ -16,11 +16,14 @@ requirejs.config
     'js.mobile.dashboard.view': 'main/dashboard/view'
 
     #  Report components
-    'js.mobile.report.report': 'main/report/report'
+    'js.mobile.report': 'main/report/report'
     'js.mobile.report.callback': 'main/report/callback'
     'js.mobile.report.controller': 'main/report/controller'
+    'js.mobile.report.session': 'main/report/session'
 
     # Legacy components
     'fastclick': '../bower_components/fastclick/lib/fastclick'
+    'jquery': '../bower_components/jquery/dist/jquery.min'
   shim:
     'fastclick': {'exports': 'fastclick'}
+    'jquery': {'exports': 'jquery'}

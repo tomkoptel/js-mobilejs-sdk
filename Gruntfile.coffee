@@ -84,8 +84,8 @@ module.exports = (grunt) ->
           out: "build/lib/#{properties.outputs.report.android}"
           include: ['android/report/main.js']
           paths:
-            'js.mobile.android.report.callback': 'android/report/callback'
             'js.mobile.android.report.client': 'android/report/client'
+            'js.mobile.android.report.callback': 'android/report/callback'
             'js.mobile.android.logger': 'android/logger'
 
 

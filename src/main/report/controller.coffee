@@ -1,23 +1,25 @@
-define 'js.mobile.report.controller', () ->
+define 'js.mobile.report.controller', ->
   class ReportController
     constructor: (options) ->
-      {@context, @uri, @params} = options
+      {@context, @session, @uri, @params} = options
       @callback = @context.callback
       @logger = @context.logger
 
       @logger.log @uri
 
       @params ||= {}
-
+      @totalPages = 0
 
     runReport: ->
-      session = @context.session
-      v(session.authOptions(), @_loadReport)
-
-    _loadReport: (v) ->
       @callback.onLoadStart()
+      @logger.log "start loading visualize"
 
-      v.report
+      visualize @session.authOptions(), @_executeReport
+
+    _executeReport: (visualize) =>
+      @logger.log "start report execution"
+
+      visualize.report
         resource: @uri
         params: @params
         container: "#container"
@@ -25,23 +27,20 @@ define 'js.mobile.report.controller', () ->
         linkOptions:
           events:
             click: @_processLinkClicks
-            success: @_processSuccess
-            error: @_processErrors
-            events:
-              changeTotalPages: @_processChangeTotalPages
+        error: @_processErrors
+        events:
+          changeTotalPages: @_processChangeTotalPages
+        success: @_processSuccess
 
-    _processLinkClicks: (event, link) ->
+    _processLinkClicks: (event, link) =>
 
-    _processChangeTotalPages: (@totalPages) ->
-        @callback.onTotalPagesLoaded totalPages
+    _processChangeTotalPages: (@totalPages) =>
+        @callback.onTotalPagesLoaded @totalPages
 
-    _processSuccess: (parameters) ->
+    _processSuccess: (parameters) =>
       @logger.log parameters
       @callback.onLoadDone parameters
 
-    _processErrors: (error) ->
+    _processErrors: (error) =>
       @logger.log error
       @callback.onLoadError error
-
-  root = window ? exports
-  root.ReportWrapper = ReportWrapper
