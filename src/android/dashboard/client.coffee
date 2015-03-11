@@ -1,7 +1,7 @@
-define 'js.mobile.android.client',
+define 'js.mobile.android.dashboard.client',
   [
     'js.mobile.client',
-    'js.mobile.android.callback.implementor',
+    'js.mobile.android.dashboard.callback.implementor',
     'js.mobile.android.logger',
     'js.mobile.context',
     'js.mobile.dashboard.wrapper'
