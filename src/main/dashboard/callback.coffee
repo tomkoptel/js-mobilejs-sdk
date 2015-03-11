@@ -1,5 +1,5 @@
-define 'js.mobile.dashboard.callback.implementor', ->
-  class DashboardCallbackImplementor
+define 'js.mobile.dashboard.callback', ->
+  class DashboardCallback
     onMaximize: (title) ->
     onMinimize: ->
     onWrapperLoaded: ->

@@ -1,9 +1,9 @@
-define 'js.mobile.report.wrapper', () ->
-  class ReportWrapper
+define 'js.mobile.report', () ->
+  class MobileReport
     @_instance: null
 
     @getInstance: (context) ->
-      @_instance ||= new ReportWrapper context
+      @_instance ||= new MobileReport context
 
     constructor: (@context) ->
 
@@ -15,4 +15,4 @@ define 'js.mobile.report.wrapper', () ->
 
 
   root = window ? exports
-  root.ReportWrapper = ReportWrapper
+  root.MobileReport = MobileReport

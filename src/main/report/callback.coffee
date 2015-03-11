@@ -1,5 +1,5 @@
-define 'js.mobile.report.callback.implementor', ->
-  class ReportCallbackImplementor
+define 'js.mobile.report.callback', ->
+  class ReportCallback
     onLoadStart: ->
     onLoadDone: (parameters) ->
     onLoadError: (error) ->

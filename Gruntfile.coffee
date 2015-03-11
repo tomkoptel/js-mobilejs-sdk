@@ -68,7 +68,7 @@ module.exports = (grunt) ->
           out: "build/lib/#{properties.outputs.dashboard.android}"
           include: ['android/dashboard/main.js']
           paths:
-            'js.mobile.android.dashboard.callback.implementor': 'android/dashboard/callback_implementor'
+            'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
             'js.mobile.android.dashboard.client': 'android/dashboard/client'
             'js.mobile.android.logger': 'android/logger'
 
@@ -84,7 +84,7 @@ module.exports = (grunt) ->
           out: "build/lib/#{properties.outputs.report.android}"
           include: ['android/report/main.js']
           paths:
-            'js.mobile.android.report.callback.implementor': 'android/report/callback_implementor'
+            'js.mobile.android.report.callback': 'android/report/callback'
             'js.mobile.android.report.client': 'android/report/client'
             'js.mobile.android.logger': 'android/logger'
 

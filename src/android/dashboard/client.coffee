@@ -1,16 +1,16 @@
 define 'js.mobile.android.dashboard.client',
   [
     'js.mobile.client',
-    'js.mobile.android.dashboard.callback.implementor',
+    'js.mobile.android.dashboard.callback',
     'js.mobile.android.logger',
     'js.mobile.context',
-    'js.mobile.dashboard.wrapper'
+    'js.mobile.dashboard'
   ],
-  (MobileClient, AndroidCallbackImplementor, AndroidLogger, Context, DashboardWrapper) ->
+  (MobileClient, AndroidCallback, AndroidLogger, Context, MobileDashboard) ->
     class AndroidClient extends MobileClient
       run: ->
-        callbackImplementor = new AndroidCallbackImplementor()
+        callbackImplementor = new AndroidCallback()
         logger = new AndroidLogger()
         context = new Context callback: callbackImplementor, logger: logger
-        DashboardWrapper.getInstance(context)
+        MobileDashboard.getInstance(context)
         callbackImplementor.onWrapperLoaded()

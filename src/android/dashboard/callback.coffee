@@ -1,5 +1,7 @@
-define 'js.mobile.android.callback.implementor', ['js.mobile.dashboard.callback.implementor'], (DashboardCallbackImplementor) ->
-  class AndroidCallbackImplementor extends DashboardCallbackImplementor
+define 'js.mobile.android.dashboard.callback', (require) ->
+  Callback = require 'js.mobile.dashboard.callback'
+
+  class AndroidCallback extends Callback
     onMaximize: (title) ->
       Android.onMaximize(title)
       return

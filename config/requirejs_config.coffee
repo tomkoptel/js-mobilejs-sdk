@@ -8,19 +8,19 @@ requirejs.config
     'js.mobile.context': 'main/context'
     'js.mobile.client': 'main/client'
 
-    #  Dashboards
-    'js.mobile.dashboard.callback.implementor': 'main/dashboard/callback_implementor'
-    'js.mobile.dashboard.wrapper': 'main/dashboard/dashboard_wrapper'
-    'js.mobile.dashboard.window': 'main/dashboard/dashboard_window'
-    'js.mobile.dashboard.controller': 'main/dashboard/dashboard_controller'
+    #  Dashboard components
+    'js.mobile.dashboard': 'main/dashboard/dashboard'
+    'js.mobile.dashboard.callback': 'main/dashboard/callback'
+    'js.mobile.dashboard.window': 'main/dashboard/window'
+    'js.mobile.dashboard.controller': 'main/dashboard/controller'
     'js.mobile.dashboard.view': 'main/dashboard/view'
 
-    #  Reports
-    'js.mobile.report.callback.implementor': 'main/report/callback_implementor'
-    'js.mobile.report.controller': 'main/report/report_controller'
-    'js.mobile.report.wrapper': 'main/report/report_wrapper'
+    #  Report components
+    'js.mobile.report.report': 'main/report/report'
+    'js.mobile.report.callback': 'main/report/callback'
+    'js.mobile.report.controller': 'main/report/controller'
 
-    # Legacy
+    # Legacy components
     'fastclick': '../bower_components/fastclick/lib/fastclick'
   shim:
     'fastclick': {'exports': 'fastclick'}
