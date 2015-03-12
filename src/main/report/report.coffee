@@ -11,13 +11,20 @@ define 'js.mobile.report', (require) ->
     constructor: (@context) ->
 
     @run: (options) ->
-      @_instance.run(options)
+      @_instance.run options
+
+    @selectPage: (page) ->
+      @_instance.selectPage page
+
+    selectPage: (page) ->
+      if @reportController
+        @reportController.selectPage page
 
     run: (options) ->
       options.session = new Session options
       options.context = @context
-      reportController = new ReportController options
-      reportController.runReport()
+      @reportController = new ReportController options
+      @reportController.runReport()
 
   root = window ? exports
   root.MobileReport = MobileReport

@@ -10,6 +10,14 @@ define 'js.mobile.report.controller', ->
       @params ||= {}
       @totalPages = 0
 
+    selectPage: (page) ->
+      if @loader?
+        @loader
+          .pages(page)
+          .run()
+          .done(@_processSuccess)
+          .fail(@_processErrors)
+
     runReport: ->
       @callback.onLoadStart()
       @logger.log "start loading visualize"
@@ -19,7 +27,7 @@ define 'js.mobile.report.controller', ->
     _executeReport: (visualize) =>
       @logger.log "start report execution"
 
-      visualize.report
+      @loader = visualize.report
         resource: @uri
         params: @params
         container: "#container"
