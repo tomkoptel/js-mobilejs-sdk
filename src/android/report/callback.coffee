@@ -26,6 +26,10 @@ define 'js.mobile.android.report.callback', (require) ->
       Android.onPageChange(page)
       return
 
-    onRemoteCall: (type, location) ->
-      Android.onRemoteCall(type, location)
+    onReferenceClick: (location) ->
+      Android.onReferenceClick(location)
+      return
+
+    onReportExecutionClick: (reportUri, params) ->
+      Android.onReportExecutionClick(reportUri, params)
       return

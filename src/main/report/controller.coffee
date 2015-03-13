@@ -20,13 +20,10 @@ define 'js.mobile.report.controller', ->
 
     runReport: ->
       @callback.onLoadStart()
-      @logger.log "start loading visualize"
 
       visualize @session.authOptions(), @_executeReport
 
     _executeReport: (visualize) =>
-      @logger.log "start report execution"
-
       @loader = visualize.report
         resource: @uri
         params: @params
@@ -40,15 +37,51 @@ define 'js.mobile.report.controller', ->
           changeTotalPages: @_processChangeTotalPages
         success: @_processSuccess
 
-    _processLinkClicks: (event, link) =>
-
     _processChangeTotalPages: (@totalPages) =>
         @callback.onTotalPagesLoaded @totalPages
 
     _processSuccess: (parameters) =>
-      @logger.log parameters
       @callback.onLoadDone parameters
 
     _processErrors: (error) =>
       @logger.log error
       @callback.onLoadError error
+
+    _processLinkClicks: (event, link) =>
+      type = link.type
+
+      switch type
+        when "ReportExecution" then @_startReportExecution link
+        when "LocalAnchor" then @_navigateToAnchor link
+        when "LocalPage" then @_navigateToPage link
+        when "Reference" then @_openRemoteLink link
+
+    _startReportExecution: (link) =>
+      params = link.parameters
+      reportUri = params._report
+      paramsAsString = JSON.stringify params, null, 2
+      @callback.onReportExecutionClick reportUri, paramsAsString
+
+    _navigateToAnchor: (link) =>
+      window.location.hash = link.href
+
+    _navigateToPage: (link) =>
+      href = link.href
+      numberPattern = /\d+/g
+      matches = href.match numberPattern
+      if matches?
+        pageNumber = matches.join ""
+        @_loadPage pageNumber
+
+    _openRemoteLink: (link) =>
+      href = link.href
+      @callback.onReferenceClick href
+
+    _loadPage: (page) ->
+      @loader.pages(page)
+        .run()
+        .fail(@_processErrors)
+        .done(@_notifyPageChange)
+
+    _notifyPageChange: =>
+      @callback.onPageChange @loader.pages()

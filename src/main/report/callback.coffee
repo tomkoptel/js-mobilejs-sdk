@@ -6,4 +6,5 @@ define 'js.mobile.report.callback', ->
     onLoadError: (error) ->
     onTotalPagesLoaded: (pages) ->
     onPageChange: (page) ->
-    onRemoteCall: (type, location) ->
+    onReferenceClick: (location) ->
+    onReportExecutionClick: (reportUri, params) ->
