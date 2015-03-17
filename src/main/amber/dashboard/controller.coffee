@@ -29,19 +29,22 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
       @container.scaleView()
 
     _attachDashletLoadListeners: ->
-      self = @
+      timeInterval = window.setInterval () =>
+        window.clearInterval timeInterval
 
-      jQuery(document).bind 'DOMNodeInserted', (e) ->
-        dashlets = jQuery('.dashlet')
-        self._removeRedundantArtifacts()
+        timeIntervalDashletContent = window.setInterval () =>
+          dashlets = jQuery('.dashlet')
+          @_removeRedundantArtifacts()
 
-        if dashlets.length > 0
-          dashletContent = jQuery('.dashletContent > div.content')
-          if dashletContent.length is dashlets.length and not self.dashletsLoaded
-            self.dashletsLoaded = true
-            self._configureDashboard()
+          if dashlets.length > 0
+            @_disableDashlets()
+            dashletContent = jQuery('.dashletContent > div.content')
 
-        return
+            if dashletContent.length is dashlets.length
+              @_configureDashboard()
+              window.clearInterval timeIntervalDashletContent
+        , 100
+      , 100
 
     _configureDashboard: ->
       @_overrideDashletTouches()
