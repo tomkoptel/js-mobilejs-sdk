@@ -1,5 +1,5 @@
-define 'js.mobile.android.dashboard.callback', (require) ->
-  Callback = require 'js.mobile.dashboard.callback'
+define 'js.mobile.amber.android.dashboard.callback', (require) ->
+  Callback = require 'js.mobile.amber.dashboard.callback'
 
   class AndroidCallback extends Callback
     onMaximize: (title) ->

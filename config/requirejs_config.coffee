@@ -8,12 +8,11 @@ requirejs.config
     'js.mobile.context': 'main/context'
     'js.mobile.client': 'main/client'
 
-    #  Dashboard components
-    'js.mobile.dashboard': 'main/dashboard/dashboard'
-    'js.mobile.dashboard.callback': 'main/dashboard/callback'
-    'js.mobile.dashboard.window': 'main/dashboard/window'
-    'js.mobile.dashboard.controller': 'main/dashboard/controller'
-    'js.mobile.dashboard.view': 'main/dashboard/view'
+    # Amber Dashboard components
+    'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'
+    'js.mobile.amber.dashboard.callback': 'main/amber/dashboard/callback'
+    'js.mobile.amber.dashboard.controller': 'main/amber/dashboard/controller'
+    'js.mobile.amber.dashboard.view': 'main/amber/dashboard/view'
 
     #  Report components
     'js.mobile.report': 'main/report/report'

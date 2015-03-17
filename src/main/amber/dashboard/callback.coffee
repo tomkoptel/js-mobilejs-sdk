@@ -1,4 +1,4 @@
-define 'js.mobile.dashboard.callback', ->
+define 'js.mobile.amber.dashboard.callback', ->
   class DashboardCallback
     onMaximize: (title) ->
     onMinimize: ->

@@ -1,4 +1,4 @@
-define 'js.mobile.dashboard.controller', ['js.mobile.dashboard.view'], (View) ->
+define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'], (View) ->
   class DashboardController
 
     constructor: (@context) ->

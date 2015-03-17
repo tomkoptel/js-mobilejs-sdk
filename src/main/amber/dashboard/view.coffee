@@ -1,4 +1,4 @@
-define 'js.mobile.dashboard.view', ->
+define 'js.mobile.amber.dashboard.view', ->
   class View
     constructor: (options) ->
       {@context, @el} = options

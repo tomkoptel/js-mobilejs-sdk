@@ -1,10 +1,10 @@
-define 'js.mobile.android.dashboard.client',
+define 'js.mobile.amber.android.dashboard.client',
   [
     'js.mobile.client',
-    'js.mobile.android.dashboard.callback',
+    'js.mobile.amber.android.dashboard.callback',
     'js.mobile.android.logger',
     'js.mobile.context',
-    'js.mobile.dashboard'
+    'js.mobile.amber.dashboard'
   ],
   (MobileClient, AndroidCallback, AndroidLogger, Context, MobileDashboard) ->
     class AndroidClient extends MobileClient
