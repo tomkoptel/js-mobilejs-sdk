@@ -1,5 +1,5 @@
 define 'js.mobile.report', (require) ->
-  Session = require 'js.mobile.report.session'
+  Session = require 'js.mobile.session'
   ReportController = require 'js.mobile.report.controller'
 
   class MobileReport

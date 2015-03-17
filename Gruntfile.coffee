@@ -72,6 +72,16 @@ module.exports = (grunt) ->
             'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
             'js.mobile.android.logger': 'android/logger'
 
+      android_amber2_dashboard_script:
+        options:
+          mainConfigFile: 'build/config/requirejs_config.js'
+          out: "build/lib/#{properties.outputs.dashboard.android_amber2}"
+          include: ['android/amber2/dashboard/main.js']
+          paths:
+            'js.mobile.amber2.android.dashboard.callback': 'android/amber2/dashboard/callback'
+            'js.mobile.amber2.android.dashboard.client': 'android/amber2/dashboard/client'
+            'js.mobile.android.logger': 'android/logger'
+
       legacy_dashboard_script:
           options:
             mainConfigFile: 'build/config/requirejs_config.js'
@@ -104,6 +114,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'requirejs:compile', [
     'requirejs:android_report_script',
     'requirejs:android_amber_dashboard_script',
+    'requirejs:android_amber2_dashboard_script',
     'requirejs:legacy_dashboard_script',
   ]
   grunt.registerTask 'buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile']
