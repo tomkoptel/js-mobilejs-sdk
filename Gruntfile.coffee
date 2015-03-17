@@ -66,16 +66,28 @@ module.exports = (grunt) ->
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/lib/#{properties.outputs.dashboard.android}"
-          include: ['android/main.js']
+          include: ['android/dashboard/main.js']
           paths:
-            'js.mobile.android.callback.implementor': 'android/callback_implementor'
-            'js.mobile.android.client': 'android/client'
+            'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
+            'js.mobile.android.dashboard.client': 'android/dashboard/client'
             'js.mobile.android.logger': 'android/logger'
+
       legacy_dashboard_script:
           options:
             mainConfigFile: 'build/config/requirejs_config.js'
             out: "build/lib/#{properties.outputs.dashboard.legacy}"
             include: ['main/fastclick/main.js']
+
+      android_report_script:
+        options:
+          mainConfigFile: 'build/config/requirejs_config.js'
+          out: "build/lib/#{properties.outputs.report.android}"
+          include: ['android/report/main.js']
+          paths:
+            'js.mobile.android.report.client': 'android/report/client'
+            'js.mobile.android.report.callback': 'android/report/callback'
+            'js.mobile.android.logger': 'android/logger'
+
 
     watch: all:
       files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
@@ -89,6 +101,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'buildConfig', 'coffee:config'
   grunt.registerTask 'buildDev', 'coffee:dev'
   grunt.registerTask 'buildTest', 'coffee:test'
-  grunt.registerTask 'requirejs:compile', ['requirejs:android_dashboard_script', 'requirejs:legacy_dashboard_script']
+  grunt.registerTask 'requirejs:compile', [
+    'requirejs:android_report_script',
+    'requirejs:android_dashboard_script',
+    'requirejs:legacy_dashboard_script',
+  ]
   grunt.registerTask 'buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile']
   grunt.registerTask 'moveDev', ['buildR']

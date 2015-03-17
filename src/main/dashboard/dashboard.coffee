@@ -1,9 +1,9 @@
-define 'js.mobile.dashboard.wrapper', ['js.mobile.dashboard.controller', 'js.mobile.dashboard.window'], (DashboardController, DashboardWindow) ->
-  class DashboardWrapper
+define 'js.mobile.dashboard', ['js.mobile.dashboard.controller', 'js.mobile.dashboard.window'], (DashboardController, DashboardWindow) ->
+  class MobileDashboard
     @_instance: null
 
     @getInstance: (context) ->
-      @_instance ||= new DashboardWrapper context
+      @_instance ||= new MobileDashboard context
 
     @wrapScreen: (width, height) ->
       @_instance.wrapScreen width, height
@@ -24,4 +24,4 @@ define 'js.mobile.dashboard.wrapper', ['js.mobile.dashboard.controller', 'js.mob
       @dashboardController.minimizeDashlet()
 
   root = window ? exports
-  root.DashboardWrapper = DashboardWrapper
+  root.MobileDashboard = MobileDashboard

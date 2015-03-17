@@ -4,6 +4,10 @@
       "legacy" : "dashboard-legacy-mobilejs-sdk.js",
       "android" : "dashboard-android-mobilejs-sdk.js",
       "ios" : "dashboard-android-mobilejs-sdk.js"
+    },
+    "report": {
+      "android" : "report-android-mobilejs-sdk.js",
+      "ios" : "report-ios-mobilejs-sdk.js"
     }
   }
 }
