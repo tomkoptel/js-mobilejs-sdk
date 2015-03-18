@@ -11,6 +11,15 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @run: (options) ->
       @_instance.run options
 
+    @minimizeDashlet: ->
+      @_instance.minimizeDashlet()
+
+    @refreshDashlet: ->
+      @_instance.refreshDashlet()
+
+    @refresh: ->
+      @_instance.refresh()
+
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
@@ -19,6 +28,15 @@ define 'js.mobile.amber2.dashboard', (require) ->
       options.context = @context
       @dashboardController = new DashboardController options
       @dashboardController.runDashboard()
+
+    minimizeDashlet: ->
+      @dashboardController.minimizeDashlet()
+
+    refreshDashlet: ->
+      @dashboardController.refreshDashlet()
+
+    refresh: ->
+      @dashboardController.refresh()
 
   root = window ? exports
   root.MobileDashboard = MobileDashboard

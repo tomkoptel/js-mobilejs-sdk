@@ -8,6 +8,7 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
       @dashletsLoaded = false
 
     initialize: ->
+      @callback.onLoadStart()
       @_injectViewport()
       @_scaleDashboard()
       @_attachDashletLoadListeners()

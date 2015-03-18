@@ -22,6 +22,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
           resource: self.uri
           success: ->
             self.logger.log "Scale dashboard"
+            self.components = @data().components
             $(@container()).find('.dashboardCanvas').addClass 'scaledCanvas'
 
             self.logger.log "Iterate components"
@@ -47,7 +48,11 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
                 self.dashboard.updateComponent id,
                   maximized: true
                   interactive: true
-                self.updateToolbar component
+
+                self.maximizedComponent = component
+                self.logger.log "onMaximize"
+                self.callback.onMaximize component.name
+
               return
 
             self.callback.onLoadDone()
@@ -58,42 +63,28 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self.callback.onLoadError error
             return
 
-    updateToolbar: (component) ->
-      self = @
-      $('#toolbar > #label').text component.name
-      $('#toolbar > #minimize').show().off().on 'click', ->
-        dashboardId = self.v.dashboard.componentIdDomAttribute
+    refreshDashlet: ->
+      if @maximizedComponent
+        @dashboard.refresh(@maximizedComponent.id)
 
-        $(self.dashboard.container())
-          .find("[#{dashboardId}='#{component.id}']")
-          .removeClass 'originalDashletInScaledCanvas'
+    refresh: ->
+      @components.forEach (component) =>
+        @dashboard.refresh(component.id)
 
-        self.dashboard.updateComponent component.id,
-          maximized: false
-          interactive: false
+    minimizeDashlet: ->
+      dashboardId = @v.dashboard.componentIdDomAttribute
+      component = @maximizedComponent
 
-        $(this).hide()
-        $('#toolbar > #cancel').hide()
-        $('#toolbar > #refresh').hide()
-        $('#toolbar > #label').text 'My Dashboard'
-        return
+      $(@dashboard.container())
+        .find("[#{dashboardId}='#{component.id}']")
+        .removeClass 'originalDashletInScaledCanvas'
 
-      $('#toolbar > #cancel').off().on 'click', ->
-        $('#toolbar > #cancel').hide()
-        self.dashboard.cancel(component.id).always ->
-          $('#toolbar > #refresh').show()
-          return
-        return
+      @dashboard.updateComponent component.id,
+        maximized: false
+        interactive: false
 
-      $('#toolbar > #refresh').show().off().on 'click', ->
-        $('#toolbar > #refresh').hide()
-        $('#toolbar > #cancel').show()
-        self.dashboard.refresh(component.id).always ->
-          $('#toolbar > #refresh').show()
-          $('#toolbar > #cancel').hide()
-          return
-        return
-      return
+      @logger.log "onMinimize"
+      @callback.onMinimize()
 
     getComponentById: (id) ->
       @dashboard.data().components.filter((c) ->
