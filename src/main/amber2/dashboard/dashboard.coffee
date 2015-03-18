@@ -1,7 +1,7 @@
 define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
-  
+
   class MobileDashboard
     @_instance: null
 
@@ -9,9 +9,10 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_instance ||= new MobileDashboard context
 
     @run: (options) ->
-      @_instance.run(options)
+      @_instance.run options
 
     constructor: (@context) ->
+      @context.callback.onScriptLoaded()
 
     run: (options) ->
       options.session = new Session options

@@ -9,9 +9,12 @@ requirejs.config
     'js.mobile.client': 'main/client'
     'js.mobile.session': 'main/session'
 
+    #  Common Android components
+    'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
+    'js.mobile.android.logger': 'android/logger'
+
     # Amber Dashboard components
     'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'
-    'js.mobile.amber.dashboard.callback': 'main/amber/dashboard/callback'
     'js.mobile.amber.dashboard.controller': 'main/amber/dashboard/controller'
     'js.mobile.amber.dashboard.view': 'main/amber/dashboard/view'
     'js.mobile.amber.dashboard.window': 'main/amber/dashboard/window'

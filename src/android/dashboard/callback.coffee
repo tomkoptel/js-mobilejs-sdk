@@ -1,6 +1,13 @@
-define 'js.mobile.amber2.android.dashboard.callback', ->
+define 'js.mobile.android.dashboard.callback', (require) ->
+  class AndroidCallback
+    onMaximize: (title) ->
+      Android.onMaximize(title)
+      return
 
-  class DashboardCallback
+    onMinimize: ->
+      Android.onMinimize()
+      return
+
     onScriptLoaded: ->
       Android.onScriptLoaded()
       return

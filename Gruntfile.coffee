@@ -68,9 +68,7 @@ module.exports = (grunt) ->
           out: "build/lib/#{properties.outputs.dashboard.android_amber}"
           include: ['android/amber/dashboard/main.js']
           paths:
-            'js.mobile.amber.android.dashboard.callback': 'android/amber/dashboard/callback'
             'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
-            'js.mobile.android.logger': 'android/logger'
 
       android_amber2_dashboard_script:
         options:
@@ -78,9 +76,7 @@ module.exports = (grunt) ->
           out: "build/lib/#{properties.outputs.dashboard.android_amber2}"
           include: ['android/amber2/dashboard/main.js']
           paths:
-            'js.mobile.amber2.android.dashboard.callback': 'android/amber2/dashboard/callback'
             'js.mobile.amber2.android.dashboard.client': 'android/amber2/dashboard/client'
-            'js.mobile.android.logger': 'android/logger'
 
       legacy_dashboard_script:
           options:
@@ -96,7 +92,6 @@ module.exports = (grunt) ->
           paths:
             'js.mobile.android.report.client': 'android/report/client'
             'js.mobile.android.report.callback': 'android/report/callback'
-            'js.mobile.android.logger': 'android/logger'
 
 
     watch: all:

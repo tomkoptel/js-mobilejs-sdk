@@ -15,7 +15,7 @@ define 'js.mobile.amber.dashboard', (require) ->
       @_instance.minimizeDashlet()
 
     constructor: (@context) ->
-      @context.callback.onDashletsLoaded()
+      @context.callback.onScriptLoaded()
 
     wrapScreen: (width, height) ->
       window = new DashboardWindow(width, height)

@@ -1,16 +1,14 @@
-define 'js.mobile.amber.android.dashboard.client',
-  [
-    'js.mobile.client',
-    'js.mobile.amber.android.dashboard.callback',
-    'js.mobile.android.logger',
-    'js.mobile.context',
-    'js.mobile.amber.dashboard'
-  ],
-  (MobileClient, AndroidCallback, AndroidLogger, Context, MobileDashboard) ->
-    class AndroidClient extends MobileClient
-      run: ->
-        callbackImplementor = new AndroidCallback()
-        logger = new AndroidLogger()
-        context = new Context callback: callbackImplementor, logger: logger
-        MobileDashboard.getInstance(context)
-        callbackImplementor.onWrapperLoaded()
+define 'js.mobile.amber.android.dashboard.client', (require) ->
+  MobileClient = require 'js.mobile.client'
+  AndroidCallback = require 'js.mobile.android.dashboard.callback'
+  AndroidLogger = require 'js.mobile.android.logger'
+  Context = require 'js.mobile.context'
+  MobileDashboard = require 'js.mobile.amber.dashboard'
+
+  class AndroidClient extends MobileClient
+    run: ->
+      context = new Context
+        callback: new AndroidCallback()
+        logger: new AndroidLogger()
+
+      MobileDashboard.getInstance context
