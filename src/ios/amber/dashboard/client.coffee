@@ -11,3 +11,4 @@ define 'js.mobile.amber.ios.dashboard.client', (require) ->
         logger: new IosLogger()
 
       MobileDashboard.getInstance context
+      MobileDashboard.run()

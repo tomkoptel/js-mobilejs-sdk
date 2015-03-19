@@ -8,8 +8,8 @@ define 'js.mobile.amber.dashboard', (require) ->
     @getInstance: (context) ->
       @_instance ||= new MobileDashboard context
 
-    @wrapScreen: (width, height) ->
-      @_instance.wrapScreen width, height
+    @run: ->
+      @_instance.run()
 
     @minimizeDashlet: ->
       @_instance.minimizeDashlet()
@@ -17,8 +17,8 @@ define 'js.mobile.amber.dashboard', (require) ->
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
-    wrapScreen: (width, height) ->
-      window = new DashboardWindow(width, height)
+    run: ->
+      window = new DashboardWindow('100%', '100%')
       @context.setWindow window
       @dashboardController = new DashboardController @context
       @dashboardController.initialize()
