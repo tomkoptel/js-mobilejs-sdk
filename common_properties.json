@@ -2,8 +2,10 @@
   "outputs": {
     "dashboard": {
       "legacy" : "dashboard-legacy-mobilejs-sdk.js",
-      "android" : "dashboard-android-mobilejs-sdk.js",
-      "ios" : "dashboard-android-mobilejs-sdk.js"
+      "android_amber" : "dashboard-amber-android-mobilejs-sdk.js",
+      "android_amber2" : "dashboard-amber2-android-mobilejs-sdk.js",
+      "ios_amber" : "dashboard-amber-ios-mobilejs-sdk.js",
+      "ios_amber2" : "dashboard-amber2-ios-mobilejs-sdk.js"
     },
     "report": {
       "android" : "report-android-mobilejs-sdk.js",

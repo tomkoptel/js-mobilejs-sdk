@@ -1,4 +1,4 @@
-define 'js.mobile.dashboard.controller', ['js.mobile.dashboard.view'], (View) ->
+define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'], (View) ->
   class DashboardController
 
     constructor: (@context) ->
@@ -8,6 +8,7 @@ define 'js.mobile.dashboard.controller', ['js.mobile.dashboard.view'], (View) ->
       @dashletsLoaded = false
 
     initialize: ->
+      @callback.onLoadStart()
       @_injectViewport()
       @_scaleDashboard()
       @_attachDashletLoadListeners()
@@ -29,27 +30,29 @@ define 'js.mobile.dashboard.controller', ['js.mobile.dashboard.view'], (View) ->
       @container.scaleView()
 
     _attachDashletLoadListeners: ->
-      self = @
+      timeInterval = window.setInterval () =>
+        window.clearInterval timeInterval
 
-      jQuery(document).bind 'DOMNodeInserted', (e) ->
-        dashlets = jQuery('.dashlet')
-        self._removeRedundantArtifacts()
+        timeIntervalDashletContent = window.setInterval () =>
+          dashlets = jQuery('.dashlet')
 
-        if dashlets.length > 0
-          dashletContent = jQuery('.dashletContent > div.content')
-          if dashletContent.length is dashlets.length and not self.dashletsLoaded
-            self.dashletsLoaded = true
-            self._configureDashboard()
+          if dashlets.length > 0
+            dashletContent = jQuery('.dashletContent > div.content')
 
-        return
+            if dashletContent.length is dashlets.length
+              @_configureDashboard()
+              window.clearInterval timeIntervalDashletContent
+        , 100
+      , 100
 
     _configureDashboard: ->
       @_overrideDashletTouches()
       @_disableDashlets()
       @_removeRedundantArtifacts()
-      @callback.onDashletsLoaded()
+      @callback.onLoadDone()
 
     _removeRedundantArtifacts: ->
+      @logger.log "remove artifacts"
       jQuery('.header').hide()
       jQuery('.dashletToolbar').hide()
       jQuery('.show_chartTypeSelector_wrapper').hide()
@@ -58,9 +61,6 @@ define 'js.mobile.dashboard.controller', ['js.mobile.dashboard.view'], (View) ->
       jQuery('.dashboardViewer .dashboardContainer > .content > .body').css 'top', '0px'
       jQuery('.column.decorated > .content > .body').css 'top', '0px'
       jQuery('.column > .content > .body').css 'top', '0px'
-      jQuery('body').css '-webkit-transform', 'translateZ(0) !important'
-      jQuery('body').css '-webkit-backface-visibility', 'hidden !important'
-
 
     _disableDashlets: ->
       @logger.log "disable dashlet touches"

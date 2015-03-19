@@ -1,4 +1,7 @@
-define 'js.mobile.dashboard', ['js.mobile.dashboard.controller', 'js.mobile.dashboard.window'], (DashboardController, DashboardWindow) ->
+define 'js.mobile.amber.dashboard', (require) ->
+  DashboardController = require 'js.mobile.amber.dashboard.controller'
+  DashboardWindow = require 'js.mobile.amber.dashboard.window'
+
   class MobileDashboard
     @_instance: null
 
@@ -12,7 +15,7 @@ define 'js.mobile.dashboard', ['js.mobile.dashboard.controller', 'js.mobile.dash
       @_instance.minimizeDashlet()
 
     constructor: (@context) ->
-      @context.callback.onDashletsLoaded()
+      @context.callback.onScriptLoaded()
 
     wrapScreen: (width, height) ->
       window = new DashboardWindow(width, height)

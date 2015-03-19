@@ -1,3 +1,3 @@
-define 'js.mobile.dashboard.window', ->
+define 'js.mobile.amber.dashboard.window', ->
   class DashboardWindow
     constructor: (@width, @height) ->

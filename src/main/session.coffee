@@ -1,4 +1,4 @@
-define 'js.mobile.report.session', ->
+define 'js.mobile.session', ->
   class Session
     constructor: (options) ->
       {@username, @password, @organization} = options
