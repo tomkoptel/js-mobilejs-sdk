@@ -62,13 +62,31 @@ module.exports = (grunt) ->
           ]
 
     requirejs:
-      android_amber_dashboard_script:
+
+      ios_amber_dashboard_script:
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
-          out: "build/lib/#{properties.outputs.dashboard.android_amber}"
-          include: ['android/amber/dashboard/main.js']
+          out: "build/lib/#{properties.outputs.dashboard.ios_amber}"
+          include: ['ios/amber/dashboard/main.js']
           paths:
-            'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
+            'js.mobile.amber.ios.dashboard.client': 'ios/amber/dashboard/client'
+
+      ios_amber2_dashboard_script:
+        options:
+          mainConfigFile: 'build/config/requirejs_config.js'
+          out: "build/lib/#{properties.outputs.dashboard.ios_amber2}"
+          include: ['ios/amber2/dashboard/main.js']
+          paths:
+            'js.mobile.amber2.ios.dashboard.client': 'ios/amber2/dashboard/client'
+
+      ios_report_script:
+        options:
+          mainConfigFile: 'build/config/requirejs_config.js'
+          out: "build/lib/#{properties.outputs.report.ios}"
+          include: ['ios/report/main.js']
+          paths:
+            'js.mobile.ios.report.client': 'ios/report/client'
+            'js.mobile.ios.report.callback': 'ios/report/callback'
 
       android_amber2_dashboard_script:
         options:
@@ -78,11 +96,13 @@ module.exports = (grunt) ->
           paths:
             'js.mobile.amber2.android.dashboard.client': 'android/amber2/dashboard/client'
 
-      legacy_dashboard_script:
-          options:
-            mainConfigFile: 'build/config/requirejs_config.js'
-            out: "build/lib/#{properties.outputs.dashboard.legacy}"
-            include: ['main/fastclick/main.js']
+      android_amber_dashboard_script:
+        options:
+          mainConfigFile: 'build/config/requirejs_config.js'
+          out: "build/lib/#{properties.outputs.dashboard.android_amber}"
+          include: ['android/amber/dashboard/main.js']
+          paths:
+            'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
 
       android_report_script:
         options:
@@ -93,10 +113,21 @@ module.exports = (grunt) ->
             'js.mobile.android.report.client': 'android/report/client'
             'js.mobile.android.report.callback': 'android/report/callback'
 
+      legacy_dashboard_script:
+          options:
+            mainConfigFile: 'build/config/requirejs_config.js'
+            out: "build/lib/#{properties.outputs.dashboard.legacy}"
+            include: ['main/fastclick/main.js']
 
-    watch: all:
-      files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
-      tasks: ['buildR', 'build:move']
+
+
+    watch:
+      android:
+        files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
+        tasks: ['build:android', 'build:move']
+      ios:
+        files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
+        tasks: ['build:ios', 'build:move']
 
 
   grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) =>
@@ -106,11 +137,18 @@ module.exports = (grunt) ->
   grunt.registerTask 'buildConfig', 'coffee:config'
   grunt.registerTask 'buildDev', 'coffee:dev'
   grunt.registerTask 'buildTest', 'coffee:test'
-  grunt.registerTask 'requirejs:compile', [
+  grunt.registerTask 'requirejs:compile:android', [
     'requirejs:android_report_script',
     'requirejs:android_amber_dashboard_script',
     'requirejs:android_amber2_dashboard_script',
     'requirejs:legacy_dashboard_script',
   ]
-  grunt.registerTask 'buildR', ['coffee:dev', 'coffee:config', 'requirejs:compile']
-  grunt.registerTask 'moveDev', ['buildR']
+  grunt.registerTask 'requirejs:compile:ios', [
+    'requirejs:ios_report_script',
+    'requirejs:ios_amber_dashboard_script',
+    'requirejs:ios_amber2_dashboard_script',
+    'requirejs:legacy_dashboard_script',
+  ]
+  grunt.registerTask 'coffee:all', ['coffee:dev', 'coffee:config']
+  grunt.registerTask 'build:android', ['coffee:all', 'requirejs:compile:android']
+  grunt.registerTask 'build:ios', ['coffee:all', 'requirejs:compile:ios']

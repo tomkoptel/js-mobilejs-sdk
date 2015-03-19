@@ -1,11 +1,11 @@
 module.exports = (grunt, platform, dst) ->
 
   fs = require('fs')
+  path = require('path')
   globalProperties = grunt.file.readJSON('.properties.json')
   commonProperties = grunt.file.readJSON('common_properties.json')
 
   copyFunc = (platform, dst) ->
-    path = require('path')
     source_dir = path.resolve(__dirname, "../../lib")
     files = fs.readdirSync(source_dir)
 
@@ -32,6 +32,7 @@ module.exports = (grunt, platform, dst) ->
 
   if not dst?
     grunt.log.write("No 'dst' argument peeking env 'properties.env.project.dst' \n")
+
 
     dst = globalProperties.env.project.dst
     if not dst?
