@@ -37,6 +37,8 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             dashboardId = self.v.dashboard.componentIdDomAttribute
 
             $(@container()).find("[#{dashboardId}]").on 'click', () ->
+              $('.show_chartTypeSelector_wrapper').show()
+
               id = $(this).attr dashboardId
               component = self.getComponentById id
 
@@ -72,6 +74,8 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(component.id)
 
     minimizeDashlet: ->
+      $('.show_chartTypeSelector_wrapper').hide()
+
       dashboardId = @v.dashboard.componentIdDomAttribute
       component = @maximizedComponent
 
