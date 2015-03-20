@@ -9,6 +9,7 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
 
     initialize: ->
       @callback.onLoadStart()
+      @_removeRedundantArtifacts()
       @_injectViewport()
       @_scaleDashboard()
       @_attachDashletLoadListeners()
@@ -48,19 +49,28 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
     _configureDashboard: ->
       @_overrideDashletTouches()
       @_disableDashlets()
-      @_removeRedundantArtifacts()
       @callback.onLoadDone()
 
     _removeRedundantArtifacts: ->
       @logger.log "remove artifacts"
-      jQuery('.header').hide()
-      jQuery('.dashletToolbar').hide()
-      jQuery('.show_chartTypeSelector_wrapper').hide()
-      jQuery('.column.decorated').css 'margin', '0px'
-      jQuery('.column.decorated').css 'border', 'none'
-      jQuery('.dashboardViewer .dashboardContainer > .content > .body').css 'top', '0px'
-      jQuery('.column.decorated > .content > .body').css 'top', '0px'
-      jQuery('.column > .content > .body').css 'top', '0px'
+      customStyle = "
+        .header, .dashletToolbar, .show_chartTypeSelector_wrapper {
+            display: none !important;
+        }
+        .column.decorated {
+            margin: 0 !important;
+            border: none !important;
+        }
+        .dashboardViewer.dashboardContainer>.content>.body,
+        .column.decorated>.content>.body,
+        .column>.content>.body {
+              top: 0 !important;
+        }
+        #mainNavigation{
+          display: none !important;
+        }
+      "
+      jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo 'head'
 
     _disableDashlets: ->
       @logger.log "disable dashlet touches"

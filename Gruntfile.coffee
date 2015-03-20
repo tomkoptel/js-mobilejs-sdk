@@ -119,8 +119,6 @@ module.exports = (grunt) ->
             out: "build/lib/#{properties.outputs.dashboard.legacy}"
             include: ['main/fastclick/main.js']
 
-
-
     watch:
       android:
         files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
@@ -134,9 +132,6 @@ module.exports = (grunt) ->
     mobileTask = require('./build/config/task/grunt-mobile-move')
     mobileTask.call(@, grunt, platform, dst)
 
-  grunt.registerTask 'buildConfig', 'coffee:config'
-  grunt.registerTask 'buildDev', 'coffee:dev'
-  grunt.registerTask 'buildTest', 'coffee:test'
   grunt.registerTask 'requirejs:compile:android', [
     'requirejs:android_report_script',
     'requirejs:android_amber_dashboard_script',
