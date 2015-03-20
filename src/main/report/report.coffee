@@ -8,7 +8,11 @@ define 'js.mobile.report', (require) ->
     @getInstance: (context) ->
       @_instance ||= new MobileReport context
 
-    constructor: (@context) ->
+    @setCredentials: (options) ->
+      @_instance.setCredentials options
+
+    @destroy: ->
+      @_instance.destroyReport()
 
     @run: (options) ->
       @_instance.run options
@@ -16,15 +20,23 @@ define 'js.mobile.report', (require) ->
     @selectPage: (page) ->
       @_instance.selectPage page
 
+    constructor: (@context) ->
+
+    setCredentials: (options) ->
+      @session = new Session options
+
     selectPage: (page) ->
       if @reportController
         @reportController.selectPage page
 
     run: (options) ->
-      options.session = new Session options
+      options.session = @session
       options.context = @context
       @reportController = new ReportController options
       @reportController.runReport()
+
+    destroyReport: ->
+      @reportController.destroyReport()
 
   root = window ? exports
   root.MobileReport = MobileReport
