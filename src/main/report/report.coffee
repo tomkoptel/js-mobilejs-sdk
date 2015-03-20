@@ -9,6 +9,7 @@ define 'js.mobile.report', (require) ->
       @_instance ||= new MobileReport context
 
     constructor: (@context) ->
+      @context.callback.onScriptLoaded()
 
     @run: (options) ->
       @_instance.run options

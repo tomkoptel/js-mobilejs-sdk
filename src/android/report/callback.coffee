@@ -1,7 +1,5 @@
 define 'js.mobile.android.report.callback', (require) ->
-  Callback = require 'js.mobile.report.callback'
-
-  class ReportCallback extends Callback
+  class ReportCallback
     onScriptLoaded: ->
       Android.onScriptLoaded()
       return

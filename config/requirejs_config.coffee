@@ -6,7 +6,6 @@ requirejs.config
     #  Common components
     'js.mobile.logger': 'main/logger'
     'js.mobile.context': 'main/context'
-    'js.mobile.client': 'main/client'
     'js.mobile.session': 'main/session'
 
     #  Common Android components
@@ -29,7 +28,6 @@ requirejs.config
 
     #  Report components
     'js.mobile.report': 'main/report/report'
-    'js.mobile.report.callback': 'main/report/callback'
     'js.mobile.report.controller': 'main/report/controller'
 
     # Legacy components
