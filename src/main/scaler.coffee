@@ -1,5 +1,5 @@
-define 'js.mobile.scaller', ->
-  class Scaller
+define 'js.mobile.scaler', ->
+  class Scaler
     scale: (factor) ->
       jQuery("#scale_style").remove()
 

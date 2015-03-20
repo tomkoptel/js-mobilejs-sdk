@@ -23,6 +23,9 @@ define 'js.mobile.report.controller', ->
 
       visualize @session.authOptions(), @_executeReport
 
+    destroyReport: ->
+      @loader.destroy()
+
     _executeReport: (visualize) =>
       @loader = visualize.report
         resource: @uri

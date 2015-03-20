@@ -1,13 +1,13 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
-  Scaller = require 'js.mobile.scaller'
+  Scaler = require 'js.mobile.scaler'
 
   class DashboardController
     constructor: (@context) ->
       @logger = @context.logger
       @callback = @context.callback
       @container = new View el: jQuery('#frame'), context: @context
-      @scaler = new Scaler()
+      @scaler = new Scaler
 
     initialize: ->
       @callback.onLoadStart()

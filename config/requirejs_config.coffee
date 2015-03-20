@@ -7,7 +7,7 @@ requirejs.config
     'js.mobile.logger': 'main/logger'
     'js.mobile.context': 'main/context'
     'js.mobile.session': 'main/session'
-    'js.mobile.scaller': 'main/scaler'
+    'js.mobile.scaler': 'main/scaler'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'

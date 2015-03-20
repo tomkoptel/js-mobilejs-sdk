@@ -1,5 +1,6 @@
 define 'js.mobile.amber2.dashboard.controller', (require) ->
   $ = require 'jquery'
+  Scaler = require 'js.mobile.scaler'
 
   class DashboardController
     constructor: (options) ->
