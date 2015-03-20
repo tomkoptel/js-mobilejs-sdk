@@ -2,11 +2,11 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
   $ = require 'jquery'
 
   class DashboardController
-
     constructor: (options) ->
       {@context, @session, @uri} = options
       @callback = @context.callback
       @logger = @context.logger
+      @scaler = new Scaler
 
     runDashboard: ->
       @callback.onLoadStart()
@@ -14,7 +14,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       self = @
       visualize @session.authOptions(), (v) ->
         self.v = v
-        self.generateScalingClasses 0.5
+        self.scaler.scale 0.25
 
         self.dashboard = v.dashboard
           animation: false
@@ -94,33 +94,3 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @dashboard.data().components.filter((c) ->
         c.id == id
       )[0]
-
-    generateScalingClasses: (factor) ->
-      scaledCanvasCss =
-        ".scaledCanvas {
-           transform-origin: 0 0 0;
-           -ms-transform-origin: 0 0 0;
-           -webkit-transform-origin: 0 0 0;
-
-           transform: scale( #{factor} );
-           -ms-transform: scale( #{factor} );
-           -webkit-transform: scale( #{factor} );
-
-           width: #{100 / factor}% !important;
-           height: #{100 / factor}% !important;
-         }"
-      originalDashletInScaledCanvasCss =
-        ".dashboardCanvas > .content > .body div.canvasOverlay.originalDashletInScaledCanvas {
-          transform-origin: 0 0 0;
-          -ms-transform-origin: 0 0 0;
-          -webkit-transform-origin: 0 0 0;
-
-          transform: scale( #{1 / factor} );
-          -ms-transform: scale( #{1 / factor} );
-          -webkit-transform: scale( #{1 / factor} );
-
-          width: #{100 * factor}% !important;
-          height: #{100 * factor}% !important;
-        }"
-      $('<style></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo 'head'
-      return

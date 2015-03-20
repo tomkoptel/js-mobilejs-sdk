@@ -1,21 +1,26 @@
-define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'], (View) ->
-  class DashboardController
+define 'js.mobile.amber.dashboard.controller',(require) ->
+  View = require 'js.mobile.amber.dashboard.view'
+  Scaller = require 'js.mobile.scaller'
 
+  class DashboardController
     constructor: (@context) ->
       @logger = @context.logger
       @callback = @context.callback
       @container = new View el: jQuery('#frame'), context: @context
-      @dashletsLoaded = false
+      @scaler = new Scaler()
 
     initialize: ->
       @callback.onLoadStart()
+      @scaler.scale 0.25
+
       @_removeRedundantArtifacts()
       @_injectViewport()
-      @_scaleDashboard()
       @_attachDashletLoadListeners()
 
     minimizeDashlet: ->
       @logger.log "minimize dashlet"
+      @logger.log "Remove original scale"
+      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay").removeClass "originalDashletInScaledCanvas"
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
       @_disableDashlets()
@@ -28,7 +33,7 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
       viewPort.setAttribute 'content', "width=device-width, height=device-height, user-scalable=yes"
 
     _scaleDashboard: ->
-      @container.scaleView()
+      jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _attachDashletLoadListeners: ->
       timeInterval = window.setInterval () =>
@@ -47,6 +52,7 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
       , 100
 
     _configureDashboard: ->
+      @_scaleDashboard()
       @_overrideDashletTouches()
       @_disableDashlets()
       @callback.onLoadDone()
@@ -72,6 +78,7 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
       "
       jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo 'head'
 
+
     _disableDashlets: ->
       @logger.log "disable dashlet touches"
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
@@ -95,7 +102,6 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
 
     _maximizeDashlet: (dashlet, title) ->
       @logger.log "maximizing dashlet"
-      @logger.log "context: " + @context
 
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
       dashlets = new View el: dashletElements, context: @context
@@ -105,3 +111,6 @@ define 'js.mobile.amber.dashboard.controller', ['js.mobile.amber.dashboard.view'
 
       button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0])
       button.click()
+
+      @logger.log "Add original scale"
+      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay").addClass "originalDashletInScaledCanvas"
