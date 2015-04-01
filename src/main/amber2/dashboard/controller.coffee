@@ -18,7 +18,10 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         self.scaler.scale 0.25
 
         self.dashboard = v.dashboard
-          animation: false
+          report:
+            chart:
+              animation: false
+              zoom: false
           container: '#container'
           resource: self.uri
           success: ->
