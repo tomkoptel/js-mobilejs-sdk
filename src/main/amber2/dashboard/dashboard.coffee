@@ -11,6 +11,9 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @run: (options) ->
       @_instance.run options
 
+    @destroy: ->
+      @_instance.destroy()
+
     @minimizeDashlet: ->
       @_instance.minimizeDashlet()
 
@@ -20,11 +23,22 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @refresh: ->
       @_instance.refresh()
 
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    authorize: (options) ->
+      @session = new Session options
+
+    @authorize: (options) ->
+      @_instance.authorize options
+
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
+    destroy: ->
+      @dashboardController.destroyDashboard()
+
+    # Run {'uri': '%@'}
     run: (options) ->
-      options.session = new Session options
+      options.session = @session
       options.context = @context
       @dashboardController = new DashboardController options
       @dashboardController.runDashboard()

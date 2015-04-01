@@ -9,16 +9,19 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @logger = @context.logger
       @scaler = new Scaler
 
+    destroyDashboard: ->
+      @dashboard.destroy()
+
     runDashboard: ->
       @callback.onLoadStart()
 
       self = @
       visualize @session.authOptions(), (v) ->
         self.v = v
-        self.scaler.scale 0.25
+        self.scaler.scale 0.5
 
         self.dashboard = v.dashboard
-          animation: false
+          # animation: false
           container: '#container'
           resource: self.uri
           success: ->

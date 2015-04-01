@@ -14,8 +14,10 @@ requirejs.config
     'js.mobile.android.logger': 'android/logger'
 
     # Common Ios components
+    'js.mobile.ios.callbacks.WebKitCallback': 'ios/callbacks/WebKitCallback'
     'js.mobile.ios.dashboard.callback': 'ios/dashboard/callback'
-    'js.mobile.ios.logger': 'ios/logger'
+    'js.mobile.ios.loggers.logger': 'ios/loggers/logger'
+    'js.mobile.ios.loggers.WebKitLogger': 'ios/loggers/WebKitLogger'
 
     # Amber Dashboard components
     'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'

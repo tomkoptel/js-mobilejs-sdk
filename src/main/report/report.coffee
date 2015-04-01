@@ -8,8 +8,8 @@ define 'js.mobile.report', (require) ->
     @getInstance: (context) ->
       @_instance ||= new MobileReport context
 
-    @setCredentials: (options) ->
-      @_instance.setCredentials options
+    @authorize: (options) ->
+      @_instance.authorize options
 
     @destroy: ->
       @_instance.destroyReport()
@@ -23,14 +23,17 @@ define 'js.mobile.report', (require) ->
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
-    setCredentials: (options) ->
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    authorize: (options) ->
       @session = new Session options
 
     selectPage: (page) ->
       if @reportController
         @reportController.selectPage page
 
+    # Run {'uri': '%@', 'params': %@}
     run: (options) ->
+      console.log "run report with options" + options
       options.session = @session
       options.context = @context
       @reportController = new ReportController options

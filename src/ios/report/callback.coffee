@@ -14,7 +14,7 @@ define 'js.mobile.ios.report.callback', (require) ->
       return
 
     onLoadError: (error) ->
-      @_makeCallback "reportDidEndRenderFailured"
+      @_makeCallback "reportDidEndRenderFailured&error=" + error
       return
 
     onTotalPagesLoaded: (pages) ->
@@ -26,11 +26,11 @@ define 'js.mobile.ios.report.callback', (require) ->
       return
 
     onReferenceClick: (location) ->
-      console.log "onReferenceClick"
+      @_makeCallback "handleReferenceClick&location=" + location
       return
 
     onReportExecutionClick: (reportUri, params) ->
-      console.log "onReportExecutionClick"
+      @_makeCallback "runReport&params=" + params
       return
 
     _makeCallback: (command) ->
