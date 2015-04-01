@@ -11,7 +11,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     initialize: ->
       @callback.onLoadStart()
-      @scaler.scale 0.25
+      # @scaler.scale 0.25
 
       @_removeRedundantArtifacts()
       @_injectViewport()
@@ -30,7 +30,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _injectViewport: ->
       viewPort = document.querySelector 'meta[name=viewport]'
-      viewPort.setAttribute 'content', "width=device-width, height=device-height, user-scalable=yes"
+      viewPort.setAttribute 'content',
+       "target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes"
 
     _scaleDashboard: ->
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'

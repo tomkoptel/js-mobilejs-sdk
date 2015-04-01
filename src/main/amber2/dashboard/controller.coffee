@@ -19,9 +19,12 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       visualize @session.authOptions(), (v) ->
         self.v = v
         self.scaler.scale 0.5
-
+        
         self.dashboard = v.dashboard
-          # animation: false
+          report:
+            chart:
+              animation: false
+              zoom: false
           container: '#container'
           resource: self.uri
           success: ->
