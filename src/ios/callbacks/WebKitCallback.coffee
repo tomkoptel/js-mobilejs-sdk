@@ -1,10 +1,26 @@
 define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
   class IosCallback
-    onMaximize: (title) ->
+    onMaximizeStart: (title) ->
       @_makeCallback {"command" : "onMaximize", "parameters" : {"title" : title} }
       return
 
-    onMinimize: ->
+    onMaximizeEnd: (title) ->
+      @_makeCallback {"command" : "onMaximize", "parameters" : {"title" : title} }
+      return
+
+    onMaximizeFailed: (title) ->
+      @_makeCallback {"command" : "onMaximize", "parameters" : {"title" : title} }
+      return
+
+    onMinimizeStart: ->
+      @_makeCallback {"command" : "onMinimize", "parameters" : {}}
+      return
+
+    onMinimizeEnd: ->
+      @_makeCallback {"command" : "onMinimize", "parameters" : {}}
+      return
+
+    onMinimizeFailed: ->
       @_makeCallback {"command" : "onMinimize", "parameters" : {}}
       return
 
