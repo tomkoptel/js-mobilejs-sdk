@@ -64,7 +64,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
 
               return
 
-            self.callback.onLoadDone()
+            self.callback.onLoadDone(self.components)
 
             return
           error: (e) ->

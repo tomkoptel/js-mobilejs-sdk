@@ -16,7 +16,7 @@ define 'js.mobile.android.dashboard.callback', (require) ->
       Android.onLoadStart()
       return
 
-    onLoadDone: ->
+    onLoadDone: (components) ->
       Android.onLoadDone()
       return
 
