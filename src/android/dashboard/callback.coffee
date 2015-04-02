@@ -1,7 +1,15 @@
 define 'js.mobile.android.dashboard.callback', (require) ->
   class AndroidCallback
-    onMaximize: (title) ->
-      Android.onMaximize(title)
+    onMaximizeStart: (title) ->
+      Android.onMaximizeStart(title)
+      return
+
+    onMaximizeEnd: (title) ->
+      Android.onMaximizeEnd(title)
+      return
+
+    onMaximizeFailed: (error) ->
+      Android.onMaximizeFailed(error)
       return
 
     onMinimize: ->

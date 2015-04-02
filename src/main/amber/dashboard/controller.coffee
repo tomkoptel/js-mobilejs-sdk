@@ -11,7 +11,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     initialize: ->
       @callback.onLoadStart()
-      # @scaler.scale 0.25
+      @scaler.scale 0.25
 
       @_removeRedundantArtifacts()
       @_injectViewport()
@@ -108,7 +108,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       dashlets = new View el: dashletElements, context: @context
       dashlets.enable()
 
-      @callback.onMaximize title
+      @callback.onMaximizeStart title
 
       button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0])
       button.click()

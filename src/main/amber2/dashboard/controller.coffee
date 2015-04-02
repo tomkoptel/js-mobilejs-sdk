@@ -92,12 +92,15 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             .find("[#{dashboardId}='#{id}']")
             .addClass 'originalDashletInScaledCanvas'
 
+          self.callback.onMaximizeStart component.name
           self.dashboard.updateComponent id,
             maximized: true
             interactive: true
-
-          self.maximizedComponent = component
-          self.callback.onMaximize component.name
+            , () ->
+              self.maximizedComponent = component
+              self.callback.onMaximizeEnd component.name
+            , (error) ->
+              self.callback.onMaximizeFailed error
 
         return
 
