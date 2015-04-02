@@ -27,12 +27,14 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         .find("[#{dashboardId}='#{component.id}']")
         .removeClass 'originalDashletInScaledCanvas'
 
+      @callback.onMinimizeStart()
       @dashboard.updateComponent component.id,
         maximized: false
         interactive: false
-
-      @logger.log "onMinimize"
-      @callback.onMinimize()
+        , () =>
+          @callback.onMinimizeEnd()
+        , (error) =>
+          @callback.onMinimizeFailed(error)
 
     runDashboard: ->
       @callback.onLoadStart()

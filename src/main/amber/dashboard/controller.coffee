@@ -1,17 +1,14 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
-  Scaler = require 'js.mobile.scaler'
 
   class DashboardController
     constructor: (@context) ->
       @logger = @context.logger
       @callback = @context.callback
       @container = new View el: jQuery('#frame'), context: @context
-      @scaler = new Scaler
 
     initialize: ->
       @callback.onLoadStart()
-      @scaler.scale 0.25
 
       @_removeRedundantArtifacts()
       @_injectViewport()
@@ -24,7 +21,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
       @_disableDashlets()
-      @callback.onMinimize()
+      @callback.onMinimizeStart()
 
     # Private
 
