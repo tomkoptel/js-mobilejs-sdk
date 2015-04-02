@@ -12,66 +12,6 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     destroyDashboard: ->
       @dashboard.destroy()
 
-    runDashboard: ->
-      @callback.onLoadStart()
-
-      self = @
-      visualize @session.authOptions(), (v) ->
-        self.v = v
-        self.scaler.scale 0.5
-        
-        self.dashboard = v.dashboard
-          report:
-            chart:
-              animation: false
-              zoom: false
-          container: '#container'
-          resource: self.uri
-          success: ->
-            self.logger.log "Scale dashboard"
-            self.components = @data().components
-            $(@container()).find('.dashboardCanvas').addClass 'scaledCanvas'
-
-            self.logger.log "Iterate components"
-            @data().components.forEach (component) ->
-              if component.type != 'inputControl'
-                self.dashboard.updateComponent component.id,
-                  interactive: false
-                  toolbar: false
-              return
-
-            self.logger.log "Apply click events"
-            dashboardId = self.v.dashboard.componentIdDomAttribute
-
-            $(@container()).find("[#{dashboardId}]").on 'click', () ->
-              $('.show_chartTypeSelector_wrapper').show()
-
-              id = $(this).attr dashboardId
-              component = self.getComponentById id
-
-              if component and !component.maximized
-                $(self.dashboard.container())
-                  .find("[#{dashboardId}='#{id}']")
-                  .addClass 'originalDashletInScaledCanvas'
-
-                self.dashboard.updateComponent id,
-                  maximized: true
-                  interactive: true
-
-                self.maximizedComponent = component
-                self.logger.log "onMaximize"
-                self.callback.onMaximize component.name
-
-              return
-
-            self.callback.onLoadDone(self.components)
-
-            return
-          error: (e) ->
-            self.logger.log error
-            self.callback.onLoadError error
-            return
-
     refreshDashlet: ->
       if @maximizedComponent
         @dashboard.refresh(@maximizedComponent.id)
@@ -90,14 +30,106 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         .find("[#{dashboardId}='#{component.id}']")
         .removeClass 'originalDashletInScaledCanvas'
 
+      @callback.onMinimizeStart()
       @dashboard.updateComponent component.id,
         maximized: false
         interactive: false
+        , () =>
+          @callback.onMinimizeEnd()
+        , (error) =>
+          @callback.onMinimizeFailed(error)
 
-      @logger.log "onMinimize"
-      @callback.onMinimize()
+    runDashboard: ->
+      @callback.onLoadStart()
 
-    getComponentById: (id) ->
+      self = @
+      visualize @session.authOptions(), (v) ->
+        self.v = v
+        self.scaler.scale 0.5
+
+        self.dashboard = v.dashboard
+          report:
+            chart:
+              animation: false
+              zoom: false
+          container: '#container'
+          resource: self.uri
+          success: ->
+            self.selfDashboard = @
+            self.data = @data()
+            self.components = @data().components
+            self.container = @container()
+            self._scaleContainer()
+            self._configureComponents()
+            self._defineComponentsClickEvent()
+            self.callback.onLoadDone(self.components)
+          linkOptions:
+            events:
+              click: self._clickCallback
+          error: (e) ->
+            self.logger.log error
+            self.callback.onLoadError error
+
+    _scaleContainer: ->
+      @logger.log "Scale dashboard"
+      $(@container).find('.dashboardCanvas').addClass 'scaledCanvas'
+
+    _configureComponents: ->
+      @logger.log "Iterate components"
+      @components.forEach (component) =>
+        if component.type != 'inputControl'
+          @dashboard.updateComponent component.id,
+            interactive: false
+            toolbar: false
+        return
+
+    _defineComponentsClickEvent: ->
+      @logger.log "Apply click events"
+      dashboardId = @v.dashboard.componentIdDomAttribute
+
+      self = @
+      $(@container).find("[#{dashboardId}]").on 'click', () ->
+        $('.show_chartTypeSelector_wrapper').show()
+
+        id = $(this).attr dashboardId
+        component = self._getComponentById id
+
+        if component and !component.maximized
+          $(self.container)
+            .find("[#{dashboardId}='#{id}']")
+            .addClass 'originalDashletInScaledCanvas'
+
+          self.callback.onMaximizeStart component.name
+          self.dashboard.updateComponent id,
+            maximized: true
+            interactive: true
+            , () ->
+              self.maximizedComponent = component
+              self.callback.onMaximizeEnd component.name
+            , (error) ->
+              self.callback.onMaximizeFailed error
+
+        return
+
+    _getComponentById: (id) ->
       @dashboard.data().components.filter((c) ->
         c.id == id
       )[0]
+
+# Click events
+
+    _clickCallback: (event, link) =>
+      if link.type is "ReportExecution"
+        data =
+          resource: link.parameters._report
+          params: @_collectReportParams link
+        dataString = JSON.stringify(data, null, 4)
+        @callback.onReportExecution dataString
+
+    _collectReportParams: (link) ->
+        params = {}
+        for key of link.parameters
+          if key != '_report'
+            isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
+            params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
+        params

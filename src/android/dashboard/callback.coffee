@@ -1,11 +1,27 @@
 define 'js.mobile.android.dashboard.callback', (require) ->
   class AndroidCallback
-    onMaximize: (title) ->
-      Android.onMaximize(title)
+    onMaximizeStart: (title) ->
+      Android.onMaximizeStart(title)
       return
 
-    onMinimize: ->
-      Android.onMinimize()
+    onMaximizeEnd: (title) ->
+      Android.onMaximizeEnd(title)
+      return
+
+    onMaximizeFailed: (error) ->
+      Android.onMaximizeFailed(error)
+      return
+
+    onMinimizeStart: ->
+      Android.onMinimizeStart()
+      return
+
+    onMinimizeEnd: ->
+      Android.onMinimizeEnd()
+      return
+
+    onMinimizeFailed: (error) ->
+      Android.onMinimizeFailed(error)
       return
 
     onScriptLoaded: ->
@@ -22,4 +38,8 @@ define 'js.mobile.android.dashboard.callback', (require) ->
 
     onLoadError: (error) ->
       Android.onLoadError(error)
+      return
+
+    onReportExecution: (data) ->
+      Android.onReportExecution(data)
       return
