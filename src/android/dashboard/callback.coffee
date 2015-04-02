@@ -39,3 +39,7 @@ define 'js.mobile.android.dashboard.callback', (require) ->
     onLoadError: (error) ->
       Android.onLoadError(error)
       return
+
+    onReportExecution: (data) ->
+      Android.onReportExecution(data)
+      return

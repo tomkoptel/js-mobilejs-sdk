@@ -60,10 +60,12 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self._configureComponents()
             self._defineComponentsClickEvent()
             self.callback.onLoadDone()
+          linkOptions:
+            events:
+              click: self._clickCallback
           error: (e) ->
             self.logger.log error
             self.callback.onLoadError error
-            return
 
     _scaleContainer: ->
       @logger.log "Scale dashboard"
@@ -110,3 +112,21 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @dashboard.data().components.filter((c) ->
         c.id == id
       )[0]
+
+# Click events
+
+    _clickCallback: (event, link) =>
+      if link.type is "ReportExecution"
+        data =
+          resource: link.parameters._report
+          params: @_collectReportParams link
+        dataString = JSON.stringify(data, null, 4)
+        @callback.onReportExecution dataString
+
+    _collectReportParams: (link) ->
+        params = {}
+        for key of link.parameters
+          if key != '_report'
+            isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
+            params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
+        params
