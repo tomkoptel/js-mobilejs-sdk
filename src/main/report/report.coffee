@@ -31,7 +31,9 @@ define 'js.mobile.report', (require) ->
       if @reportController
         @reportController.selectPage page
 
-    # Run {'uri': '%@', 'params': %@}
+    # Run {'uri': '%@', 'params': %@} // default pages = '1'
+    # Run {'uri': '%@', 'params': %@, 'pages' : '%@'}
+    # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
     run: (options) ->
       console.log "run report with options" + options
       options.session = @session

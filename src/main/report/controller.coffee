@@ -1,7 +1,7 @@
 define 'js.mobile.report.controller', ->
   class ReportController
     constructor: (options) ->
-      {@context, @session, @uri, @params} = options
+      {@context, @session, @uri, @params, @pages} = options
       @callback = @context.callback
       @logger = @context.logger
 
@@ -9,6 +9,7 @@ define 'js.mobile.report.controller', ->
 
       @params ||= {}
       @totalPages = 0
+      @pages ||= '1'
 
     selectPage: (page) ->
       if @loader?
@@ -30,6 +31,7 @@ define 'js.mobile.report.controller', ->
       @loader = visualize.report
         resource: @uri
         params: @params
+        pages: @pages
         container: "#container"
         scale: "width"
         linkOptions:
@@ -39,6 +41,7 @@ define 'js.mobile.report.controller', ->
         events:
           changeTotalPages: @_processChangeTotalPages
         success: @_processSuccess
+      window.loader = @loader
 
     _processChangeTotalPages: (@totalPages) =>
         @callback.onTotalPagesLoaded @totalPages
