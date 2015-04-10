@@ -113,12 +113,6 @@ module.exports = (grunt) ->
             'js.mobile.android.report.client': 'android/report/client'
             'js.mobile.android.report.callback': 'android/report/callback'
 
-      legacy_dashboard_script:
-          options:
-            mainConfigFile: 'build/config/requirejs_config.js'
-            out: "build/lib/#{properties.outputs.dashboard.legacy}"
-            include: ['main/fastclick/main.js']
-
     watch:
       android:
         files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
@@ -136,13 +130,11 @@ module.exports = (grunt) ->
     'requirejs:android_report_script',
     'requirejs:android_amber_dashboard_script',
     'requirejs:android_amber2_dashboard_script',
-    'requirejs:legacy_dashboard_script',
   ]
   grunt.registerTask 'requirejs:compile:ios', [
     'requirejs:ios_report_script',
     'requirejs:ios_amber_dashboard_script',
     'requirejs:ios_amber2_dashboard_script',
-    'requirejs:legacy_dashboard_script',
   ]
   grunt.registerTask 'coffee:all', ['coffee:dev', 'coffee:config']
   grunt.registerTask 'build:android', ['coffee:all', 'requirejs:compile:android']

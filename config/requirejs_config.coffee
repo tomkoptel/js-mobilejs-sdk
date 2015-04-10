@@ -34,8 +34,6 @@ requirejs.config
     'js.mobile.report.controller': 'main/report/controller'
 
     # Legacy components
-    'fastclick': '../bower_components/fastclick/lib/fastclick'
     'jquery': '../bower_components/jquery/dist/jquery.min'
   shim:
-    'fastclick': {'exports': 'fastclick'}
     'jquery': {'exports': 'jquery'}
