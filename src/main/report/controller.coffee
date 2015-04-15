@@ -24,7 +24,12 @@ define 'js.mobile.report.controller', ->
 
       visualize @session.authOptions(), @_executeReport
 
+    exportReport: (format) ->
+      @loader.export({ outputFormat: format })
+             .done(@_exportResource)
+
     destroyReport: ->
+      console.log("destroy")
       @loader.destroy()
 
     _executeReport: (visualize) =>
@@ -91,3 +96,11 @@ define 'js.mobile.report.controller', ->
 
     _notifyPageChange: =>
       @callback.onPageChange @loader.pages()
+
+    _exportReport: (format) ->
+      console.log("export with format: " + format)
+      @loader.export({ outputFormat: format })
+             .done(@_exportResource)
+
+    _exportResource: (link) =>
+      @callback.onExportGetResourcePath link.href
