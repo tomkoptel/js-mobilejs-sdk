@@ -1,5 +1,4 @@
-require ['js.mobile.amber.android.dashboard.client', 'fastclick'], (AndroidClient, FastClick) ->
+require ['js.mobile.amber.android.dashboard.client'], (AndroidClient) ->
   (($) ->
-    FastClick.attach document.body
     new AndroidClient().run()
   ) jQuery
