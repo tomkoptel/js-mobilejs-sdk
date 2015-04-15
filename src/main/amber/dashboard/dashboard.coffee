@@ -5,8 +5,8 @@ define 'js.mobile.amber.dashboard', (require) ->
   class MobileDashboard
     @_instance: null
 
-    @getInstance: (context) ->
-      @_instance ||= new MobileDashboard context
+    @getInstance: (context, viewport) ->
+      @_instance ||= new MobileDashboard context, viewport
 
     @run: ->
       @_instance.run()
@@ -14,13 +14,13 @@ define 'js.mobile.amber.dashboard', (require) ->
     @minimizeDashlet: ->
       @_instance.minimizeDashlet()
 
-    constructor: (@context) ->
+    constructor: (@context, @viewport) ->
       @context.callback.onScriptLoaded()
 
     run: ->
       window = new DashboardWindow('100%', '100%')
       @context.setWindow window
-      @dashboardController = new DashboardController @context
+      @dashboardController = new DashboardController @context, @viewport
       @dashboardController.initialize()
 
     minimizeDashlet: ->

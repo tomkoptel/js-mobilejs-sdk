@@ -3,12 +3,14 @@ define 'js.mobile.amber.ios.dashboard.client', (require) ->
   IosLogger = require 'js.mobile.ios.loggers.logger'
   Context = require 'js.mobile.context'
   MobileDashboard = require 'js.mobile.amber.dashboard'
+  Viewport = require 'js.mobile.ios.viewport.dashboard.amber'
 
   class IosClient
     run: ->
       context = new Context
         callback: new IosCallback()
         logger: new IosLogger()
+      viewport = new Viewport()
 
-      MobileDashboard.getInstance context
+      MobileDashboard.getInstance context, viewport
       MobileDashboard.run()

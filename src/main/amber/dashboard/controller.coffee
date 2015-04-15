@@ -2,7 +2,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
 
   class DashboardController
-    constructor: (@context) ->
+    constructor: (@context, @viewport) ->
       @logger = @context.logger
       @callback = @context.callback
       @container = new View el: jQuery('#frame'), context: @context
@@ -26,9 +26,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     # Private
 
     _injectViewport: ->
-      viewPort = document.querySelector 'meta[name=viewport]'
-      viewPort.setAttribute 'content',
-       "target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes"
+      @viewport.configure()
 
     _scaleDashboard: ->
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
