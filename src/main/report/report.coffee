@@ -20,6 +20,9 @@ define 'js.mobile.report', (require) ->
     @selectPage: (page) ->
       @_instance.selectPage page
 
+    @exportReport: (format) ->
+      @_instance.exportReport format
+
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
@@ -40,6 +43,9 @@ define 'js.mobile.report', (require) ->
       options.context = @context
       @reportController = new ReportController options
       @reportController.runReport()
+
+    exportReport: (format) ->
+      @reportController.exportReport format
 
     destroyReport: ->
       @reportController.destroyReport()

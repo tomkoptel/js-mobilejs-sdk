@@ -2,7 +2,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
 
   class DashboardController
-    constructor: (@context) ->
+    constructor: (@context, @viewport) ->
       @logger = @context.logger
       @callback = @context.callback
       @container = new View el: jQuery('#frame'), context: @context
@@ -26,9 +26,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     # Private
 
     _injectViewport: ->
-      viewPort = document.querySelector 'meta[name=viewport]'
-      viewPort.setAttribute 'content',
-       "target-densitydpi=device-dpi, height=device-height, width=device-width, user-scalable=yes"
+      @viewport.configure()
 
     _scaleDashboard: ->
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
@@ -50,6 +48,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       , 100
 
     _configureDashboard: ->
+      @_createCustomOverlays()
       @_scaleDashboard()
       @_overrideDashletTouches()
       @_disableDashlets()
@@ -73,25 +72,40 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
         #mainNavigation{
           display: none !important;
         }
+        .customOverlay {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 1000;
+        }
       "
       jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo 'head'
 
+    _createCustomOverlays: ->
+      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
+      jQuery.each dashletElements, (key, value) ->
+        dashlet = jQuery(value)
+        overlay = jQuery("<div></div>")
+        overlay.addClass "customOverlay"
+        dashlet.prepend overlay
 
     _disableDashlets: ->
       @logger.log "disable dashlet touches"
-      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
-      dashlets = new View el: dashletElements, context: @context
-      dashlets.disable()
+      jQuery('.customOverlay').css 'display', 'block'
+
+    _enableDashlets: ->
+      @logger.log "enable dashlet touches"
+      jQuery('.customOverlay').css 'display', 'none'
 
     _overrideDashletTouches: ->
       @logger.log "override dashlet touches"
 
-      dashlets = jQuery('div.dashboardCanvas > div.content > div.body > div')
+      dashlets = jQuery('.customOverlay')
       dashlets.unbind()
       self = @
 
       dashlets.click ->
-        dashlet = jQuery(@)
+        dashlet = jQuery(@).parent()
         innerLabel = dashlet.find('.innerLabel > p')
         if innerLabel? and innerLabel.text?
           title = innerLabel.text()
@@ -100,10 +114,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _maximizeDashlet: (dashlet, title) ->
       @logger.log "maximizing dashlet"
-
-      dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
-      dashlets = new View el: dashletElements, context: @context
-      dashlets.enable()
+      @_enableDashlets()
 
       @callback.onMaximizeStart title
 

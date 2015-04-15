@@ -15,7 +15,7 @@ requirejs.config
 
     # Common Ios components
     'js.mobile.ios.callbacks.WebKitCallback': 'ios/callbacks/WebKitCallback'
-    'js.mobile.ios.dashboard.callback': 'ios/dashboard/callback'
+    'js.mobile.ios.callbacks.IosCallback': 'ios/callbacks/IosCallback'
     'js.mobile.ios.loggers.logger': 'ios/loggers/logger'
     'js.mobile.ios.loggers.WebKitLogger': 'ios/loggers/WebKitLogger'
 

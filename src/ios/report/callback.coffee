@@ -33,5 +33,8 @@ define 'js.mobile.ios.report.callback', (require) ->
       @_makeCallback "runReport&params=" + params
       return
 
+    onExportGetResourcePath: (link) ->
+      @_makeCallback "exportPath&link=" + link
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

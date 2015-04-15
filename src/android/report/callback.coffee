@@ -31,3 +31,6 @@ define 'js.mobile.android.report.callback', (require) ->
     onReportExecutionClick: (reportUri, params) ->
       Android.onReportExecutionClick(reportUri, params)
       return
+
+    onExportGetResourcePath: (link) ->
+      Android.onExportGetResourcePath(link)

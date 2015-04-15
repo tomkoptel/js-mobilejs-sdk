@@ -70,6 +70,7 @@ module.exports = (grunt) ->
           include: ['ios/amber/dashboard/main.js']
           paths:
             'js.mobile.amber.ios.dashboard.client': 'ios/amber/dashboard/client'
+            'js.mobile.ios.viewport.dashboard.amber' : 'ios/viewport/amber/viewport'
 
       ios_amber2_dashboard_script:
         options:
@@ -103,6 +104,7 @@ module.exports = (grunt) ->
           include: ['android/amber/dashboard/main.js']
           paths:
             'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
+            'js.mobile.android.viewport.dashboard.amber' : 'android/viewport/amber/viewport'
 
       android_report_script:
         options:
