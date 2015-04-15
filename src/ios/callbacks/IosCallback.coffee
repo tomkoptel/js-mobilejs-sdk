@@ -1,10 +1,10 @@
-define 'js.mobile.ios.dashboard.callback', (require) ->
+define 'js.mobile.ios.callbacks.IosCallback', (require) ->
   class IosCallback
-    onMaximize: (title) ->
+    onMaximizeStart: (title) ->
       @_makeCallback "command:maximize&title:#{title}"
       return
 
-    onMinimize: ->
+    onMinimizeStart: ->
       return
 
     onScriptLoaded: ->
