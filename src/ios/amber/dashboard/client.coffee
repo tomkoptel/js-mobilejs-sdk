@@ -13,4 +13,3 @@ define 'js.mobile.amber.ios.dashboard.client', (require) ->
       viewport = new Viewport()
 
       MobileDashboard.getInstance context, viewport
-      MobileDashboard.run()

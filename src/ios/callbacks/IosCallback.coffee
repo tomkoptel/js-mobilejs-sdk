@@ -8,6 +8,7 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
       return
 
     onScriptLoaded: ->
+      @_makeCallback "command:didScriptLoad"
       return
 
     onLoadStart: ->

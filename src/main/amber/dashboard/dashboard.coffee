@@ -1,12 +1,17 @@
 define 'js.mobile.amber.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber.dashboard.controller'
   DashboardWindow = require 'js.mobile.amber.dashboard.window'
+  Scaler = require 'js.mobile.scaler'
 
   class MobileDashboard
     @_instance: null
 
     @getInstance: (context, viewport) ->
       @_instance ||= new MobileDashboard context, viewport
+
+    @configure: (options) ->
+      @_instance.options = options
+      @_instance
 
     @run: ->
       @_instance.run()
@@ -18,9 +23,12 @@ define 'js.mobile.amber.dashboard', (require) ->
       @context.callback.onScriptLoaded()
 
     run: ->
-      window = new DashboardWindow('100%', '100%')
-      @context.setWindow window
-      @dashboardController = new DashboardController @context, @viewport
+      scaler = new Scaler @options
+      @dashboardController = new DashboardController
+       context: @context
+       viewport: @viewport
+       scaler: scaler
+
       @dashboardController.initialize()
 
     minimizeDashlet: ->
