@@ -1,7 +1,7 @@
 define 'js.mobile.scaler', ->
   class Scaler
     constructor: (options) ->
-       {@diagonale} = options
+       {@diagonal} = options
 
     initialize: ->
       factor = @_calculateFactor()
@@ -18,7 +18,9 @@ define 'js.mobile.scaler', ->
       jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
 
     _calculateFactor: ->
-      0.5
+      factor = @diagonal / 10.1
+      console.log factor
+      factor
 
     _generateStyles: (factor) ->
       jQuery("#scale_style").remove()
