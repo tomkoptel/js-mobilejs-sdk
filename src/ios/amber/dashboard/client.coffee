@@ -12,4 +12,4 @@ define 'js.mobile.amber.ios.dashboard.client', (require) ->
         logger: new IosLogger()
       viewport = new Viewport()
 
-      MobileDashboard.getInstance context, viewport
+      MobileDashboard.newInstance context, viewport
