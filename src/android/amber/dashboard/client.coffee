@@ -12,5 +12,4 @@ define 'js.mobile.amber.android.dashboard.client', (require) ->
         logger: new AndroidLogger()
       viewport = new Viewport()
 
-      MobileDashboard.getInstance context, viewport
-      MobileDashboard.run()
+      MobileDashboard.newInstance context, viewport
