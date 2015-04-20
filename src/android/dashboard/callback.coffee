@@ -43,3 +43,11 @@ define 'js.mobile.android.dashboard.callback', (require) ->
     onReportExecution: (data) ->
       Android.onReportExecution(data)
       return
+
+    onWindowResizeStart: ->
+      Android.onWindowResizeStart()
+      return
+
+    onWindowResizeEnd: ->
+      Android.onWindowResizeEnd()
+      return

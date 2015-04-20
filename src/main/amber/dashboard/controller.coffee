@@ -1,5 +1,6 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
+  DOMTreeObserver = require 'js.mobile.dom_tree_observer'
 
   class DashboardController
     constructor: (options) ->
@@ -9,9 +10,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     initialize: ->
       @callback.onLoadStart()
-
       @scaler.initialize()
-
+      @_setupResizeListener()
       @_removeRedundantArtifacts()
       @_injectViewport()
       @_attachDashletLoadListeners()
@@ -20,12 +20,19 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @logger.log "minimize dashlet"
       @logger.log "Remove original scale"
       @scaler.removeOriginalScale()
+      @_disableDashlets()
+
+      @callback.onMinimizeStart()
+      DOMTreeObserver.lastModify(@callback.onMinimizeEnd).wait()
+
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
-      @_disableDashlets()
-      @callback.onMinimizeStart()
-
     # Private
+
+    _setupResizeListener: ->
+      jQuery(window).resize () =>
+        DOMTreeObserver.lastModify(@callback.onWindowResizeEnd).wait()
+        @callback.onWindowResizeStart()
 
     _injectViewport: ->
       @viewport.configure()
@@ -34,22 +41,9 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _attachDashletLoadListeners: ->
-      timeInterval = window.setInterval () =>
-        window.clearInterval timeInterval
+      DOMTreeObserver.lastModify(@_configureDashboard).wait()
 
-        timeIntervalDashletContent = window.setInterval () =>
-          dashlets = jQuery('.dashlet')
-
-          if dashlets.length > 0
-            dashletContent = jQuery('.dashletContent > div.content')
-
-            if dashletContent.length is dashlets.length
-              @_configureDashboard()
-              window.clearInterval timeIntervalDashletContent
-        , 100
-      , 100
-
-    _configureDashboard: ->
+    _configureDashboard: =>
       @_createCustomOverlays()
       @_scaleDashboard()
       @_overrideDashletTouches()
@@ -119,6 +113,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @_enableDashlets()
 
       @callback.onMaximizeStart title
+      endListener = () => @callback.onMaximizeEnd title
+      DOMTreeObserver.lastModify(endListener).wait()
 
       button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0])
       button.click()

@@ -21,5 +21,13 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
     onLoadError: (error) ->
       return
 
+    onWindowResizeStart: ->
+      @_makeCallback "command:didWindowResizeStart"
+      return
+
+    onWindowResizeEnd: ->
+      @_makeCallback "command:didWindowResizeEnd"
+      return
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command
