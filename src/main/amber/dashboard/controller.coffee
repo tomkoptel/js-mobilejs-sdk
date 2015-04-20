@@ -1,5 +1,6 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
+  DOMTreeObserver = require 'js.mobile.dom_tree_observer'
 
   class DashboardController
     constructor: (options) ->
@@ -20,10 +21,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @logger.log "minimize dashlet"
       @logger.log "Remove original scale"
       @scaler.removeOriginalScale()
-      jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
-
       @_disableDashlets()
+
       @callback.onMinimizeStart()
+      endListener = () => @callback.onMinimizeEnd()
+      DOMTreeObserver.lastModify(endListener).wait()
+
+      jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
     # Private
 
@@ -119,6 +123,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @_enableDashlets()
 
       @callback.onMaximizeStart title
+      endListener = () => @callback.onMaximizeEnd title
+      DOMTreeObserver.lastModify(endListener).wait()
 
       button = jQuery(jQuery(dashlet).find('div.dashletToolbar > div.content div.buttons > .maximizeDashletButton')[0])
       button.click()

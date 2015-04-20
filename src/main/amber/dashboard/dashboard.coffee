@@ -44,4 +44,5 @@ define 'js.mobile.amber.dashboard', (require) ->
 
       @dashboardController.initialize()
 
+  root = window ? exports
   window.MobileDashboard = MobileDashboard
