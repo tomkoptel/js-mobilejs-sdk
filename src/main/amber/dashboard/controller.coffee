@@ -38,22 +38,9 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _attachDashletLoadListeners: ->
-      timeInterval = window.setInterval () =>
-        window.clearInterval timeInterval
+      DOMTreeObserver.lastModify(@_configureDashboard).wait()
 
-        timeIntervalDashletContent = window.setInterval () =>
-          dashlets = jQuery('.dashlet')
-
-          if dashlets.length > 0
-            dashletContent = jQuery('.dashletContent > div.content')
-
-            if dashletContent.length is dashlets.length
-              @_configureDashboard()
-              window.clearInterval timeIntervalDashletContent
-        , 100
-      , 100
-
-    _configureDashboard: ->
+    _configureDashboard: =>
       @_createCustomOverlays()
       @_scaleDashboard()
       @_overrideDashletTouches()
