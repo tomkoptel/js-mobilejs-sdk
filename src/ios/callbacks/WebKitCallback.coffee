@@ -40,6 +40,14 @@ define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
       @_makeCallback {"command" : "onLoadError", "parameters" : {"error" : error}}
       return
 
+    onWindowResizeStart: ->
+      @_makeCallback {"command" : "onWindowResizeStart", "parameters" : {}}
+      return
+
+    onWindowResizeEnd: ->
+      @_makeCallback {"command" : "onWindowResizeEnd", "parameters" : {}}
+      return
+
     _makeCallback: (command) ->
       console.log "callback"
       window.webkit.messageHandlers.callback.postMessage(command)

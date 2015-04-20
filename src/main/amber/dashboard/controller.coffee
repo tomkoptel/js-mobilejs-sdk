@@ -10,9 +10,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     initialize: ->
       @callback.onLoadStart()
-
       @scaler.initialize()
-
+      @_setupResizeListener()
       @_removeRedundantArtifacts()
       @_injectViewport()
       @_attachDashletLoadListeners()
@@ -30,6 +29,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
     # Private
+
+    _setupResizeListener: ->
+      jQuery(window).resize () =>
+        endListener = () => @callback.onWindowResizeEnd()
+        DOMTreeObserver.lastModify(endListener).wait()
+        @callback.onWindowResizeStart()
 
     _injectViewport: ->
       @viewport.configure()

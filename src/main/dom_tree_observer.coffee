@@ -15,10 +15,7 @@ define 'js.mobile.dom_tree_observer', ->
           window.clearInterval timeout
 
         timeout = window.setTimeout () =>
-            console.log "2"
             window.clearInterval timeout
             jQuery("body").unbind()
             @callback.call(@)
           , 1000
-
-        console.log "1"
