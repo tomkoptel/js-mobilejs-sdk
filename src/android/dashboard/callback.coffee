@@ -25,14 +25,17 @@ define 'js.mobile.android.dashboard.callback', (require) ->
       return
 
     onScriptLoaded: ->
+      console.log "onScriptLoaded"
       Android.onScriptLoaded()
       return
 
     onLoadStart: ->
+      console.log "onLoadStart"
       Android.onLoadStart()
       return
 
     onLoadDone: (components) ->
+      console.log "onLoadDone"
       Android.onLoadDone()
       return
 

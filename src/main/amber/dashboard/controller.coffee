@@ -11,7 +11,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     initialize: ->
       @callback.onLoadStart()
       @scaler.initialize()
-      @_setupResizeListener()
       @_removeRedundantArtifacts()
       @_injectViewport()
       @_attachDashletLoadListeners()
@@ -28,27 +27,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
     # Private
-
-    _setupResizeListener: ->
-      jQuery(window).resize () =>
-        DOMTreeObserver.lastModify(@callback.onWindowResizeEnd).wait()
-        @callback.onWindowResizeStart()
-
-    _injectViewport: ->
-      @viewport.configure()
-
-    _scaleDashboard: ->
-      jQuery('.dashboardCanvas').addClass 'scaledCanvas'
-
-    _attachDashletLoadListeners: ->
-      DOMTreeObserver.lastModify(@_configureDashboard).wait()
-
-    _configureDashboard: =>
-      @_createCustomOverlays()
-      @_scaleDashboard()
-      @_overrideDashletTouches()
-      @_disableDashlets()
-      @callback.onLoadDone()
 
     _removeRedundantArtifacts: ->
       @logger.log "remove artifacts"
@@ -77,13 +55,41 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       "
       jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo 'head'
 
+    _injectViewport: ->
+      @logger.log "inject custom viewport"
+      @viewport.configure()
+
+    _attachDashletLoadListeners: ->
+      @logger.log "attaching dashlet listener"
+      DOMTreeObserver.lastModify(@_configureDashboard).wait()
+
+    _configureDashboard: ->
+      @logger.log "_configureDashboard"
+      @_createCustomOverlays()
+      @_scaleDashboard()
+      @_overrideDashletTouches()
+      @_disableDashlets()
+      @callback.onLoadDone()
+      @_setupResizeListener()
+
     _createCustomOverlays: ->
+      @logger.log "_createCustomOverlays"
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
       jQuery.each dashletElements, (key, value) ->
         dashlet = jQuery(value)
         overlay = jQuery("<div></div>")
         overlay.addClass "customOverlay"
         dashlet.prepend overlay
+
+    _scaleDashboard: ->
+      @logger.log "_scaleDashboard"
+      jQuery('.dashboardCanvas').addClass 'scaledCanvas'
+
+    _setupResizeListener: ->
+      @logger.log "set resizer listener"
+      jQuery(window).resize () =>
+        DOMTreeObserver.lastModify(@callback.onWindowResizeEnd).wait()
+        @callback.onWindowResizeStart()
 
     _disableDashlets: ->
       @logger.log "disable dashlet touches"
@@ -93,7 +99,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @logger.log "enable dashlet touches"
       jQuery('.customOverlay').css 'display', 'none'
 
-    _overrideDashletTouches: ->
+    _overrideDashletTouches: =>
       @logger.log "override dashlet touches"
 
       dashlets = jQuery('.customOverlay')
