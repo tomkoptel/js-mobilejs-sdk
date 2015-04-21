@@ -80,8 +80,11 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
           height: 100%;
           z-index: 1000;
         }
+        .dashboardCanvas .dashlet > .dashletContent > .content {
+          -webkit-overflow-scrolling : auto !important;
+        }
       "
-      jQuery('<style id="custom_mobile"></style').text(customStyle).appendTo 'head'
+      jQuery('<style id="custom_mobile"></style>').text(customStyle).appendTo 'head'
 
     _createCustomOverlays: ->
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())

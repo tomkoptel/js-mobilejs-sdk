@@ -51,7 +51,7 @@ define 'js.mobile.scaler', ->
           width: #{100 * factor}% !important;
           height: #{100 * factor}% !important;
         }"
-      jQuery('<style id="scale_style"></style').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo 'head'
+      jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo 'head'
       return
 
     _applyScaleToDOM: ->
