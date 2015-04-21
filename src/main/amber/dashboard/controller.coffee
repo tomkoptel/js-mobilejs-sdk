@@ -63,7 +63,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @logger.log "attaching dashlet listener"
       DOMTreeObserver.lastModify(@_configureDashboard).wait()
 
-    _configureDashboard: ->
+    _configureDashboard: =>
       @logger.log "_configureDashboard"
       @_createCustomOverlays()
       @_scaleDashboard()
