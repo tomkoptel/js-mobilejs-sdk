@@ -18,7 +18,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     minimizeDashlet: ->
       @logger.log "minimize dashlet"
       @logger.log "Remove original scale"
-      @scaler.removeOriginalScale()
+      @_removeOriginalScale()
       @_disableDashlets()
 
       @callback.onMinimizeStart()
@@ -64,16 +64,39 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _attachDashletLoadListeners: ->
       @logger.log "attaching dashlet listener"
-      DOMTreeObserver.lastModify(@_configureDashboard).wait()
+      dashboardElInterval = window.setInterval () =>
+        dashboardContainer = jQuery('.dashboardCanvas')
+        if dashboardContainer.length > 0
+          window.clearInterval dashboardElInterval
+          @_scaleDashboard()
+      , 100
+
+      timeInterval = window.setInterval () =>
+        window.clearInterval timeInterval
+
+        timeIntervalDashletContent = window.setInterval () =>
+          dashlets = jQuery('.dashlet')
+
+          if dashlets.length > 0
+            dashletContent = jQuery('.dashletContent > div.content')
+
+            if dashletContent.length is dashlets.length
+              DOMTreeObserver.lastModify(@_configureDashboard).wait()
+              window.clearInterval timeIntervalDashletContent
+        , 100
+      , 100
 
     _configureDashboard: =>
       @logger.log "_configureDashboard"
       @_createCustomOverlays()
-      @_scaleDashboard()
       @_overrideDashletTouches()
       @_disableDashlets()
       @callback.onLoadDone()
       @_setupResizeListener()
+
+    _scaleDashboard: ->
+      @logger.log "_scaleDashboard"
+      jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _createCustomOverlays: ->
       @logger.log "_createCustomOverlays"
@@ -83,10 +106,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
         overlay = jQuery("<div></div>")
         overlay.addClass "customOverlay"
         dashlet.prepend overlay
-
-    _scaleDashboard: ->
-      @logger.log "_scaleDashboard"
-      jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _setupResizeListener: ->
       @logger.log "set resizer listener"
@@ -129,4 +148,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       button.click()
 
       @logger.log "Add original scale"
-      @scaler.addOriginalScale()
+      @_addOriginalScale()
+
+    _addOriginalScale: ->
+      @_getOverlay().addClass "originalDashletInScaledCanvas"
+
+    _removeOriginalScale: ->
+       @_getOverlay().removeClass "originalDashletInScaledCanvas"
+
+    _getOverlay: ->
+      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")

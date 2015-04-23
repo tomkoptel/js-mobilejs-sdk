@@ -1,13 +1,12 @@
 define 'js.mobile.amber2.dashboard.controller', (require) ->
   $ = require 'jquery'
-  Scaler = require 'js.mobile.scaler'
 
   class DashboardController
     constructor: (options) ->
-      {@context, @session, @uri} = options
+      {@context, @session, @uri, @scaler} = options
       @callback = @context.callback
       @logger = @context.logger
-      @scaler = new Scaler
+      @scaler.initialize()
 
     destroyDashboard: ->
       @dashboard.destroy()
@@ -41,11 +40,11 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
 
     runDashboard: ->
       @callback.onLoadStart()
+      @_scaleDashboard()
 
       self = @
       visualize @session.authOptions(), (v) ->
         self.v = v
-        self.scaler.scale 0.5
 
         self.dashboard = v.dashboard
           report:
@@ -59,7 +58,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self.data = @data()
             self.components = @data().components
             self.container = @container()
-            self._scaleContainer()
+
             self._configureComponents()
             self._defineComponentsClickEvent()
             self.callback.onLoadDone(self.components)
@@ -70,9 +69,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self.logger.log error
             self.callback.onLoadError error
 
-    _scaleContainer: ->
+    _scaleDashboard: ->
       @logger.log "Scale dashboard"
-      $(@container).find('.dashboardCanvas').addClass 'scaledCanvas'
+      $('#container').addClass 'scaledCanvas'
 
     _configureComponents: ->
       @logger.log "Iterate components"
