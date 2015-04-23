@@ -6,16 +6,6 @@ define 'js.mobile.scaler', ->
     initialize: ->
       factor = @_calculateFactor()
       @_generateStyles factor
-      @_applyScaleToDOM()
-
-    addOriginalScale: ->
-      @_getOverlay().addClass "originalDashletInScaledCanvas"
-
-    removeOriginalScale: ->
-       @_getOverlay().removeClass "originalDashletInScaledCanvas"
-
-    _getOverlay: ->
-      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
 
     _calculateFactor: ->
       @diagonal / 10.1
@@ -51,6 +41,3 @@ define 'js.mobile.scaler', ->
         }"
       jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo 'head'
       return
-
-    _applyScaleToDOM: ->
-      jQuery('.dashboardCanvas').addClass 'scaledCanvas'

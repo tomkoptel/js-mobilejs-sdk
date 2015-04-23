@@ -1,6 +1,7 @@
 define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
+  Scaler = require 'js.mobile.scaler'
 
   class MobileDashboard
     @_instance: null
@@ -40,6 +41,8 @@ define 'js.mobile.amber2.dashboard', (require) ->
     run: (options) ->
       options.session = @session
       options.context = @context
+      options.scaler = new Scaler options
+
       @dashboardController = new DashboardController options
       @dashboardController.runDashboard()
 

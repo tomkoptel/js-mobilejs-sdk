@@ -38,7 +38,6 @@ define 'js.mobile.report', (require) ->
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@'}
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
     run: (options) ->
-      console.log "run report with options" + options
       options.session = @session
       options.context = @context
       @reportController = new ReportController options
@@ -50,5 +49,4 @@ define 'js.mobile.report', (require) ->
     destroyReport: ->
       @reportController.destroyReport()
 
-  root = window ? exports
-  root.MobileReport = MobileReport
+  window.MobileReport = MobileReport

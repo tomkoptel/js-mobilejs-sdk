@@ -21,7 +21,6 @@ define 'js.mobile.report.controller', ->
 
     runReport: ->
       @callback.onLoadStart()
-
       visualize @session.authOptions(), @_executeReport
 
     exportReport: (format) ->
