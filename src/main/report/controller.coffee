@@ -1,7 +1,9 @@
-define 'js.mobile.report.controller', ->
+define 'js.mobile.report.controller', (reqiure) ->
+  jQuery = require 'jquery'
+
   class ReportController
     constructor: (options) ->
-      {@context, @uri, @params, @pages} = options
+      {@context, @uri, @session, @params, @pages} = options
       @callback = @context.callback
       @logger = @context.logger
 
@@ -21,14 +23,38 @@ define 'js.mobile.report.controller', ->
 
     runReport: ->
       @callback.onLoadStart()
-      visualize @_executeReport, @_executeFailedCallback, @_executeAlways
+      @_runReportWithoutAuth()
+
+    _runReportWithoutAuth: =>
+      @logger.log "_runReportWithoutAuth"
+      visualize @_executeReport, @_runReportWithoutAuthButWithHack, @_executeAlways
+
+    _runReportWithoutAuthButWithHack: (error) =>
+      @logger.log "_runReportWithoutAuthHack. Reason: #{error.message}"
+      skipAuth =
+        auth:
+          # if we are at this point we are already authenticated with HTTP API, so hook Viz.js auth to do nothing
+          loginFn: (properties, request) ->
+            # jQuery here is just for sample, any resolved Promise will work
+            return (new jQuery.Deferred()).resolve()
+
+      visualize(
+        skipAuth,
+        @_executeReport,
+        @_runReportWithAuth,
+        @_executeAlways
+      )
+
+    _runReportWithAuth: (error) =>
+      @logger.log "_runReportWithAuth. Reason: #{error.message}"
+      visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     exportReport: (format) ->
       @loader.export({ outputFormat: format })
              .done(@_exportResource)
 
     destroyReport: ->
-      console.log("destroy")
+      @logger.log "destroy"
       @loader.destroy()
 
     _executeReport: (visualize) =>
@@ -46,7 +72,7 @@ define 'js.mobile.report.controller', ->
           changeTotalPages: @_processChangeTotalPages
         success: @_processSuccess
 
-    _executeFailedCallback: (error) ->
+    _executeFailedCallback: (error) =>
       console.log error.message
 
     _executeAlways: ->
