@@ -3,4 +3,4 @@ define 'js.mobile.ios.viewport.dashboard.amber', ->
     configure: ->
       viewPort = document.querySelector 'meta[name=viewport]'
       viewPort.setAttribute 'content',
-       "width=device-width, minimum-scale=0.1, maximum-scale=1, user-scalable=yes"
+       "width=device-width, minimum-scale=0.1, maximum-scale=3, user-scalable=yes"
