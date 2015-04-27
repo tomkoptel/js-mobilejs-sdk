@@ -1,7 +1,7 @@
 define 'js.mobile.report.controller', ->
   class ReportController
     constructor: (options) ->
-      {@context, @session, @uri, @params, @pages} = options
+      {@context, @uri, @params, @pages} = options
       @callback = @context.callback
       @logger = @context.logger
 
@@ -21,7 +21,7 @@ define 'js.mobile.report.controller', ->
 
     runReport: ->
       @callback.onLoadStart()
-      visualize @session.authOptions(), @_executeReport
+      visualize @_executeReport, @_executeFailedCallback, @_executeAlways
 
     exportReport: (format) ->
       @loader.export({ outputFormat: format })
@@ -45,7 +45,12 @@ define 'js.mobile.report.controller', ->
         events:
           changeTotalPages: @_processChangeTotalPages
         success: @_processSuccess
-      window.loader = @loader
+
+    _executeFailedCallback: (error) ->
+      console.log error.message
+
+    _executeAlways: ->
+      console.log "always"
 
     _processChangeTotalPages: (@totalPages) =>
         @callback.onTotalPagesLoaded @totalPages
