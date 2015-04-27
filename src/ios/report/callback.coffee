@@ -36,5 +36,11 @@ define 'js.mobile.ios.report.callback', (require) ->
     onExportGetResourcePath: (link) ->
       @_makeCallback "exportPath&link=" + link
 
+    onRefreshSuccess: ->
+      @_makeCallback "refrshDidEndSuccessful"
+
+    onRefreshError: (error) ->
+      @_makeCallback "refrshDidEndError&error=" + error
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

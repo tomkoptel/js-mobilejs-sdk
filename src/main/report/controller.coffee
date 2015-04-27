@@ -28,8 +28,15 @@ define 'js.mobile.report.controller', ->
              .done(@_exportResource)
 
     destroyReport: ->
-      console.log("destroy")
+      @logger.log "destroy"
       @loader.destroy()
+
+    refresh: ->
+      @loader.refresh(
+        @callback.onRefreshSuccess,
+        (error) => @callback.onRefreshError error.message,
+        () ->
+      )
 
     _executeReport: (visualize) =>
       @loader = visualize.report
