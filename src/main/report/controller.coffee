@@ -14,8 +14,8 @@ define 'js.mobile.report.controller', (reqiure) ->
       @pages ||= '1'
 
     selectPage: (page) ->
-      if @loader?
-        @loader
+      if @report?
+        @report
           .pages(page)
           .run()
           .done(@_processSuccess)
@@ -23,14 +23,26 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     runReport: ->
       @callback.onLoadStart()
-      @_runReportWithoutAuthButWithHack()
+      @_getServerVersion @_runReportOnTheVersionBasis
+
+    _runReportOnTheVersionBasis: (version) =>
+      isAmber2orHigher = (version >= 6.1)
+      @logger.log "Version: #{version} Is amber2 or higher: #{isAmber2orHigher}"
+
+      if isAmber2orHigher
+        @_runReportWithoutAuth()
+      else
+        @_runReportWithoutAuthButWithHack()
 
     _runReportWithoutAuth: =>
       @logger.log "_runReportWithoutAuth"
-      visualize @_executeReport, @_runReportWithoutAuthButWithHack, @_executeAlways
+      visualize(
+        @_executeReport,
+        @_runReportWithoutAuthButWithHack
+      )
 
     _runReportWithoutAuthButWithHack: (error) =>
-      @logger.log "_runReportWithoutAuthHack."
+      @logger.log "_runReportWithoutAuthButWithHack."
       if error?
         @logger.log " Reason: #{error.message}"
 
@@ -41,12 +53,7 @@ define 'js.mobile.report.controller', (reqiure) ->
             # jQuery here is just for sample, any resolved Promise will work
             return (new jQuery.Deferred()).resolve()
 
-      visualize(
-        skipAuth,
-        @_executeReport,
-        @_runReportWithAuth,
-        @_executeAlways
-      )
+      visualize skipAuth, @_executeReport
 
     _runReportWithAuth: (error) =>
       @logger.log "_runReportWithAuth"
@@ -55,16 +62,15 @@ define 'js.mobile.report.controller', (reqiure) ->
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     exportReport: (format) ->
-      @loader.export({ outputFormat: format })
+      @report.export({ outputFormat: format })
              .done(@_exportResource)
 
     destroyReport: ->
       @logger.log "destroy"
-      @loader.destroy()
+      @report.destroy()
 
     _executeReport: (visualize) =>
-      console.log "I am in execute report"
-      @loader = visualize.report
+      @report = visualize.report
         resource: @uri
         params: @params
         pages: @pages
@@ -79,10 +85,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         success: @_processSuccess
 
     _executeFailedCallback: (error) =>
-      console.log error.message
-
-    _executeAlways: ->
-      console.log "always"
+      @logger.log error.message
 
     _processChangeTotalPages: (@totalPages) =>
         @callback.onTotalPagesLoaded @totalPages
@@ -92,7 +95,11 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _processErrors: (error) =>
       @logger.log error
-      @callback.onLoadError error
+      if error.errorCode is "authentication.error"
+        @callback.onLoadStart()
+        @_runReportWithAuth error
+      else
+        @callback.onLoadError error
 
     _processLinkClicks: (event, link) =>
       type = link.type
@@ -125,18 +132,35 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onReferenceClick href
 
     _loadPage: (page) ->
-      @loader.pages(page)
+      @report.pages(page)
         .run()
         .fail(@_processErrors)
         .done(@_notifyPageChange)
 
     _notifyPageChange: =>
-      @callback.onPageChange @loader.pages()
+      @callback.onPageChange @report.pages()
 
     _exportReport: (format) ->
-      console.log("export with format: " + format)
-      @loader.export({ outputFormat: format })
+      @logger.log("export with format: " + format)
+      @report.export({ outputFormat: format })
              .done(@_exportResource)
 
     _exportResource: (link) =>
       @callback.onExportGetResourcePath link.href
+
+    _getServerVersion: (callback) =>
+      @logger.log "_getServerVersion"
+      jQuery
+        .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
+        .done (response) =>
+          version = @_parseServerVersion(response)
+          @logger.log "Server version: #{version}"
+          callback.call(@, version)
+
+    _parseServerVersion: (response) =>
+      serverVersion = response.version
+      digits = serverVersion.match(/\d/g)
+      result = 0
+      for digit, index in digits
+        result += digit * Math.pow(10, index * -1)
+      return result
