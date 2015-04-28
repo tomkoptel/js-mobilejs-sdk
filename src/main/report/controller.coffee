@@ -23,14 +23,17 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     runReport: ->
       @callback.onLoadStart()
-      @_runReportWithoutAuth()
+      @_runReportWithoutAuthButWithHack()
 
     _runReportWithoutAuth: =>
       @logger.log "_runReportWithoutAuth"
       visualize @_executeReport, @_runReportWithoutAuthButWithHack, @_executeAlways
 
     _runReportWithoutAuthButWithHack: (error) =>
-      @logger.log "_runReportWithoutAuthHack. Reason: #{error.message}"
+      @logger.log "_runReportWithoutAuthHack."
+      if error?
+        @logger.log " Reason: #{error.message}"
+
       skipAuth =
         auth:
           # if we are at this point we are already authenticated with HTTP API, so hook Viz.js auth to do nothing
@@ -46,7 +49,9 @@ define 'js.mobile.report.controller', (reqiure) ->
       )
 
     _runReportWithAuth: (error) =>
-      @logger.log "_runReportWithAuth. Reason: #{error.message}"
+      @logger.log "_runReportWithAuth"
+      if error?
+        @logger.log " Reason: #{error.message}"
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     exportReport: (format) ->
@@ -58,6 +63,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       @loader.destroy()
 
     _executeReport: (visualize) =>
+      console.log "I am in execute report"
       @loader = visualize.report
         resource: @uri
         params: @params
