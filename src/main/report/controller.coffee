@@ -69,6 +69,13 @@ define 'js.mobile.report.controller', (reqiure) ->
       @logger.log "destroy"
       @report.destroy()
 
+    refresh: ->
+      @loader.refresh(
+        @callback.onRefreshSuccess,
+        (error) => @callback.onRefreshError error.message,
+        () ->
+      )
+
     _executeReport: (visualize) =>
       @report = visualize.report
         resource: @uri

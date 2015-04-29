@@ -9,44 +9,49 @@ define 'js.mobile.report', (require) ->
       @_instance ||= new MobileReport context
 
     @authorize: (options) ->
-      @_instance.authorize options
+      @_instance._authorize options
 
     @destroy: ->
-      @_instance.destroyReport()
+      @_instance._destroyReport()
 
     @run: (options) ->
-      @_instance.run options
+      @_instance._run options
 
     @selectPage: (page) ->
-      @_instance.selectPage page
+      @_instance._selectPage page
 
     @exportReport: (format) ->
-      @_instance.exportReport format
+      @_instance._exportReport format
+
+    @refresh: ->
+      @_instance._refreshController()
 
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    authorize: (options) ->
-      @session = new Session options
-
-    selectPage: (page) ->
-      if @reportController
-        @reportController.selectPage page
-
     # Run {'uri': '%@', 'params': %@} // default pages = '1'
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@'}
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
-    run: (options) ->
+    _run: (options) ->
       options.session = @session
       options.context = @context
       @reportController = new ReportController options
       @reportController.runReport()
 
-    exportReport: (format) ->
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    _authorize: (options) ->
+      @session = new Session options
+
+    _selectPage: (page) ->
+      if @reportController
+        @reportController.selectPage page
+    _exportReport: (format) ->
       @reportController.exportReport format
 
-    destroyReport: ->
+    _destroyReport: ->
       @reportController.destroyReport()
+
+    _refreshController: ->
+      @reportController.refresh()
 
   window.MobileReport = MobileReport

@@ -34,3 +34,9 @@ define 'js.mobile.android.report.callback', (require) ->
 
     onExportGetResourcePath: (link) ->
       Android.onExportGetResourcePath(link)
+
+    onRefreshSuccess: ->
+      Android.onRefreshSuccess()
+
+    onRefreshError: (error) ->
+      Android.onRefreshError(error)
