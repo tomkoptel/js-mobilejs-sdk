@@ -70,10 +70,9 @@ define 'js.mobile.report.controller', (reqiure) ->
       @report.destroy()
 
     refresh: ->
-      @loader.refresh(
-        @callback.onRefreshSuccess,
-        (error) => @callback.onRefreshError error.message,
-        () ->
+      @report.refresh(
+        () => @callback.onRefreshSuccess(),
+        (error) => @callback.onRefreshError error.message
       )
 
     _executeReport: (visualize) =>
