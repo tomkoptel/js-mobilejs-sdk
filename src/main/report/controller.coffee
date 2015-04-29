@@ -1,7 +1,9 @@
-define 'js.mobile.report.controller', ->
+define 'js.mobile.report.controller', (reqiure) ->
+  jQuery = require 'jquery'
+
   class ReportController
     constructor: (options) ->
-      {@context, @session, @uri, @params, @pages} = options
+      {@context, @uri, @session, @params, @pages} = options
       @callback = @context.callback
       @logger = @context.logger
 
@@ -12,8 +14,8 @@ define 'js.mobile.report.controller', ->
       @pages ||= '1'
 
     selectPage: (page) ->
-      if @loader?
-        @loader
+      if @report?
+        @report
           .pages(page)
           .run()
           .done(@_processSuccess)
@@ -21,15 +23,51 @@ define 'js.mobile.report.controller', ->
 
     runReport: ->
       @callback.onLoadStart()
-      visualize @session.authOptions(), @_executeReport
+      @_getServerVersion @_runReportOnTheVersionBasis
+
+    _runReportOnTheVersionBasis: (version) =>
+      isAmber2orHigher = (version >= 6.1)
+      @logger.log "Version: #{version} Is amber2 or higher: #{isAmber2orHigher}"
+
+      if isAmber2orHigher
+        @_runReportWithoutAuth()
+      else
+        @_runReportWithoutAuthButWithHack()
+
+    _runReportWithoutAuth: =>
+      @logger.log "_runReportWithoutAuth"
+      visualize(
+        @_executeReport,
+        @_runReportWithoutAuthButWithHack
+      )
+
+    _runReportWithoutAuthButWithHack: (error) =>
+      @logger.log "_runReportWithoutAuthButWithHack."
+      if error?
+        @logger.log " Reason: #{error.message}"
+
+      skipAuth =
+        auth:
+          # if we are at this point we are already authenticated with HTTP API, so hook Viz.js auth to do nothing
+          loginFn: (properties, request) ->
+            # jQuery here is just for sample, any resolved Promise will work
+            return (new jQuery.Deferred()).resolve()
+
+      visualize skipAuth, @_executeReport
+
+    _runReportWithAuth: (error) =>
+      @logger.log "_runReportWithAuth"
+      if error?
+        @logger.log " Reason: #{error.message}"
+      visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     exportReport: (format) ->
-      @loader.export({ outputFormat: format })
+      @report.export({ outputFormat: format })
              .done(@_exportResource)
 
     destroyReport: ->
       @logger.log "destroy"
-      @loader.destroy()
+      @report.destroy()
 
     refresh: ->
       @loader.refresh(
@@ -39,7 +77,7 @@ define 'js.mobile.report.controller', ->
       )
 
     _executeReport: (visualize) =>
-      @loader = visualize.report
+      @report = visualize.report
         resource: @uri
         params: @params
         pages: @pages
@@ -52,7 +90,9 @@ define 'js.mobile.report.controller', ->
         events:
           changeTotalPages: @_processChangeTotalPages
         success: @_processSuccess
-      window.loader = @loader
+
+    _executeFailedCallback: (error) =>
+      @logger.log error.message
 
     _processChangeTotalPages: (@totalPages) =>
         @callback.onTotalPagesLoaded @totalPages
@@ -62,7 +102,11 @@ define 'js.mobile.report.controller', ->
 
     _processErrors: (error) =>
       @logger.log error
-      @callback.onLoadError error
+      if error.errorCode is "authentication.error"
+        @callback.onLoadStart()
+        @_runReportWithAuth error
+      else
+        @callback.onLoadError error
 
     _processLinkClicks: (event, link) =>
       type = link.type
@@ -95,18 +139,35 @@ define 'js.mobile.report.controller', ->
       @callback.onReferenceClick href
 
     _loadPage: (page) ->
-      @loader.pages(page)
+      @report.pages(page)
         .run()
         .fail(@_processErrors)
         .done(@_notifyPageChange)
 
     _notifyPageChange: =>
-      @callback.onPageChange @loader.pages()
+      @callback.onPageChange @report.pages()
 
     _exportReport: (format) ->
-      console.log("export with format: " + format)
-      @loader.export({ outputFormat: format })
+      @logger.log("export with format: " + format)
+      @report.export({ outputFormat: format })
              .done(@_exportResource)
 
     _exportResource: (link) =>
       @callback.onExportGetResourcePath link.href
+
+    _getServerVersion: (callback) =>
+      @logger.log "_getServerVersion"
+      jQuery
+        .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
+        .done (response) =>
+          version = @_parseServerVersion(response)
+          @logger.log "Server version: #{version}"
+          callback.call(@, version)
+
+    _parseServerVersion: (response) =>
+      serverVersion = response.version
+      digits = serverVersion.match(/\d/g)
+      result = 0
+      for digit, index in digits
+        result += digit * Math.pow(10, index * -1)
+      return result
