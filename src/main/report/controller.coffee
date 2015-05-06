@@ -105,7 +105,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         @callback.onLoadStart()
         @_runReportWithAuth error
       else
-        @callback.onLoadError error
+        @callback.onLoadError error.message
 
     _processLinkClicks: (event, link) =>
       type = link.type
