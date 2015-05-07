@@ -9,6 +9,7 @@ requirejs.config
     'js.mobile.session': 'main/session'
     'js.mobile.scaler': 'main/scaler'
     'js.mobile.dom_tree_observer': 'main/dom_tree_observer'
+    'js.mobile.callback_dispatcher': 'main/callback_dispatcher'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'

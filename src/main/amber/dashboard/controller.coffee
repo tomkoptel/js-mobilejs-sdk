@@ -34,6 +34,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
 
+    pause: ->
+      @callback.setPause true
+
+    resume: ->
+      @callback.setPause false
+      @callback.firePendingTasks()
+
     # Private
 
     _removeRedundantArtifacts: ->
@@ -103,6 +110,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     _createCustomOverlays: ->
       @logger.log "_createCustomOverlays"
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
+      @logger.log "dashletElements #{dashletElements.length}"
       jQuery.each dashletElements, (key, value) ->
         dashlet = jQuery(value)
         overlay = jQuery("<div></div>")

@@ -28,6 +28,12 @@ define 'js.mobile.amber.dashboard', (require) ->
     @minimizeDashlet: ->
       @_instance.minimizeDashlet()
 
+    @pause: ->
+      @_instance._pause()
+
+    @resume: ->
+      @_instance._resume()
+
     minimizeDashlet: ->
       if not @dashboardController?
         alert "MobileDashboard not initialized"
@@ -44,5 +50,10 @@ define 'js.mobile.amber.dashboard', (require) ->
 
       @dashboardController.initialize()
 
-  root = window ? exports
+    _pause: ->
+      @dashboardController.pause()
+
+    _resume: ->
+      @dashboardController.resume()
+
   window.MobileDashboard = MobileDashboard
