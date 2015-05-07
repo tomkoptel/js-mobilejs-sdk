@@ -95,17 +95,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
       dashboardElInterval = window.setInterval () =>
         dashboardContainer = jQuery('.dashboardCanvas')
+
         if dashboardContainer.length > 0
           window.clearInterval dashboardElInterval
           @_scaleDashboard()
-      , 500
+          DOMTreeObserver.lastModify(@_configureDashboard).wait()
 
-      timeIntervalDashletContent = window.setInterval () =>
-          dashlets = jQuery('.dashletContent > div.content')
-
-          if dashlets.length > 0
-            DOMTreeObserver.lastModify(@_configureDashboard).wait()
-            window.clearInterval timeIntervalDashletContent
       , 500
 
     _configureDashboard: =>
