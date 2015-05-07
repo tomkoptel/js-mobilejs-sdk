@@ -4,7 +4,13 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
       @_makeCallback "command:maximize&title:#{title}"
       return
 
+    onMaximizeEnd: (title) ->
+      return
+
     onMinimizeStart: ->
+      return
+
+    onMinimizeEnd: ->
       return
 
     onScriptLoaded: ->

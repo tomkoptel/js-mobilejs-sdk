@@ -18,4 +18,4 @@ define 'js.mobile.dom_tree_observer', ->
             window.clearInterval timeout
             jQuery("body").unbind()
             @callback.call(@)
-          , 1000
+          , 2000
