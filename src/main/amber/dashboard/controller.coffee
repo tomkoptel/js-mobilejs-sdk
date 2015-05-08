@@ -1,5 +1,4 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
-  View = require 'js.mobile.amber.dashboard.view'
   DOMTreeObserver = require 'js.mobile.dom_tree_observer'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
