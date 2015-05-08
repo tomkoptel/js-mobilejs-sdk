@@ -33,6 +33,13 @@ define 'js.mobile.report', (require) ->
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    _authorize: (options) ->
+      @session = new Session options
+
+    _destroyReport: ->
+      @_controller.destroyReport()
+
     # Run {'uri': '%@', 'params': %@} // default pages = '1'
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@'}
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
@@ -42,19 +49,12 @@ define 'js.mobile.report', (require) ->
       @_controller = new ReportController options
       @_controller.runReport()
 
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    _authorize: (options) ->
-      @session = new Session options
-
     _selectPage: (page) ->
       if @_controller
         @_controller.selectPage page
 
     _exportReport: (format) ->
       @_controller.exportReport format
-
-    _destroyReport: ->
-      @_controller.destroyReport()
 
     _refreshController: ->
       @_controller.refresh()
