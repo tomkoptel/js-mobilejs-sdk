@@ -13,9 +13,6 @@ define 'js.mobile.amber.dashboard', (require) ->
     @newInstance: (context, viewport) ->
       @_instance ||= new MobileDashboard context, viewport
 
-    constructor: (@context, @viewport) ->
-      @context.callback.onScriptLoaded()
-
     @configure: (options) ->
       @_instance.options = options
       @_instance
@@ -23,22 +20,26 @@ define 'js.mobile.amber.dashboard', (require) ->
     @run: ->
       @_instance.run()
 
+    @minimizeDashlet: ->
+      @_instance._minimizeDashlet()
+
+    constructor: (@context, @viewport) ->
+      @context.callback.onScriptLoaded()
+
     run: ->
       if not @options?
         alert "Run was called without options"
       else
         @_initController()
 
-    @minimizeDashlet: ->
-      @_instance.minimizeDashlet()
+    # Private methods
 
-    minimizeDashlet: ->
+    _minimizeDashlet: ->
       if not @_controller?
         alert "MobileDashboard not initialized"
       else
         @_controller.minimizeDashlet()
 
-    # Private methods
     _initController: ->
       scaler = new Scaler @options
       @_controller = new DashboardController
