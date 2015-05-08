@@ -1,5 +1,7 @@
 define 'js.mobile.ios.callbacks.IosCallback', (require) ->
-  class IosCallback
+  CallbackDispatcher = require 'js.mobile.callback_dispatcher'
+
+  class IosCallback extends CallbackDispatcher
     onMaximizeStart: (title) ->
       @_makeCallback "command:maximize&title:#{title}"
       return
@@ -36,4 +38,5 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
       return
 
     _makeCallback: (command) ->
-      window.location.href = "http://jaspermobile.callback/" + command
+      @dispatch () -> 
+        window.location.href = "http://jaspermobile.callback/" + command
