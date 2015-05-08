@@ -2,8 +2,13 @@ define 'js.mobile.amber.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber.dashboard.controller'
   DashboardWindow = require 'js.mobile.amber.dashboard.window'
   Scaler = require 'js.mobile.scaler'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class MobileDashboard
+  class MobileDashboard extends Module
+    @include lifecycle.dashboard.instanceMethods
+    @extend lifecycle.dashboard.staticMethods
+
     @_instance: null
 
     @newInstance: (context, viewport) ->
@@ -28,32 +33,20 @@ define 'js.mobile.amber.dashboard', (require) ->
     @minimizeDashlet: ->
       @_instance.minimizeDashlet()
 
-    @pause: ->
-      @_instance._pause()
-
-    @resume: ->
-      @_instance._resume()
-
     minimizeDashlet: ->
-      if not @dashboardController?
+      if not @_controller?
         alert "MobileDashboard not initialized"
       else
-        @dashboardController.minimizeDashlet()
+        @_controller.minimizeDashlet()
 
     # Private methods
     _initController: ->
       scaler = new Scaler @options
-      @dashboardController = new DashboardController
+      @_controller = new DashboardController
        context: @context
        viewport: @viewport
        scaler: scaler
 
-      @dashboardController.initialize()
-
-    _pause: ->
-      @dashboardController.pause()
-
-    _resume: ->
-      @dashboardController.resume()
+      @_controller.initialize()
 
   window.MobileDashboard = MobileDashboard

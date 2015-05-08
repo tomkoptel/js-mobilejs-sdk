@@ -1,8 +1,12 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
   View = require 'js.mobile.amber.dashboard.view'
   DOMTreeObserver = require 'js.mobile.dom_tree_observer'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class DashboardController
+  class DashboardController extends Module
+    @include lifecycle.dashboardController.instanceMethods
+
     constructor: (options) ->
       {@context, @viewport, @scaler} = options
       @logger = @context.logger
@@ -32,13 +36,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       ).wait()
 
       jQuery("div.dashboardCanvas > div.content > div.body > div").find(".minimizeDashlet")[0].click()
-
-    pause: ->
-      @callback.setPause true
-
-    resume: ->
-      @callback.setPause false
-      @callback.firePendingTasks()
 
     # Private
 

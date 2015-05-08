@@ -2,8 +2,12 @@ define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
   Scaler = require 'js.mobile.scaler'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class MobileDashboard
+  class MobileDashboard extends Module
+    @include lifecycle.dashboard.instanceMethods
+    @extend lifecycle.dashboard.staticMethods
     @_instance: null
 
     @getInstance: (context) ->
@@ -31,17 +35,11 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @authorize: (options) ->
       @_instance.authorize options
 
-    @pause: ->
-      @_instance._pause()
-
-    @resume: ->
-      @_instance._resume()
-
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
     destroy: ->
-      @dashboardController.destroyDashboard()
+      @_controller.destroyDashboard()
 
     # Run {'uri': '%@'}
     run: (options) ->
@@ -49,23 +47,17 @@ define 'js.mobile.amber2.dashboard', (require) ->
       options.context = @context
       options.scaler = new Scaler options
 
-      @dashboardController = new DashboardController options
-      @dashboardController.runDashboard()
+      @_controller = new DashboardController options
+      @_controller.runDashboard()
 
     minimizeDashlet: ->
-      @dashboardController.minimizeDashlet()
+      @_controller.minimizeDashlet()
 
     refreshDashlet: ->
-      @dashboardController.refreshDashlet()
+      @_controller.refreshDashlet()
 
     refresh: ->
-      @dashboardController.refresh()
-
-    _pause: ->
-      @dashboardController.pause()
-
-    _resume: ->
-      @dashboardController.resume()
+      @_controller.refresh()
 
   root = window ? exports
   root.MobileDashboard = MobileDashboard

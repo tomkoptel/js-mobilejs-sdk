@@ -4,7 +4,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
   Module = require 'js.mobile.module'
 
   class DashboardController extends Module
-    @include lifecycle
+    @include lifecycle.dashboardController.instanceMethods
 
     constructor: (options) ->
       {@context, @session, @uri, @scaler} = options
