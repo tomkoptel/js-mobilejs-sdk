@@ -1,7 +1,11 @@
 define 'js.mobile.report.controller', (reqiure) ->
   jQuery = require 'jquery'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class ReportController
+  class ReportController extends Module
+    @include lifecycle.reportController.instanceMethods
+
     constructor: (options) ->
       {@context, @uri, @session, @params, @pages} = options
       @callback = @context.callback

@@ -1,12 +1,10 @@
 define 'js.mobile.lifecycle', ->
-  return {
+  lifecycle =
     dashboardController:
       instanceMethods:
         pause: ->
-          console.log "pause"
           @callback.setPause true
         resume: ->
-          console.log "resume"
           @callback.setPause false
           @callback.firePendingTasks()
     dashboard:
@@ -20,4 +18,6 @@ define 'js.mobile.lifecycle', ->
           @_controller.pause()
         _resume: ->
           @_controller.resume()
-  }
+  lifecycle['report'] = lifecycle['dashboard']
+  lifecycle['reportController'] = lifecycle['dashboardController']
+  return lifecycle

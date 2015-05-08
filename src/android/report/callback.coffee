@@ -1,42 +1,47 @@
 define 'js.mobile.android.report.callback', (require) ->
-  class ReportCallback
+  CallbackDispatcher = require 'js.mobile.callback_dispatcher'
+
+  class ReportCallback extends CallbackDispatcher
     onScriptLoaded: ->
-      Android.onScriptLoaded()
+      @dispatch () -> Android.onScriptLoaded()
       return
 
     onLoadStart: ->
-      Android.onLoadStart()
+      @dispatch () -> Android.onLoadStart()
       return
 
     onLoadDone: (parameters) ->
-      Android.onLoadDone(parameters)
+      @dispatch () -> Android.onLoadDone(parameters)
       return
 
     onLoadError: (error) ->
-      Android.onLoadError(error)
+      @dispatch () -> Android.onLoadError(error)
       return
 
     onTotalPagesLoaded: (pages) ->
-      Android.onTotalPagesLoaded(pages)
+      @dispatch () -> Android.onTotalPagesLoaded(pages)
       return
 
     onPageChange: (page) ->
-      Android.onPageChange(page)
+      @dispatch () -> Android.onPageChange(page)
       return
 
     onReferenceClick: (location) ->
-      Android.onReferenceClick(location)
+      @dispatch () -> Android.onReferenceClick(location)
       return
 
     onReportExecutionClick: (reportUri, params) ->
-      Android.onReportExecutionClick(reportUri, params)
+      @dispatch () -> Android.onReportExecutionClick(reportUri, params)
       return
 
     onExportGetResourcePath: (link) ->
-      Android.onExportGetResourcePath(link)
+      @dispatch () -> Android.onExportGetResourcePath(link)
+      return
 
     onRefreshSuccess: ->
-      Android.onRefreshSuccess()
+      @dispatch () -> Android.onRefreshSuccess()
+      return
 
     onRefreshError: (error) ->
-      Android.onRefreshError(error)
+      @dispatch () -> Android.onRefreshError(error)
+      return
