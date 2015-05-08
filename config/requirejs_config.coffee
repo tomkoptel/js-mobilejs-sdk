@@ -4,11 +4,11 @@ requirejs.config
   logLevel: 0
   paths:
     #  Common components
-    'js.mobile.logger': 'main/logger'
-    'js.mobile.context': 'main/context'
-    'js.mobile.session': 'main/session'
-    'js.mobile.scaler': 'main/scaler'
-    'js.mobile.dom_tree_observer': 'main/dom_tree_observer'
+    'js.mobile.logger': 'main/common/logger'
+    'js.mobile.context': 'main/common/context'
+    'js.mobile.session': 'main/common/session'
+    'js.mobile.scaler': 'main/common/scaler'
+    'js.mobile.dom_tree_observer': 'main/common/dom_tree_observer'
     'js.mobile.callback_dispatcher': 'main/common/callback_dispatcher'
     'js.mobile.lifecycle': 'main/common/lifecycle'
     'js.mobile.module': 'main/common/module'
