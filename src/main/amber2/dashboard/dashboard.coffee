@@ -14,35 +14,30 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_instance ||= new MobileDashboard context
 
     @run: (options) ->
-      @_instance.run options
+      @_instance._run options
 
     @destroy: ->
-      @_instance.destroy()
+      @_instance._destroy()
 
     @minimizeDashlet: ->
-      @_instance.minimizeDashlet()
+      @_instance._minimizeDashlet()
 
     @refreshDashlet: ->
-      @_instance.refreshDashlet()
+      @_instance._refreshDashlet()
 
     @refresh: ->
-      @_instance.refresh()
-
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    authorize: (options) ->
-      @session = new Session options
+      @_instance._refresh()
 
     @authorize: (options) ->
-      @_instance.authorize options
+      @_instance._authorize options
 
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
-    destroy: ->
-      @_controller.destroyDashboard()
+    # Private methods
 
     # Run {'uri': '%@'}
-    run: (options) ->
+    _run: (options) ->
       options.session = @session
       options.context = @context
       options.scaler = new Scaler options
@@ -50,14 +45,20 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_controller = new DashboardController options
       @_controller.runDashboard()
 
-    minimizeDashlet: ->
+    _destroy: ->
+      @_controller.destroyDashboard()
+
+    _minimizeDashlet: ->
       @_controller.minimizeDashlet()
 
-    refreshDashlet: ->
+    _refreshDashlet: ->
       @_controller.refreshDashlet()
 
-    refresh: ->
+    _refresh: ->
       @_controller.refresh()
 
-  root = window ? exports
-  root.MobileDashboard = MobileDashboard
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    _authorize: (options) ->
+      @session = new Session options
+
+  window.MobileDashboard = MobileDashboard
