@@ -31,6 +31,12 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @authorize: (options) ->
       @_instance.authorize options
 
+    @pause: ->
+      @_instance._pause()
+
+    @resume: ->
+      @_instance._resume()
+
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
@@ -54,6 +60,12 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     refresh: ->
       @dashboardController.refresh()
+
+    _pause: ->
+      @dashboardController.pause()
+
+    _resume: ->
+      @dashboardController.resume()
 
   root = window ? exports
   root.MobileDashboard = MobileDashboard
