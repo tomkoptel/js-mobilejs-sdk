@@ -160,12 +160,20 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _getServerVersion: (callback) =>
       @logger.log "_getServerVersion"
-      jQuery
-        .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
-        .done (response) =>
+      params = {
+        async: false,
+        dataType: 'json',
+        success: (response) => 
           version = @_parseServerVersion(response)
           @logger.log "Server version: #{version}"
           callback.call(@, version)
+        error: (error) => 
+          @logger.log status
+          @logger.log JSON.stringify error
+          @_processErrors error
+      }
+      jQuery
+        .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
     _parseServerVersion: (response) =>
       serverVersion = response.version
