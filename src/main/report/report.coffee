@@ -26,6 +26,9 @@ define 'js.mobile.report', (require) ->
     @refresh: ->
       @_instance._refreshController()
 
+    @applyReportParams: (params) ->
+      @_instance._applyReportParams params
+
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
@@ -53,5 +56,8 @@ define 'js.mobile.report', (require) ->
 
     _refreshController: ->
       @reportController.refresh()
+
+    _applyReportParams: (params) ->
+      @reportController.applyReportParams params
 
   window.MobileReport = MobileReport

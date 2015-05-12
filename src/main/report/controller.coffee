@@ -22,6 +22,7 @@ define 'js.mobile.report.controller', (reqiure) ->
           .fail(@_processErrors)
 
     runReport: ->
+      @logger.log "onLoadStart"
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 
@@ -35,14 +36,12 @@ define 'js.mobile.report.controller', (reqiure) ->
         @_runReportWithoutAuthButWithHack()
 
     _runReportWithoutAuth: =>
-      @logger.log "_runReportWithoutAuth"
       visualize(
         @_executeReport,
         @_runReportWithoutAuthButWithHack
       )
 
     _runReportWithoutAuthButWithHack: (error) =>
-      @logger.log "_runReportWithoutAuthButWithHack."
       if error?
         @logger.log " Reason: #{error.message}"
 
@@ -56,7 +55,6 @@ define 'js.mobile.report.controller', (reqiure) ->
       visualize skipAuth, @_executeReport
 
     _runReportWithAuth: (error) =>
-      @logger.log "_runReportWithAuth"
       if error?
         @logger.log " Reason: #{error.message}"
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
@@ -75,6 +73,15 @@ define 'js.mobile.report.controller', (reqiure) ->
         (error) => @callback.onRefreshError error.message
       )
 
+    applyReportParams: (parameters) ->
+      @logger.log "onLoadStart"
+      @callback.onLoadStart()
+      @report
+        .params(parameters)
+        .run()
+        .done(@_processSuccess)
+        .fail(@_processErrors)
+
     _executeReport: (visualize) =>
       @report = visualize.report
         resource: @uri
@@ -88,20 +95,34 @@ define 'js.mobile.report.controller', (reqiure) ->
         error: @_processErrors
         events:
           changeTotalPages: @_processChangeTotalPages
+          reportCompleted: @_processReportComplete
         success: @_processSuccess
 
     _executeFailedCallback: (error) =>
       @logger.log error.message
 
     _processChangeTotalPages: (@totalPages) =>
-        @callback.onTotalPagesLoaded @totalPages
+      @logger.log "onTotalPagesLoaded"
+      @callback.onTotalPagesLoaded @totalPages
+
+    _processReportComplete: (status, error) =>
+      @logger.log "onReportCompleted"
+      @callback.onReportCompleted status, @report.data().totalPages, error
 
     _processSuccess: (parameters) =>
-      @callback.onLoadDone parameters
+      if parameters.components.length == 0
+        @callback.onEmptyReportEvent()
+      else
+        window.setTimeout(@_processLoadDone, 2000)
+
+    _processLoadDone: (parameters) =>
+        @logger.log "onLoadDone"
+        @callback.onLoadDone parameters
 
     _processErrors: (error) =>
       @logger.log error
       if error.errorCode is "authentication.error"
+        @logger.log "onLoadStart"
         @callback.onLoadStart()
         @_runReportWithAuth error
       else
@@ -155,12 +176,10 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onExportGetResourcePath link.href
 
     _getServerVersion: (callback) =>
-      @logger.log "_getServerVersion"
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
         .done (response) =>
           version = @_parseServerVersion(response)
-          @logger.log "Server version: #{version}"
           callback.call(@, version)
 
     _parseServerVersion: (response) =>

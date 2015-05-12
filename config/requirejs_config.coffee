@@ -24,7 +24,6 @@ requirejs.config
     'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'
     'js.mobile.amber.dashboard.controller': 'main/amber/dashboard/controller'
     'js.mobile.amber.dashboard.view': 'main/amber/dashboard/view'
-    'js.mobile.amber.dashboard.window': 'main/amber/dashboard/window'
 
     # Amber2 Dashboard components
     'js.mobile.amber2.dashboard': 'main/amber2/dashboard/dashboard'

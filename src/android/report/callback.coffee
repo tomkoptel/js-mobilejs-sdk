@@ -16,8 +16,11 @@ define 'js.mobile.android.report.callback', (require) ->
       Android.onLoadError(error)
       return
 
+    onReportCompleted: (status, pages, error) ->
+      Android.onReportCompleted(status, pages, error)
+      return
+
     onTotalPagesLoaded: (pages) ->
-      Android.onTotalPagesLoaded(pages)
       return
 
     onPageChange: (page) ->
@@ -34,9 +37,16 @@ define 'js.mobile.android.report.callback', (require) ->
 
     onExportGetResourcePath: (link) ->
       Android.onExportGetResourcePath(link)
+      return
 
     onRefreshSuccess: ->
       Android.onRefreshSuccess()
+      return
 
     onRefreshError: (error) ->
       Android.onRefreshError(error)
+      return
+
+    onEmptyReportEvent: () ->
+      Android.onEmptyReportEvent()
+      return

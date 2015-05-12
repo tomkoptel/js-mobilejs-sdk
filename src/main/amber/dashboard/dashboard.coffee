@@ -1,6 +1,5 @@
 define 'js.mobile.amber.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber.dashboard.controller'
-  DashboardWindow = require 'js.mobile.amber.dashboard.window'
   Scaler = require 'js.mobile.scaler'
 
   class MobileDashboard
