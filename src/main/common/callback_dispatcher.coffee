@@ -6,13 +6,18 @@ define 'js.mobile.callback_dispatcher', ->
 
     dispatch: (task) ->
       if not @paused
-        task.call @
+        @queue.push task
+        dispatchTimeInterval = window.setInterval () =>
+          if @queue.length == 0
+            window.clearInterval dispatchTimeInterval
+          else 
+            @queue.pop().call @
+        , 1000
       else
         @queue.push task
 
     firePendingTasks: ->
-      hasPendingTasks = @queue.length > 0
-      if not @paused and hasPendingTasks
+      if not @paused
         while @queue.length > 0
           @queue.pop().call @
 
