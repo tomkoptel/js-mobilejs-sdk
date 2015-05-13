@@ -1,7 +1,11 @@
 define 'js.mobile.amber2.dashboard.controller', (require) ->
   $ = require 'jquery'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class DashboardController
+  class DashboardController extends Module
+    @include lifecycle.dashboardController.instanceMethods
+
     constructor: (options) ->
       {@context, @session, @uri, @scaler} = options
       @callback = @context.callback

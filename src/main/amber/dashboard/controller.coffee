@@ -1,8 +1,11 @@
 define 'js.mobile.amber.dashboard.controller',(require) ->
-  View = require 'js.mobile.amber.dashboard.view'
   DOMTreeObserver = require 'js.mobile.dom_tree_observer'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class DashboardController
+  class DashboardController extends Module
+    @include lifecycle.dashboardController.instanceMethods
+
     constructor: (options) ->
       {@context, @viewport, @scaler} = options
       @logger = @context.logger
@@ -16,7 +19,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
         @_removeRedundantArtifacts()
         @_injectViewport()
         @_attachDashletLoadListeners()
-        @_scaleDashboard()
       )
 
     minimizeDashlet: ->
@@ -104,12 +106,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @callback.onLoadDone()
 
     _scaleDashboard: ->
-      @logger.log "_scaleDashboard"
+      @logger.log "_scaleDashboard #{jQuery('.dashboardCanvas').length}"
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
     _createCustomOverlays: ->
       @logger.log "_createCustomOverlays"
       dashletElements = jQuery('.dashlet').not(jQuery('.inputControlWrapper').parentsUntil('.dashlet').parent())
+      @logger.log "dashletElements #{dashletElements.length}"
       jQuery.each dashletElements, (key, value) ->
         dashlet = jQuery(value)
         overlay = jQuery("<div></div>")

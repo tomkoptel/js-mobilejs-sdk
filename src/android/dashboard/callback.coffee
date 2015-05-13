@@ -1,56 +1,55 @@
 define 'js.mobile.android.dashboard.callback', (require) ->
-  class AndroidCallback
+  CallbackDispatcher = require 'js.mobile.callback_dispatcher'
+
+  class AndroidCallback extends CallbackDispatcher
     onMaximizeStart: (title) ->
-      Android.onMaximizeStart(title)
+      @dispatch () -> Android.onMaximizeStart(title)
       return
 
     onMaximizeEnd: (title) ->
-      Android.onMaximizeEnd(title)
+      @dispatch () -> Android.onMaximizeEnd(title)
       return
 
     onMaximizeFailed: (error) ->
-      Android.onMaximizeFailed(error)
+      @dispatch () -> Android.onMaximizeFailed(error)
       return
 
     onMinimizeStart: ->
-      Android.onMinimizeStart()
+      @dispatch () -> Android.onMinimizeStart()
       return
 
     onMinimizeEnd: ->
-      Android.onMinimizeEnd()
+      @dispatch () -> Android.onMinimizeEnd()
       return
 
     onMinimizeFailed: (error) ->
-      Android.onMinimizeFailed(error)
+      @dispatch () -> Android.onMinimizeFailed(error)
       return
 
     onScriptLoaded: ->
-      console.log "onScriptLoaded"
-      Android.onScriptLoaded()
+      @dispatch () -> Android.onScriptLoaded()
       return
 
     onLoadStart: ->
-      console.log "onLoadStart"
-      Android.onLoadStart()
+      @dispatch () -> Android.onLoadStart()
       return
 
     onLoadDone: (components) ->
-      console.log "onLoadDone"
-      Android.onLoadDone()
+      @dispatch () -> Android.onLoadDone()
       return
 
     onLoadError: (error) ->
-      Android.onLoadError(error)
+      @dispatch () -> Android.onLoadError(error)
       return
 
     onReportExecution: (data) ->
-      Android.onReportExecution(data)
+      @dispatch () -> Android.onReportExecution(data)
       return
 
     onWindowResizeStart: ->
-      Android.onWindowResizeStart()
+      @dispatch () -> Android.onWindowResizeStart()
       return
 
     onWindowResizeEnd: ->
-      Android.onWindowResizeEnd()
+      @dispatch () -> Android.onWindowResizeEnd()
       return

@@ -1,8 +1,12 @@
 define 'js.mobile.report', (require) ->
   Session = require 'js.mobile.session'
   ReportController = require 'js.mobile.report.controller'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class MobileReport
+  class MobileReport extends Module
+    @include lifecycle.report.instanceMethods
+    @extend lifecycle.report.staticMethods
     @_instance: null
 
     @getInstance: (context) ->
@@ -29,29 +33,30 @@ define 'js.mobile.report', (require) ->
     constructor: (@context) ->
       @context.callback.onScriptLoaded()
 
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    _authorize: (options) ->
+      @session = new Session options
+
+    _destroyReport: ->
+      @_controller.destroyReport()
+
     # Run {'uri': '%@', 'params': %@} // default pages = '1'
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@'}
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
     _run: (options) ->
       options.session = @session
       options.context = @context
-      @reportController = new ReportController options
-      @reportController.runReport()
-
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    _authorize: (options) ->
-      @session = new Session options
+      @_controller = new ReportController options
+      @_controller.runReport()
 
     _selectPage: (page) ->
-      if @reportController
-        @reportController.selectPage page
-    _exportReport: (format) ->
-      @reportController.exportReport format
+      if @_controller
+        @_controller.selectPage page
 
-    _destroyReport: ->
-      @reportController.destroyReport()
+    _exportReport: (format) ->
+      @_controller.exportReport format
 
     _refreshController: ->
-      @reportController.refresh()
+      @_controller.refresh()
 
   window.MobileReport = MobileReport

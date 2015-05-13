@@ -1,5 +1,7 @@
 define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
-  class IosCallback
+  CallbackDispatcher = require 'js.mobile.callback_dispatcher'
+
+  class IosCallback extends CallbackDispatcher
     onMaximizeStart: (title) ->
       @_makeCallback {"command" : "onMaximizeStart", "parameters" : {"title" : title} }
       return
@@ -49,5 +51,5 @@ define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
       return
 
     _makeCallback: (command) ->
-      console.log "callback"
-      window.webkit.messageHandlers.callback.postMessage(command)
+      @dispatch () -> 
+        window.webkit.messageHandlers.callback.postMessage(command)
