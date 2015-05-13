@@ -1,12 +1,12 @@
 define 'js.mobile.ios.report.callback', (require) ->
+  CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
-  class ReportCallback
+  class ReportCallback extends CallbackDispatcher
     onScriptLoaded: ->
       @_makeCallback "DOMContentLoaded"
       return
 
     onLoadStart: ->
-      console.log "onLoadStart"
       return
 
     onLoadDone: (parameters) ->
@@ -22,7 +22,6 @@ define 'js.mobile.ios.report.callback', (require) ->
       return
 
     onPageChange: (page) ->
-      console.log "onPageChange"
       return
 
     onReferenceClick: (location) ->
@@ -37,11 +36,9 @@ define 'js.mobile.ios.report.callback', (require) ->
       @_makeCallback "exportPath&link=" + link
 
     onRefreshSuccess: ->
-      console.log "onRefreshSuccess"
       @_makeCallback "reportDidDidEndRefreshSuccessful"
 
     onRefreshError: (error) ->
-      console.log "onRefreshError"
       @_makeCallback "reportDidEndRefreshFailured&error=" + error
 
     onMultipageStateObtained: (isMultipage) ->
@@ -49,4 +46,5 @@ define 'js.mobile.ios.report.callback', (require) ->
       @_makeCallback "onMultipageStateObtained&isMultipage=" + isMultipage
 
     _makeCallback: (command) ->
-      window.location.href = "http://jaspermobile.callback/" + command
+      @dispatch () ->
+        window.location.href = "http://jaspermobile.callback/" + command

@@ -1,15 +1,17 @@
 define 'js.mobile.amber.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber.dashboard.controller'
   Scaler = require 'js.mobile.scaler'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class MobileDashboard
+  class MobileDashboard extends Module
+    @include lifecycle.dashboard.instanceMethods
+    @extend lifecycle.dashboard.staticMethods
+
     @_instance: null
 
     @newInstance: (context, viewport) ->
       @_instance ||= new MobileDashboard context, viewport
-
-    constructor: (@context, @viewport) ->
-      @context.callback.onScriptLoaded()
 
     @configure: (options) ->
       @_instance.options = options
@@ -18,30 +20,33 @@ define 'js.mobile.amber.dashboard', (require) ->
     @run: ->
       @_instance.run()
 
+    @minimizeDashlet: ->
+      @_instance._minimizeDashlet()
+
+    constructor: (@context, @viewport) ->
+      @context.callback.onScriptLoaded()
+
     run: ->
       if not @options?
         alert "Run was called without options"
       else
         @_initController()
 
-    @minimizeDashlet: ->
-      @_instance.minimizeDashlet()
+    # Private methods
 
-    minimizeDashlet: ->
-      if not @dashboardController?
+    _minimizeDashlet: ->
+      if not @_controller?
         alert "MobileDashboard not initialized"
       else
-        @dashboardController.minimizeDashlet()
+        @_controller.minimizeDashlet()
 
-    # Private methods
     _initController: ->
       scaler = new Scaler @options
-      @dashboardController = new DashboardController
+      @_controller = new DashboardController
        context: @context
        viewport: @viewport
        scaler: scaler
 
-      @dashboardController.initialize()
+      @_controller.initialize()
 
-  root = window ? exports
   window.MobileDashboard = MobileDashboard

@@ -1,7 +1,11 @@
 define 'js.mobile.report.controller', (reqiure) ->
   jQuery = require 'jquery'
+  lifecycle = require 'js.mobile.lifecycle'
+  Module = require 'js.mobile.module'
 
-  class ReportController
+  class ReportController extends Module
+    @include lifecycle.reportController.instanceMethods
+
     constructor: (options) ->
       {@context, @uri, @session, @params, @pages} = options
       @callback = @context.callback
@@ -154,8 +158,20 @@ define 'js.mobile.report.controller', (reqiure) ->
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
         .done (response) =>
+      @logger.log "_getServerVersion"
+      params = {
+        async: false,
+        dataType: 'json',
+        success: (response) => 
           version = @_parseServerVersion(response)
           callback.call(@, version)
+        error: (error) => 
+          @logger.log status
+          @logger.log JSON.stringify error
+          @_processErrors error
+      }
+      jQuery
+        .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
     _parseServerVersion: (response) =>
       serverVersion = response.version
