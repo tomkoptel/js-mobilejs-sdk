@@ -18,8 +18,11 @@ define 'js.mobile.android.report.callback', (require) ->
       @dispatch () -> Android.onLoadError(error)
       return
 
+    onReportCompleted: (status, pages, error) ->
+      Android.onReportCompleted(status, pages, error)
+      return
+
     onTotalPagesLoaded: (pages) ->
-      @dispatch () -> Android.onTotalPagesLoaded(pages)
       return
 
     onPageChange: (page) ->
@@ -44,4 +47,12 @@ define 'js.mobile.android.report.callback', (require) ->
 
     onRefreshError: (error) ->
       @dispatch () -> Android.onRefreshError(error)
+      return
+
+    onEmptyReportEvent: () ->
+      @dispatch () -> Android.onEmptyReportEvent()
+      return
+
+    onMultiPageStateObtained: (isMultiPage) ->
+      @dispatch () -> Android.onMultiPageStateObtained(isMultiPage)
       return

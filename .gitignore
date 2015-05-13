@@ -32,3 +32,5 @@ build
 
 # Ignore bower
 bower_components
+
+*.idea
