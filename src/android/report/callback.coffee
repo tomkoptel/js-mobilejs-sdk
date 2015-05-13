@@ -50,3 +50,7 @@ define 'js.mobile.android.report.callback', (require) ->
     onEmptyReportEvent: () ->
       Android.onEmptyReportEvent()
       return
+
+    onMultiPageStateObtained: (isMultipage) ->
+      Android.onMultiPageStateObtained(isMultipage)
+      return

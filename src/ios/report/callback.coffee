@@ -44,5 +44,9 @@ define 'js.mobile.ios.report.callback', (require) ->
       console.log "onRefreshError"
       @_makeCallback "reportDidEndRefreshFailured&error=" + error
 
+    onMultipageStateObtained: (isMultipage) ->
+      console.log "onMultipageStateObtained"
+      @_makeCallback "onMultipageStateObtained&isMultipage=" + isMultipage
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

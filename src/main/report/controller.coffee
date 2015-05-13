@@ -13,19 +13,47 @@ define 'js.mobile.report.controller', (reqiure) ->
       @totalPages = 0
       @pages ||= '1'
 
-    selectPage: (page) ->
-      if @report?
-        @report
-          .pages(page)
-          .run()
-          .done(@_processSuccess)
-          .fail(@_processErrors)
-
+  #---------------------------------------------------------------------
+  # Public API
+  #---------------------------------------------------------------------
     runReport: ->
       @logger.log "onLoadStart"
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 
+    refresh: =>
+      @logger.log "onRefreshStart"
+      @report.refresh(
+        @_processSuccess
+        @_processErrors
+      )
+
+    applyReportParams: (parameters) ->
+      @logger.log "onLoadStart"
+      @callback.onLoadStart()
+      @report
+        .params(parameters)
+        .run()
+        .done(@_processSuccess)
+        .fail(@_processErrors)
+
+    selectPage: (page) ->
+      if @report?
+        @report
+          .pages(page)
+          .run()
+
+    exportReport: (format) ->
+      @report.export({ outputFormat: format })
+             .done(@_exportResource)
+
+    destroyReport: ->
+      @logger.log "destroy"
+      @report.destroy()
+
+  #---------------------------------------------------------------------
+  # Helper Methods
+  #---------------------------------------------------------------------
     _runReportOnTheVersionBasis: (version) =>
       isAmber2orHigher = (version >= 6.1)
       @logger.log "Version: #{version} Is amber2 or higher: #{isAmber2orHigher}"
@@ -59,83 +87,30 @@ define 'js.mobile.report.controller', (reqiure) ->
         @logger.log " Reason: #{error.message}"
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
-    exportReport: (format) ->
-      @report.export({ outputFormat: format })
-             .done(@_exportResource)
-
-    destroyReport: ->
-      @logger.log "destroy"
-      @report.destroy()
-
-    refresh: ->
-      @report.refresh(
-        () => @callback.onRefreshSuccess(),
-        (error) => @callback.onRefreshError error.message
-      )
-
-    applyReportParams: (parameters) ->
-      @logger.log "onLoadStart"
-      @callback.onLoadStart()
-      @report
-        .params(parameters)
-        .run()
-        .done(@_processSuccess)
-        .fail(@_processErrors)
-
     _executeReport: (visualize) =>
       @report = visualize.report
         resource: @uri
         params: @params
         pages: @pages
-        container: "#container"
         scale: "width"
         linkOptions:
           events:
             click: @_processLinkClicks
         error: @_processErrors
         events:
-          changeTotalPages: @_processChangeTotalPages
           reportCompleted: @_processReportComplete
-        success: @_processSuccess
+        success: (parameters) =>
+          @report.container("#container")
+            .render()
+            .done () => @_processSuccess(parameters)
 
     _executeFailedCallback: (error) =>
       @logger.log error.message
 
-    _processChangeTotalPages: (@totalPages) =>
-      @logger.log "onTotalPagesLoaded"
-      @callback.onTotalPagesLoaded @totalPages
-
-    _processReportComplete: (status, error) =>
-      @logger.log "onReportCompleted"
-      @callback.onReportCompleted status, @report.data().totalPages, error
-
-    _processSuccess: (parameters) =>
-      if parameters.components.length == 0
-        @callback.onEmptyReportEvent()
-      else
-        window.setTimeout(@_processLoadDone, 2000)
-
-    _processLoadDone: (parameters) =>
-        @logger.log "onLoadDone"
-        @callback.onLoadDone parameters
-
-    _processErrors: (error) =>
-      @logger.log error
-      if error.errorCode is "authentication.error"
-        @logger.log "onLoadStart"
-        @callback.onLoadStart()
-        @_runReportWithAuth error
-      else
-        @callback.onLoadError error.message
-
-    _processLinkClicks: (event, link) =>
-      type = link.type
-
-      switch type
-        when "ReportExecution" then @_startReportExecution link
-        when "LocalAnchor" then @_navigateToAnchor link
-        when "LocalPage" then @_navigateToPage link
-        when "Reference" then @_openRemoteLink link
+    _checkMultipageState: ->
+      @report.export({ outputFormat: "html", pages: "2"})
+        .done(() => @_processMultipageState(true))
+        .fail(() => @_processMultipageState(false))
 
     _startReportExecution: (link) =>
       params = link.parameters
@@ -161,7 +136,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _loadPage: (page) ->
       @report.pages(page)
         .run()
-        .fail(@_processErrors)
+        .fail(@)
         .done(@_notifyPageChange)
 
     _notifyPageChange: =>
@@ -189,3 +164,41 @@ define 'js.mobile.report.controller', (reqiure) ->
       for digit, index in digits
         result += digit * Math.pow(10, index * -1)
       return result
+
+  #---------------------------------------------------------------------
+  # Method callbacks
+  #---------------------------------------------------------------------
+    _processReportComplete: (status, error) =>
+      @logger.log "onReportCompleted"
+      @callback.onReportCompleted status, @report.data().totalPages, error
+
+    _processMultipageState: (isMultipage) =>
+      @logger.log "multi #{isMultipage}"
+      @callback.onMultiPageStateObtained(isMultipage)
+
+    _processSuccess: (parameters) =>
+      if parameters.components.length == 0
+        @logger.log "onEmptyReportEvent"
+        @callback.onEmptyReportEvent()
+      else
+        @_checkMultipageState()
+      @logger.log "onLoadDone"
+      @callback.onLoadDone parameters
+
+    _processErrors: (error) =>
+      @logger.log error
+      if error.errorCode is "authentication.error"
+        @logger.log "onLoadStart"
+        @callback.onLoadStart()
+        @_runReportWithAuth error
+      else
+        @callback.onLoadError error.message
+
+    _processLinkClicks: (event, link) =>
+      type = link.type
+
+      switch type
+        when "ReportExecution" then @_startReportExecution link
+        when "LocalAnchor" then @_navigateToAnchor link
+        when "LocalPage" then @_navigateToPage link
+        when "Reference" then @_openRemoteLink link
