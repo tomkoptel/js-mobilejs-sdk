@@ -88,15 +88,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _attachDashletLoadListeners: ->
       @logger.log "attaching dashlet listener"
-
       dashboardElInterval = window.setInterval () =>
         dashboardContainer = jQuery('.dashboardCanvas')
 
         if dashboardContainer.length > 0
           window.clearInterval dashboardElInterval
-          @_scaleDashboard()
           DOMTreeObserver.lastModify(@_configureDashboard).wait()
-
+          @_scaleDashboard()
       , 500
 
     _configureDashboard: =>
