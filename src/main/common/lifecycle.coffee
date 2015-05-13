@@ -3,9 +3,9 @@ define 'js.mobile.lifecycle', ->
     dashboardController:
       instanceMethods:
         pause: ->
-          @callback.setPause true
+          @callback.pause()
         resume: ->
-          @callback.setPause false
+          @callback.resume()
           @callback.firePendingTasks()
     dashboard:
       staticMethods:

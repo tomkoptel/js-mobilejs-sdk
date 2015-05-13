@@ -7,12 +7,7 @@ define 'js.mobile.callback_dispatcher', ->
     dispatch: (task) ->
       if not @paused
         @queue.push task
-        dispatchTimeInterval = window.setInterval () =>
-          if @queue.length == 0
-            window.clearInterval dispatchTimeInterval
-          else 
-            @queue.pop().call @
-        , 1000
+        @_processEventLoop()
       else
         @queue.push task
 
@@ -21,4 +16,25 @@ define 'js.mobile.callback_dispatcher', ->
         while @queue.length > 0
           @queue.pop().call @
 
-    setPause: (@paused) ->
+    pause: ->
+      @paused = true
+
+    resume: ->
+      @paused = false
+
+    _processEventLoop: ->
+      if not @dispatchTimeInterval?
+        @_createInterval @_processQueue
+
+    _processQueue: =>
+      if @queue.length == 0
+        @_removeInterval()
+      else
+        @queue.pop().call @
+
+    _createInterval: (eventLoop) ->
+      @dispatchTimeInterval = window.setInterval eventLoop, 200
+
+    _removeInterval: ->
+      window.clearInterval @dispatchTimeInterval
+      @dispatchTimeInterval = null
