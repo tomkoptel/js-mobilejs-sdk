@@ -67,7 +67,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _runReportWithoutAuth: =>
       js_mobile.log "_runReportWithoutAuth"
       visualize(
-        @_executeReport,
+        @_executeReportForAmber2OrHigher,
         @_runReportWithoutAuthButWithHack
       )
 
@@ -83,17 +83,27 @@ define 'js.mobile.report.controller', (reqiure) ->
             # jQuery here is just for sample, any resolved Promise will work
             return (new jQuery.Deferred()).resolve()
 
-      visualize skipAuth, @_executeReport
+      visualize skipAuth, @_executeReportForAmber
 
     _runReportWithAuth: (error) =>
       js_mobile.log "_runReportWithAuth"
       if error?
         js_mobile.log " Reason: #{error.message}"
-      visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
+      visualize @session.authOptions(), @_executeReportForAmber, @_executeFailedCallback, @_executeAlways
 
-    _executeReport: (visualize) =>
+    _executeReportForAmber2OrHigher: (visualize) =>
+      params =
+        chart:
+          animation: false
+          zoom: false
+      @_executeReport visualize, params
+
+    _executeReportForAmber: (visualize) =>
+      @_executeReport visualize, {}
+
+    _executeReport: (visualize, params) =>
       js_mobile.log "_executeReport"
-      @report = visualize.report
+      defaultParams =
         resource: @uri
         params: @params
         pages: @pages
@@ -108,14 +118,18 @@ define 'js.mobile.report.controller', (reqiure) ->
           @report.container("#container")
             .render()
             .done () => @_processSuccess(parameters)
+      actualParams = jQuery.extend {}, defaultParams, params
+      @report = visualize.report actualParams
 
     _executeFailedCallback: (error) =>
       js_mobile.log error.message
 
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
-        .done(() => @_processMultipageState(true))
-        .fail(() => @_processMultipageState(false))
+        .done (params) =>
+          @_processMultipageState(true)
+        .fail (error) =>
+          @_processMultipageState(false)
 
     _startReportExecution: (link) =>
       params = link.parameters
@@ -156,11 +170,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onExportGetResourcePath link.href
 
     _getServerVersion: (callback) =>
-      jQuery
-        .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
-        .done (response) =>
-      js_mobile.log "_getServerVersion"
-      params = {
+      params =
         async: false,
         dataType: 'json',
         success: (response) =>
@@ -170,7 +180,6 @@ define 'js.mobile.report.controller', (reqiure) ->
           js_mobile.log status
           js_mobile.log JSON.stringify error
           @_processErrors error
-      }
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
@@ -195,11 +204,7 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _processSuccess: (parameters) =>
       js_mobile.log "_processSuccess"
-      if parameters.components.length == 0
-        js_mobile.log "onEmptyReportEvent"
-        @callback.onEmptyReportEvent()
-      else
-        @_checkMultipageState()
+      @_checkMultipageState()
       @callback.onLoadDone parameters
 
     _processErrors: (error) =>
