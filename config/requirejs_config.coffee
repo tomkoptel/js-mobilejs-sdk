@@ -5,7 +5,8 @@ requirejs.config
   paths:
     #  Common components
     'js.mobile.session': 'main/common/session'
-    'js.mobile.scaler': 'main/common/scaler'
+    'js.mobile.dashboard.scaler': 'main/common/dashboard_scaler'
+    'js.mobile.report.scaler': 'main/common/report_scaler'
     'js.mobile.dom_tree_observer': 'main/common/dom_tree_observer'
     'js.mobile.callback_dispatcher': 'main/common/callback_dispatcher'
     'js.mobile.lifecycle': 'main/common/lifecycle'

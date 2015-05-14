@@ -1,5 +1,5 @@
-define 'js.mobile.scaler', ->
-  class Scaler
+define 'js.mobile.dashboard.scaler', ->
+  class DashboardScaler
     constructor: (options) ->
       {@diagonal} = options
 
