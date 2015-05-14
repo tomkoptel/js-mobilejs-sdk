@@ -10,6 +10,8 @@ requirejs.config
     'js.mobile.callback_dispatcher': 'main/common/callback_dispatcher'
     'js.mobile.lifecycle': 'main/common/lifecycle'
     'js.mobile.module': 'main/common/module'
+    'js.mobile.debug_log': 'main/common/debug_log'
+    'js.mobile.release_log': 'main/common/release_log'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'

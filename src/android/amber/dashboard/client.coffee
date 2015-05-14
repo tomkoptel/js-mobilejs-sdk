@@ -6,5 +6,5 @@ define 'js.mobile.amber.android.dashboard.client', (require) ->
   class AndroidClient
     run: ->
       MobileDashboard.newInstance
-        callback: new Viewport()
-        viewport: new AndroidCallback()
+        callback: new AndroidCallback()
+        viewport: new Viewport()

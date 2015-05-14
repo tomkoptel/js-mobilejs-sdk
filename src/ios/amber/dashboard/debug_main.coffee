@@ -1,6 +1,6 @@
 require [
     'js.mobile.amber.ios.dashboard.client'
-    'js.mobile.release_log'
+    'js.mobile.debug_log'
   ]
   , (IosClient, Log) ->
     (($) ->
