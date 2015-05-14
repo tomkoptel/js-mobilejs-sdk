@@ -9,8 +9,8 @@ define 'js.mobile.report', (require) ->
     @extend lifecycle.report.staticMethods
     @_instance: null
 
-    @getInstance: (context) ->
-      @_instance ||= new MobileReport context
+    @getInstance: (args) ->
+      @_instance ||= new MobileReport args
 
     @authorize: (options) ->
       @_instance._authorize options
@@ -33,8 +33,8 @@ define 'js.mobile.report', (require) ->
     @applyReportParams: (params) ->
       @_instance._applyReportParams params
 
-    constructor: (@context) ->
-      @context.callback.onScriptLoaded()
+    constructor: (@args) ->
+      @args.callback.onScriptLoaded()
 
     # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
     _authorize: (options) ->
@@ -48,7 +48,7 @@ define 'js.mobile.report', (require) ->
     # Run {'uri': '%@', 'params': %@, 'pages' : '%@-%@'}
     _run: (options) ->
       options.session = @session
-      options.context = @context
+      options.callback = @args.callback
       @_controller = new ReportController options
       @_controller.runReport()
 

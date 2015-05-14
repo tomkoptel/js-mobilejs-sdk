@@ -10,8 +10,8 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @extend lifecycle.dashboard.staticMethods
     @_instance: null
 
-    @getInstance: (context) ->
-      @_instance ||= new MobileDashboard context
+    @getInstance: (args) ->
+      @_instance ||= new MobileDashboard args
 
     @run: (options) ->
       @_instance._run options
@@ -31,15 +31,15 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @authorize: (options) ->
       @_instance._authorize options
 
-    constructor: (@context) ->
-      @context.callback.onScriptLoaded()
+    constructor: (@args) ->
+      @args.callback.onScriptLoaded()
 
     # Private methods
 
     # Run {'uri': '%@'}
     _run: (options) ->
       options.session = @session
-      options.context = @context
+      options.callback = @args.callback
       options.scaler = new Scaler options
 
       @_controller = new DashboardController options

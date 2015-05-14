@@ -6,10 +6,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
   class DashboardController extends Module
     @include lifecycle.dashboardController.instanceMethods
 
-    constructor: (options) ->
-      {@context, @viewport, @scaler} = options
-      @logger = @context.logger
-      @callback = @context.callback
+    constructor: (args) ->
+      {@callback, @viewport, @scaler} = args
 
     initialize: ->
       @callback.onLoadStart()

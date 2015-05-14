@@ -7,10 +7,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     @include lifecycle.reportController.instanceMethods
 
     constructor: (options) ->
-      {@context, @uri, @session, @params, @pages} = options
-      @callback = @context.callback
-      @logger = @context.logger
-
+      {@callback, @uri, @session, @params, @pages} = options
       console.log @uri
 
       @params ||= {}
@@ -166,10 +163,10 @@ define 'js.mobile.report.controller', (reqiure) ->
       params = {
         async: false,
         dataType: 'json',
-        success: (response) => 
+        success: (response) =>
           version = @_parseServerVersion(response)
           callback.call(@, version)
-        error: (error) => 
+        error: (error) =>
           console.log status
           console.log JSON.stringify error
           @_processErrors error

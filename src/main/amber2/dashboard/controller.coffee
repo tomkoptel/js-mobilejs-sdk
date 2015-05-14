@@ -7,9 +7,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     @include lifecycle.dashboardController.instanceMethods
 
     constructor: (options) ->
-      {@context, @session, @uri, @scaler} = options
-      @callback = @context.callback
-      @logger = @context.logger
+      {@callback, @session, @uri, @scaler} = options
       @scaler.initialize()
 
     destroyDashboard: ->
