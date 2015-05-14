@@ -3,48 +3,59 @@ define 'js.mobile.ios.report.callback', (require) ->
 
   class ReportCallback extends CallbackDispatcher
     onScriptLoaded: ->
-      @_makeCallback "DOMContentLoaded"
+      @dispatch () ->
+        @_makeCallback "DOMContentLoaded"
       return
 
     onLoadStart: ->
       return
 
     onLoadDone: (parameters) ->
-      @_makeCallback "reportDidEndRenderSuccessful"
+      @dispatch () ->
+        @_makeCallback "reportDidEndRenderSuccessful"
       return
 
     onLoadError: (error) ->
-      @_makeCallback "reportDidEndRenderFailured&error=" + error
+      @dispatch () ->
+        @_makeCallback "reportDidEndRenderFailured&error=" + error
       return
 
-    onTotalPagesLoaded: (pages) ->
-      @_makeCallback "changeTotalPages&totalPage=" + pages
+    onReportCompleted: (status, pages, error) ->
+      @dispatch () ->
+        @_makeCallback "reportRunDidCompleted&status=#{status}&pages=#{pages}&error=#{error}"
+      return
+      
+    onEmptyReportEvent: () ->
       return
 
     onPageChange: (page) ->
       return
 
     onReferenceClick: (location) ->
-      @_makeCallback "handleReferenceClick&location=" + location
+      @dispatch () ->
+        @_makeCallback "handleReferenceClick&location=" + location
       return
 
     onReportExecutionClick: (reportUri, params) ->
-      @_makeCallback "runReport&params=" + params
+      @dispatch () ->
+        @_makeCallback "runReport&params=" + params
       return
 
     onExportGetResourcePath: (link) ->
-      @_makeCallback "exportPath&link=" + link
+      @dispatch () ->
+        @_makeCallback "exportPath&link=" + link
 
     onRefreshSuccess: ->
-      @_makeCallback "reportDidDidEndRefreshSuccessful"
+      @dispatch () ->
+        @_makeCallback "reportDidDidEndRefreshSuccessful"
 
     onRefreshError: (error) ->
-      @_makeCallback "reportDidEndRefreshFailured&error=" + error
+      @dispatch () ->
+        @_makeCallback "reportDidEndRefreshFailured&error=" + error
 
-    onMultipageStateObtained: (isMultipage) ->
-      console.log "onMultipageStateObtained"
-      @_makeCallback "onMultipageStateObtained&isMultipage=" + isMultipage
+    onMultiPageStateObtained: (isMultipage) ->
+      @dispatch () ->
+        @_makeCallback "reportDidObtaineMultipageState&isMultiPage=" + isMultipage
 
     _makeCallback: (command) ->
-      @dispatch () ->
-        window.location.href = "http://jaspermobile.callback/" + command
+      window.location.href = "http://jaspermobile.callback/" + command

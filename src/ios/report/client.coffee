@@ -10,4 +10,3 @@ define 'js.mobile.ios.report.client', (require) ->
       logger = new IosLogger()
       context = new Context callback: callbackImplementor, logger: logger
       MobileReport.getInstance(context)
-      callbackImplementor.onScriptLoaded()

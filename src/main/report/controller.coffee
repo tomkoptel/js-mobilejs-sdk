@@ -21,19 +21,19 @@ define 'js.mobile.report.controller', (reqiure) ->
   # Public API
   #---------------------------------------------------------------------
     runReport: ->
-      @logger.log "onLoadStart"
+      @logger.log "runReport"
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 
     refresh: =>
-      @logger.log "onRefreshStart"
+      @logger.log "refresh"
       @report.refresh(
         @_processSuccess
         @_processErrors
       )
 
     applyReportParams: (parameters) ->
-      @logger.log "onLoadStart"
+      @logger.log "applyReportParams"
       @callback.onLoadStart()
       @report
         .params(parameters)
@@ -52,7 +52,7 @@ define 'js.mobile.report.controller', (reqiure) ->
              .done(@_exportResource)
 
     destroyReport: ->
-      @logger.log "destroy"
+      @logger.log "destroyReport"
       @report.destroy()
 
   #---------------------------------------------------------------------
@@ -68,12 +68,14 @@ define 'js.mobile.report.controller', (reqiure) ->
         @_runReportWithoutAuthButWithHack()
 
     _runReportWithoutAuth: =>
+      @logger.log "_runReportWithoutAuth"
       visualize(
         @_executeReport,
         @_runReportWithoutAuthButWithHack
       )
 
     _runReportWithoutAuthButWithHack: (error) =>
+      @logger.log "_runReportWithoutAuthButWithHack"
       if error?
         @logger.log " Reason: #{error.message}"
 
@@ -87,11 +89,13 @@ define 'js.mobile.report.controller', (reqiure) ->
       visualize skipAuth, @_executeReport
 
     _runReportWithAuth: (error) =>
+      @logger.log "_runReportWithAuth"
       if error?
         @logger.log " Reason: #{error.message}"
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     _executeReport: (visualize) =>
+      @logger.log "_executeReport"
       @report = visualize.report
         resource: @uri
         params: @params
@@ -193,12 +197,12 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onMultiPageStateObtained(isMultipage)
 
     _processSuccess: (parameters) =>
+      @logger.log "_processSuccess"
       if parameters.components.length == 0
         @logger.log "onEmptyReportEvent"
         @callback.onEmptyReportEvent()
       else
         @_checkMultipageState()
-      @logger.log "onLoadDone"
       @callback.onLoadDone parameters
 
     _processErrors: (error) =>
