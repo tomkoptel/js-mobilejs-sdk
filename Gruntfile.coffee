@@ -171,9 +171,12 @@ module.exports = (grunt) ->
     'requirejs:ios_amber2_dashboard_script_debug',
   ]
   grunt.registerTask 'coffee:all', ['coffee:dev', 'coffee:config']
-  grunt.registerTask 'build:android', ['coffee:all', 'requirejs:compile:android:release']
+
   grunt.registerTask 'build:android:release', ['coffee:all', 'requirejs:compile:android:release']
   grunt.registerTask 'build:android:debug', ['coffee:all', 'requirejs:compile:android:debug']
-  grunt.registerTask 'build:ios', ['coffee:all', 'requirejs:compile:ios:release']
+
   grunt.registerTask 'build:ios:release', ['coffee:all', 'requirejs:compile:ios:release']
   grunt.registerTask 'build:ios:debug', ['coffee:all', 'requirejs:compile:ios:debug']
+
+  grunt.registerTask 'release:android', ['build:android:release', 'build:move']
+  grunt.registerTask 'release:ios', ['build:ios:release', 'build:move']
