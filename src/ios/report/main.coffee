@@ -1,2 +1,7 @@
-require ['js.mobile.ios.report.client'], (ReportClient) ->
-  new ReportClient().run()
+require [
+    'js.mobile.ios.report.client'
+    'js.mobile.release_log'
+  ]
+  , (IosClient, Log) ->
+    Log.configure()
+    new IosClient().run()

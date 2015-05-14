@@ -1,11 +1,12 @@
 module.exports = (grunt) ->
+  path = require("path")
   properties = grunt.file.readJSON('common_properties.json')
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-requirejs'
   grunt.loadNpmTasks 'grunt-karma'
-  grunt.initConfig
+  initConfigs =
     pkg: grunt.file.readJSON('package.json')
 
     coffee:
@@ -118,26 +119,64 @@ module.exports = (grunt) ->
     watch:
       android:
         files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
-        tasks: ['build:android', 'build:move']
+        tasks: ['build:android:debug', 'build:move']
       ios:
         files: ['config/*.coffee', 'src/**/*.coffee', 'spec/**/*.coffee']
-        tasks: ['build:ios', 'build:move']
+        tasks: ['build:ios:debug', 'build:move']
 
+
+  creatDebugConfig = (name) ->
+    debugName = "#{name}_debug"
+    debugConfig = JSON.parse(JSON.stringify(initConfigs['requirejs'][name]))
+
+    defaultPath = debugConfig['options']['include'][0]
+    basename = path.basename defaultPath
+    debugPath = defaultPath.replace(basename, "debug_#{basename}")
+
+    debugConfig['options']['include'] = [debugPath]
+    initConfigs['requirejs'][debugName] = debugConfig
+
+  creatDebugConfig 'ios_amber2_dashboard_script'
+  creatDebugConfig 'ios_amber_dashboard_script'
+  creatDebugConfig 'ios_report_script'
+
+  creatDebugConfig 'android_amber2_dashboard_script'
+  creatDebugConfig 'android_amber_dashboard_script'
+  creatDebugConfig 'android_report_script'
+
+  grunt.initConfig initConfigs
 
   grunt.registerTask 'build:move', 'Copy result scripts to specified projects', (platform, dst) =>
     mobileTask = require('./build/config/task/grunt-mobile-move')
     mobileTask.call(@, grunt, platform, dst)
 
-  grunt.registerTask 'requirejs:compile:android', [
+  grunt.registerTask 'requirejs:compile:android:release', [
     'requirejs:android_report_script',
     'requirejs:android_amber_dashboard_script',
     'requirejs:android_amber2_dashboard_script',
   ]
-  grunt.registerTask 'requirejs:compile:ios', [
+  grunt.registerTask 'requirejs:compile:android:debug', [
+    'requirejs:android_report_script_debug',
+    'requirejs:android_amber_dashboard_script_debug',
+    'requirejs:android_amber2_dashboard_script_debug',
+  ]
+  grunt.registerTask 'requirejs:compile:ios:release', [
     'requirejs:ios_report_script',
     'requirejs:ios_amber_dashboard_script',
     'requirejs:ios_amber2_dashboard_script',
   ]
+  grunt.registerTask 'requirejs:compile:ios:debug', [
+    'requirejs:ios_report_script_debug',
+    'requirejs:ios_amber_dashboard_script_debug',
+    'requirejs:ios_amber2_dashboard_script_debug',
+  ]
   grunt.registerTask 'coffee:all', ['coffee:dev', 'coffee:config']
-  grunt.registerTask 'build:android', ['coffee:all', 'requirejs:compile:android']
-  grunt.registerTask 'build:ios', ['coffee:all', 'requirejs:compile:ios']
+
+  grunt.registerTask 'build:android:release', ['coffee:all', 'requirejs:compile:android:release']
+  grunt.registerTask 'build:android:debug', ['coffee:all', 'requirejs:compile:android:debug']
+
+  grunt.registerTask 'build:ios:release', ['coffee:all', 'requirejs:compile:ios:release']
+  grunt.registerTask 'build:ios:debug', ['coffee:all', 'requirejs:compile:ios:debug']
+
+  grunt.registerTask 'release:android', ['build:android:release', 'build:move']
+  grunt.registerTask 'release:ios', ['build:ios:release', 'build:move']

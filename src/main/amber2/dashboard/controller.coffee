@@ -7,9 +7,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     @include lifecycle.dashboardController.instanceMethods
 
     constructor: (options) ->
-      {@context, @session, @uri, @scaler} = options
-      @callback = @context.callback
-      @logger = @context.logger
+      {@callback, @session, @uri, @scaler} = options
       @scaler.initialize()
 
     destroyDashboard: ->
@@ -74,11 +72,11 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self.callback.onLoadError error
 
     _scaleDashboard: ->
-      @logger.log "Scale dashboard"
+      js_mobile.log "Scale dashboard"
       $('#container').addClass 'scaledCanvas'
 
     _configureComponents: ->
-      @logger.log "Iterate components"
+      js_mobile.log "Iterate components"
       @components.forEach (component) =>
         if component.type != 'inputControl'
           @dashboard.updateComponent component.id,
@@ -87,7 +85,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         return
 
     _defineComponentsClickEvent: ->
-      @logger.log "Apply click events"
+      js_mobile.log "Apply click events"
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @

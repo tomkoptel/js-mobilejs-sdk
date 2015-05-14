@@ -4,24 +4,21 @@ requirejs.config
   logLevel: 0
   paths:
     #  Common components
-    'js.mobile.logger': 'main/common/logger'
-    'js.mobile.context': 'main/common/context'
     'js.mobile.session': 'main/common/session'
     'js.mobile.scaler': 'main/common/scaler'
     'js.mobile.dom_tree_observer': 'main/common/dom_tree_observer'
     'js.mobile.callback_dispatcher': 'main/common/callback_dispatcher'
     'js.mobile.lifecycle': 'main/common/lifecycle'
     'js.mobile.module': 'main/common/module'
+    'js.mobile.debug_log': 'main/common/debug_log'
+    'js.mobile.release_log': 'main/common/release_log'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
-    'js.mobile.android.logger': 'android/logger'
 
     # Common Ios components
     'js.mobile.ios.callbacks.WebKitCallback': 'ios/callbacks/WebKitCallback'
     'js.mobile.ios.callbacks.IosCallback': 'ios/callbacks/IosCallback'
-    'js.mobile.ios.loggers.logger': 'ios/loggers/logger'
-    'js.mobile.ios.loggers.WebKitLogger': 'ios/loggers/WebKitLogger'
 
     # Amber Dashboard components
     'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'
