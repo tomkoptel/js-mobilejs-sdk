@@ -118,7 +118,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
         .done (params) =>
-          @_fetchPage params.href, (isPageExists) =>
+          @_fetchHTMLPage params.href, (isPageExists) =>
             @_processMultipageState(isPageExists)           
         .fail (error) =>
           @logger.log "multipage error: #{JSON.stringify error}"
@@ -176,11 +176,10 @@ define 'js.mobile.report.controller', (reqiure) ->
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
-    _fetchPage: (pageURL, callback) ->
-      @logger.log "_fetchPage"
+    _fetchHTMLPage: (pageURL, callback) ->
+      @logger.log "_fetchHTMLPage"
       params = 
-        async: false,
-        dataType: 'json',
+        dataType: 'html',
         success: (response, status) => 
           if status == "nocontent"
             callback(false)
