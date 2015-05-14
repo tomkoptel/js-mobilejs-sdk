@@ -98,7 +98,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       params =
         chart:
           animation: false
-          zoom: "x"
+          zoom: false
       @_executeReport visualize, params
 
     _executeReportForAmber: (visualize) =>
@@ -130,10 +130,8 @@ define 'js.mobile.report.controller', (reqiure) ->
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
         .done (params) =>
-          @_fetchHTMLPage params.href, (isPageExists) =>
-            @_processMultipageState(isPageExists)
+          @_processMultipageState(true)
         .fail (error) =>
-          @logger.log "multipage error: #{JSON.stringify error}"
           @_processMultipageState(false)
 
     _startReportExecution: (link) =>
@@ -187,19 +185,6 @@ define 'js.mobile.report.controller', (reqiure) ->
           @_processErrors error
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", params)
-
-    _fetchHTMLPage: (pageURL, callback) ->
-      @logger.log "_fetchHTMLPage"
-      params =
-        dataType: 'html',
-        success: (response, status) =>
-          if response.length > 0
-            callback(true)
-          else
-            callback(false)
-        error: (error, status) =>
-          callback(false)
-      jQuery.ajax(pageURL, params)
 
     _parseServerVersion: (response) =>
       serverVersion = response.version
