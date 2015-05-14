@@ -181,10 +181,10 @@ define 'js.mobile.report.controller', (reqiure) ->
       params = 
         dataType: 'html',
         success: (response, status) => 
-          if status == "nocontent"
-            callback(false)
+          if response.length > 0
+            callback(true)
           else
-            callback(true)        
+            callback(false)        
         error: (error, status) => 
           callback(false)        
       jQuery.ajax(pageURL, params)
