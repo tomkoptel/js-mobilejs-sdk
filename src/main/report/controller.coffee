@@ -118,11 +118,8 @@ define 'js.mobile.report.controller', (reqiure) ->
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
         .done (params) =>
-          @_fetchPage params.href, (status) =>
-            if status == "nocontent"
-              @_processMultipageState(false)
-            else
-              @_processMultipageState(true)
+          @_fetchPage params.href, (isPageExists) =>
+            @_processMultipageState(isPageExists)           
         .fail (error) =>
           @logger.log "multipage error: #{JSON.stringify error}"
           @_processMultipageState(false)
@@ -166,7 +163,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onExportGetResourcePath link.href
 
     _getServerVersion: (callback) =>    
-      params = {
+      params =
         async: false,
         dataType: 'json',
         success: (response) => 
@@ -176,23 +173,21 @@ define 'js.mobile.report.controller', (reqiure) ->
           @logger.log status
           @logger.log JSON.stringify error
           @_processErrors error
-      }
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
     _fetchPage: (pageURL, callback) ->
       @logger.log "_fetchPage"
-      params = {
+      params = 
         async: false,
         dataType: 'json',
         success: (response, status) => 
-          @logger.log status
-          @logger.log JSON.stringify response  
-          callback(status)        
+          if status == "nocontent"
+            callback(false)
+          else
+            callback(true)        
         error: (error, status) => 
-          @logger.log status
-          @logger.log JSON.stringify error          
-      }
+          callback(false)        
       jQuery.ajax(pageURL, params)
     
     _parseServerVersion: (response) =>
