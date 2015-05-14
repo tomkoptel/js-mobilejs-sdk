@@ -11,7 +11,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback = @context.callback
       @logger = @context.logger
 
-      @logger.log @uri
+      console.log @uri
 
       @params ||= {}
       @totalPages = 0
@@ -21,19 +21,19 @@ define 'js.mobile.report.controller', (reqiure) ->
   # Public API
   #---------------------------------------------------------------------
     runReport: ->
-      @logger.log "runReport"
+      console.log "runReport"
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 
     refresh: =>
-      @logger.log "refresh"
+      console.log "refresh"
       @report.refresh(
         @_processSuccess
         @_processErrors
       )
 
     applyReportParams: (parameters) ->
-      @logger.log "applyReportParams"
+      console.log "applyReportParams"
       @callback.onLoadStart()
       @report
         .params(parameters)
@@ -52,7 +52,7 @@ define 'js.mobile.report.controller', (reqiure) ->
              .done(@_exportResource)
 
     destroyReport: ->
-      @logger.log "destroyReport"
+      console.log "destroyReport"
       @report.destroy()
 
   #---------------------------------------------------------------------
@@ -60,7 +60,7 @@ define 'js.mobile.report.controller', (reqiure) ->
   #---------------------------------------------------------------------
     _runReportOnTheVersionBasis: (version) =>
       isAmber2orHigher = (version >= 6.1)
-      @logger.log "Version: #{version} Is amber2 or higher: #{isAmber2orHigher}"
+      console.log "Version: #{version} Is amber2 or higher: #{isAmber2orHigher}"
 
       if isAmber2orHigher
         @_runReportWithoutAuth()
@@ -68,16 +68,16 @@ define 'js.mobile.report.controller', (reqiure) ->
         @_runReportWithoutAuthButWithHack()
 
     _runReportWithoutAuth: =>
-      @logger.log "_runReportWithoutAuth"
+      console.log "_runReportWithoutAuth"
       visualize(
         @_executeReport,
         @_runReportWithoutAuthButWithHack
       )
 
     _runReportWithoutAuthButWithHack: (error) =>
-      @logger.log "_runReportWithoutAuthButWithHack"
+      console.log "_runReportWithoutAuthButWithHack"
       if error?
-        @logger.log " Reason: #{error.message}"
+        console.log " Reason: #{error.message}"
 
       skipAuth =
         auth:
@@ -89,13 +89,13 @@ define 'js.mobile.report.controller', (reqiure) ->
       visualize skipAuth, @_executeReport
 
     _runReportWithAuth: (error) =>
-      @logger.log "_runReportWithAuth"
+      console.log "_runReportWithAuth"
       if error?
-        @logger.log " Reason: #{error.message}"
+        console.log " Reason: #{error.message}"
       visualize @session.authOptions(), @_executeReport, @_executeFailedCallback, @_executeAlways
 
     _executeReport: (visualize) =>
-      @logger.log "_executeReport"
+      console.log "_executeReport"
       @report = visualize.report
         resource: @uri
         params: @params
@@ -113,7 +113,7 @@ define 'js.mobile.report.controller', (reqiure) ->
             .done () => @_processSuccess(parameters)
 
     _executeFailedCallback: (error) =>
-      @logger.log error.message
+      console.log error.message
 
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
@@ -151,7 +151,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onPageChange @report.pages()
 
     _exportReport: (format) ->
-      @logger.log("export with format: " + format)
+      console.log("export with format: " + format)
       @report.export({ outputFormat: format })
              .done(@_exportResource)
 
@@ -162,7 +162,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
         .done (response) =>
-      @logger.log "_getServerVersion"
+      console.log "_getServerVersion"
       params = {
         async: false,
         dataType: 'json',
@@ -170,8 +170,8 @@ define 'js.mobile.report.controller', (reqiure) ->
           version = @_parseServerVersion(response)
           callback.call(@, version)
         error: (error) => 
-          @logger.log status
-          @logger.log JSON.stringify error
+          console.log status
+          console.log JSON.stringify error
           @_processErrors error
       }
       jQuery
@@ -189,26 +189,26 @@ define 'js.mobile.report.controller', (reqiure) ->
   # Method callbacks
   #---------------------------------------------------------------------
     _processReportComplete: (status, error) =>
-      @logger.log "onReportCompleted"
+      console.log "onReportCompleted"
       @callback.onReportCompleted status, @report.data().totalPages, error
 
     _processMultipageState: (isMultipage) =>
-      @logger.log "multi #{isMultipage}"
+      console.log "multi #{isMultipage}"
       @callback.onMultiPageStateObtained(isMultipage)
 
     _processSuccess: (parameters) =>
-      @logger.log "_processSuccess"
+      console.log "_processSuccess"
       if parameters.components.length == 0
-        @logger.log "onEmptyReportEvent"
+        console.log "onEmptyReportEvent"
         @callback.onEmptyReportEvent()
       else
         @_checkMultipageState()
       @callback.onLoadDone parameters
 
     _processErrors: (error) =>
-      @logger.log error
+      console.log error
       if error.errorCode is "authentication.error"
-        @logger.log "onLoadStart"
+        console.log "onLoadStart"
         @callback.onLoadStart()
         @_runReportWithAuth error
       else

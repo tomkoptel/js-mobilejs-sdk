@@ -74,11 +74,11 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             self.callback.onLoadError error
 
     _scaleDashboard: ->
-      @logger.log "Scale dashboard"
+      console.log "Scale dashboard"
       $('#container').addClass 'scaledCanvas'
 
     _configureComponents: ->
-      @logger.log "Iterate components"
+      console.log "Iterate components"
       @components.forEach (component) =>
         if component.type != 'inputControl'
           @dashboard.updateComponent component.id,
@@ -87,7 +87,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         return
 
     _defineComponentsClickEvent: ->
-      @logger.log "Apply click events"
+      console.log "Apply click events"
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @
