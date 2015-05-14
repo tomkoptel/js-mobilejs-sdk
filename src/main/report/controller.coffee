@@ -117,8 +117,15 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _checkMultipageState: ->
       @report.export({ outputFormat: "html", pages: "2"})
-        .done(() => @_processMultipageState(true))
-        .fail(() => @_processMultipageState(false))
+        .done (params) =>
+          @_fetchPage params.href, (status) =>
+            if status == "nocontent"
+              @_processMultipageState(false)
+            else
+              @_processMultipageState(true)
+        .fail (error) =>
+          @logger.log "multipage error: #{JSON.stringify error}"
+          @_processMultipageState(false)
 
     _startReportExecution: (link) =>
       params = link.parameters
@@ -158,11 +165,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _exportResource: (link) =>
       @callback.onExportGetResourcePath link.href
 
-    _getServerVersion: (callback) =>
-      jQuery
-        .ajax("#{window.location.href}/rest_v2/serverInfo", {dataType: 'json'})
-        .done (response) =>
-      @logger.log "_getServerVersion"
+    _getServerVersion: (callback) =>    
       params = {
         async: false,
         dataType: 'json',
@@ -177,6 +180,21 @@ define 'js.mobile.report.controller', (reqiure) ->
       jQuery
         .ajax("#{window.location.href}/rest_v2/serverInfo", params)
 
+    _fetchPage: (pageURL, callback) ->
+      @logger.log "_fetchPage"
+      params = {
+        async: false,
+        dataType: 'json',
+        success: (response, status) => 
+          @logger.log status
+          @logger.log JSON.stringify response  
+          callback(status)        
+        error: (error, status) => 
+          @logger.log status
+          @logger.log JSON.stringify error          
+      }
+      jQuery.ajax(pageURL, params)
+    
     _parseServerVersion: (response) =>
       serverVersion = response.version
       digits = serverVersion.match(/\d/g)
@@ -198,11 +216,7 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _processSuccess: (parameters) =>
       @logger.log "_processSuccess"
-      if parameters.components.length == 0
-        @logger.log "onEmptyReportEvent"
-        @callback.onEmptyReportEvent()
-      else
-        @_checkMultipageState()
+      @_checkMultipageState()
       @callback.onLoadDone parameters
 
     _processErrors: (error) =>

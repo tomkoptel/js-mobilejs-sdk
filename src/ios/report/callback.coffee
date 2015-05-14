@@ -24,9 +24,6 @@ define 'js.mobile.ios.report.callback', (require) ->
       @dispatch () ->
         @_makeCallback "reportRunDidCompleted&status=#{status}&pages=#{pages}&error=#{error}"
       return
-      
-    onEmptyReportEvent: () ->
-      return
 
     onPageChange: (page) ->
       return

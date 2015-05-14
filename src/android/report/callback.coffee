@@ -49,10 +49,6 @@ define 'js.mobile.android.report.callback', (require) ->
       @dispatch () -> Android.onRefreshError(error)
       return
 
-    onEmptyReportEvent: () ->
-      @dispatch () -> Android.onEmptyReportEvent()
-      return
-
     onMultiPageStateObtained: (isMultiPage) ->
       @dispatch () -> Android.onMultiPageStateObtained(isMultiPage)
       return
