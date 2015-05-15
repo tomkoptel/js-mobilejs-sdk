@@ -12,7 +12,6 @@ requirejs.config
     'js.mobile.module': 'main/common/module'
     'js.mobile.debug_log': 'main/common/debug_log'
     'js.mobile.release_log': 'main/common/release_log'
-    'js.mobile.server.service': 'main/common/server_service'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'

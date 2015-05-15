@@ -7,7 +7,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     @include lifecycle.dashboardController.instanceMethods
 
     constructor: (@callback, @scaler, params) ->
-      {@uri} = params
+      {@uri, @session} = params
       @scaler.initialize()
 
     destroyDashboard: ->
@@ -43,7 +43,10 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     runDashboard: ->
       @_scaleDashboard()
       @callback.onLoadStart()
-      visualize @_executeDashboard, @_processErrors
+      if @session?
+        visualize @session.authOptions(), @_executeDashboard, @_processErrors
+      else
+        visualize @_executeDashboard, @_processErrors
 
     _executeDashboard: (@v) =>
       processSuccess = @_processSuccess

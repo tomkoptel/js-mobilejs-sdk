@@ -13,6 +13,14 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @getInstance: (args) ->
       @_instance ||= new MobileDashboard args
 
+    # Deprecated. We are not using auth explicitly!
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    @authorize: (options) ->
+      @_instance._authorize options
+
+    _authorize: (options) ->
+      @session = new Session options
+
     # 'diagonal' refers to native device physical property
     @configure: (configs) ->
       @_instance._configure(configs)
@@ -22,9 +30,19 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @scaler = new Scaler
         diagonal: configs.diagonal
 
+    # Deprecated. We will not expose run as class method in future.
     # 'uri' represents dashboard adress
     @run: (params) ->
-      @_instance.run params
+      @_instance._legacyRun params
+
+    # It is temp solution. Remove this config as soon as @authorize will be removed
+    _legacyRun: (params) ->
+      params.session = @session
+      scaler = new Scaler
+        diagonal: params.diagonal
+
+      @_controller = new DashboardController @callback, scaler, params
+      @_controller.runDashboard()
 
     run: (params) ->
       @_controller = new DashboardController @callback, @scaler, params
