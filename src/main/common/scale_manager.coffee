@@ -5,11 +5,9 @@ define 'js.mobile.scale.manager', (require) ->
 
   class ScaleManager
     @getReportManager: (diagonal) ->
-      diagonal ||= 10.1
       new ScaleManager diagonal, new ScaleStyleReport()
 
     @getDashboardManager: (diagonal) ->
-      diagonal ||= 10.1
       new ScaleManager diagonal, new ScaleStyleDashboard()
 
     constructor: (diagonal, @scaleStyle) ->
