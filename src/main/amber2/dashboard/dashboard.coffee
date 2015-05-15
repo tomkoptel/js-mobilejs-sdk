@@ -13,8 +13,40 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @getInstance: (args) ->
       @_instance ||= new MobileDashboard args
 
-    @run: (options) ->
-      @_instance._run options
+    # Deprecated. We are not using auth explicitly!
+    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
+    @authorize: (options) ->
+      @_instance._authorize options
+
+    _authorize: (options) ->
+      @session = new Session options
+
+    # 'diagonal' refers to native device physical property
+    @configure: (configs) ->
+      @_instance._configure(configs)
+      @_instance
+
+    _configure: (configs) ->
+      @scaler = new Scaler
+        diagonal: configs.diagonal
+
+    # Deprecated. We will not expose run as class method in future.
+    # 'uri' represents dashboard adress
+    @run: (params) ->
+      @_instance._legacyRun params
+
+    # It is temp solution. Remove this config as soon as @authorize will be removed
+    _legacyRun: (params) ->
+      params.session = @session
+      scaler = new Scaler
+        diagonal: params.diagonal
+
+      @_controller = new DashboardController @callback, scaler, params
+      @_controller.runDashboard()
+
+    run: (params) ->
+      @_controller = new DashboardController @callback, @scaler, params
+      @_controller.runDashboard()
 
     @destroy: ->
       @_instance._destroy()
@@ -28,23 +60,12 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @refresh: ->
       @_instance._refresh()
 
-    @authorize: (options) ->
-      @_instance._authorize options
-
-    constructor: (@args) ->
-      @args.callback.onScriptLoaded()
+    constructor: (args) ->
+      {@callback} = args
+      @scaler = new Scaler {}
+      @callback.onScriptLoaded()
 
     # Private methods
-
-    # Run {'uri': '%@'}
-    _run: (options) ->
-      options.session = @session
-      options.callback = @args.callback
-      options.scaler = new Scaler options
-
-      @_controller = new DashboardController options
-      @_controller.runDashboard()
-
     _destroy: ->
       @_controller.destroyDashboard()
 
@@ -56,9 +77,5 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     _refresh: ->
       @_controller.refresh()
-
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    _authorize: (options) ->
-      @session = new Session options
 
   window.MobileDashboard = MobileDashboard
