@@ -13,8 +13,22 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @getInstance: (args) ->
       @_instance ||= new MobileDashboard args
 
-    @run: (options) ->
-      @_instance._run options
+    # 'diagonal' refers to native device physical property
+    @configure: (configs) ->
+      @_instance._configure(configs)
+      @_instance
+
+    _configure: (configs) ->
+      @scaler = new Scaler
+        diagonal: configs.diagonal
+
+    # 'uri' represents dashboard adress
+    @run: (params) ->
+      @_instance.run params
+
+    run: (params) ->
+      @_controller = new DashboardController @callback, @scaler, params
+      @_controller.runDashboard()
 
     @destroy: ->
       @_instance._destroy()
@@ -28,23 +42,12 @@ define 'js.mobile.amber2.dashboard', (require) ->
     @refresh: ->
       @_instance._refresh()
 
-    @authorize: (options) ->
-      @_instance._authorize options
-
-    constructor: (@args) ->
-      @args.callback.onScriptLoaded()
+    constructor: (args) ->
+      {@callback} = args
+      @scaler = new Scaler {}
+      @callback.onScriptLoaded()
 
     # Private methods
-
-    # Run {'uri': '%@'}
-    _run: (options) ->
-      options.session = @session
-      options.callback = @args.callback
-      options.scaler = new Scaler options
-
-      @_controller = new DashboardController options
-      @_controller.runDashboard()
-
     _destroy: ->
       @_controller.destroyDashboard()
 
@@ -56,9 +59,5 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     _refresh: ->
       @_controller.refresh()
-
-    # Auth {'username': '%@', 'password': '%@', 'organization': '%@'}
-    _authorize: (options) ->
-      @session = new Session options
 
   window.MobileDashboard = MobileDashboard

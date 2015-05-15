@@ -2,6 +2,7 @@ define 'js.mobile.scaler', ->
   class Scaler
     constructor: (options) ->
       {@diagonal} = options
+      @diagonal ||= 10.1
 
     initialize: ->
       factor = @_calculateFactor()
