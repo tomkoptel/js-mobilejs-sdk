@@ -13,7 +13,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @callback.onLoadStart()
       jQuery( document ).ready( () =>
         js_mobile.log "document ready"
-        @scaler.initialize()
+        @scaler.applyScale()
         @_removeRedundantArtifacts()
         @_injectViewport()
         @_attachDashletLoadListeners()

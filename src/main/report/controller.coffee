@@ -6,8 +6,8 @@ define 'js.mobile.report.controller', (reqiure) ->
   class ReportController extends Module
     @include lifecycle.reportController.instanceMethods
 
-    constructor: (options) ->
-      {@callback, @uri, @session, @params, @pages} = options
+    constructor: (@callback, @scaler, options) ->
+      {@session, @uri, @params, @pages} = options
       js_mobile.log @uri
 
       @params ||= {}
@@ -19,6 +19,7 @@ define 'js.mobile.report.controller', (reqiure) ->
   #---------------------------------------------------------------------
     runReport: ->
       js_mobile.log "runReport"
+      @scaler.applyScale()
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 

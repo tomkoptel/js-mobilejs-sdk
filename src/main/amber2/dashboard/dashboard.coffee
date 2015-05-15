@@ -1,7 +1,7 @@
 define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
-  Scaler = require 'js.mobile.scaler'
+  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -27,8 +27,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_instance
 
     _configure: (configs) ->
-      @scaler = new Scaler
-        diagonal: configs.diagonal
+      @scaler = ScaleManager.getDashboardManager options.diagonal
 
     # Deprecated. We will not expose run as class method in future.
     # 'uri' represents dashboard adress
@@ -38,8 +37,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
     # It is temp solution. Remove this config as soon as @authorize will be removed
     _legacyRun: (params) ->
       params.session = @session
-      scaler = new Scaler
-        diagonal: params.diagonal
+      scaler = ScaleManager.getDashboardManager options.diagonal
 
       @_controller = new DashboardController @callback, scaler, params
       @_controller.runDashboard()
@@ -62,7 +60,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     constructor: (args) ->
       {@callback} = args
-      @scaler = new Scaler {}
+      @scaler = ScaleManager.getDashboardManager
       @callback.onScriptLoaded()
 
     # Private methods
