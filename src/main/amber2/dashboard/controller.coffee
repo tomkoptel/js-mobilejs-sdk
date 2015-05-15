@@ -8,7 +8,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
 
     constructor: (options) ->
       {@callback, @session, @uri, @scaler} = options
-      @scaler.initialize()
+      @scaler.applyScale()
 
     destroyDashboard: ->
       @dashboard.destroy()

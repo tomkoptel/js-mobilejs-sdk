@@ -1,7 +1,7 @@
 define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
-  Scaler = require 'js.mobile.dashboard.scaler'
+  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -40,7 +40,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
     _run: (options) ->
       options.session = @session
       options.callback = @args.callback
-      options.scaler = new Scaler options
+      options.scaler = ScaleManager.getDashboardManager options.diagonal
 
       @_controller = new DashboardController options
       @_controller.runDashboard()

@@ -1,7 +1,7 @@
 define 'js.mobile.report', (require) ->
   Session = require 'js.mobile.session'
   ReportController = require 'js.mobile.report.controller'
-  ReportScaler = require 'js.mobile.report.scaler'
+  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -43,14 +43,14 @@ define 'js.mobile.report', (require) ->
 
     constructor: (args) ->
       {@callback} = args
-      @scaler = new ReportScaler {}
+      @scaler = ScaleManager.getReportManager
       @callback.onScriptLoaded()
 
     _authorize: (options) ->
       @session = new Session options
 
     _configure: (options) ->
-      @scaler = new ReportScaler options
+      @scaler = ScaleManager.getReportManager options.diagonal
       @session = new Session options.auth
 
     _destroyReport: ->

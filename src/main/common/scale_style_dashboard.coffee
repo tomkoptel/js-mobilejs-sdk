@@ -1,16 +1,6 @@
-define 'js.mobile.dashboard.scaler', ->
-  class DashboardScaler
-    constructor: (options) ->
-      {@diagonal} = options
-
-    initialize: ->
-      factor = @_calculateFactor()
-      @_generateStyles factor
-
-    _calculateFactor: ->
-      @diagonal / 10.1
-
-    _generateStyles: (factor) ->
+define 'js.mobile.scale.style.dashboard', ->
+  class ScaleStyleDashboard
+    applyFor: (factor) ->
       jQuery("#scale_style").remove()
 
       scaledCanvasCss =

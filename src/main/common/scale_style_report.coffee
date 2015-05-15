@@ -1,17 +1,6 @@
-define 'js.mobile.report.scaler', ->
-  class ReportScaler
-    constructor: (options) ->
-      {@diagonal} = options
-      @diagonal || = 10.1
-
-    initialize: ->
-      factor = @_calculateFactor()
-      @_generateStyles factor
-
-    _calculateFactor: ->
-      @diagonal / 10.1
-
-    _generateStyles: (factor) ->
+define 'js.mobile.scale.style.report', ->
+  class ScaleStyleReport
+    applyFor: (factor) ->
       jQuery("#scale_style").remove()
 
       scaledCanvasCss =

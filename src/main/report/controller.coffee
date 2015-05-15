@@ -19,7 +19,7 @@ define 'js.mobile.report.controller', (reqiure) ->
   #---------------------------------------------------------------------
     runReport: ->
       js_mobile.log "runReport"
-      @scaler.initialize()
+      @scaler.applyScale()
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
 
