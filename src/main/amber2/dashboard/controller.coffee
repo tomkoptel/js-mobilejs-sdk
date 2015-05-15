@@ -6,8 +6,8 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
   class DashboardController extends Module
     @include lifecycle.dashboardController.instanceMethods
 
-    constructor: (options) ->
-      {@callback, @session, @uri, @scaler} = options
+    constructor: (@callback, @scaler, params) ->
+      {@uri, @session} = params
       @scaler.applyScale()
 
     destroyDashboard: ->
@@ -41,35 +41,39 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
           @callback.onMinimizeFailed(error)
 
     runDashboard: ->
-      @callback.onLoadStart()
       @_scaleDashboard()
+      @callback.onLoadStart()
+      if @session?
+        visualize @session.authOptions(), @_executeDashboard, @_processErrors
+      else
+        visualize @_executeDashboard, @_processErrors
 
-      self = @
-      visualize @session.authOptions(), (v) ->
-        self.v = v
+    _executeDashboard: (@v) =>
+      processSuccess = @_processSuccess
+      @dashboard = @v.dashboard
+        report:
+          chart:
+            animation: false
+            zoom: false
+        container: '#container'
+        resource: @uri
+        success: -> processSuccess @
+        linkOptions:
+          events:
+            click: self._clickCallback
+        error: @_processErrors
 
-        self.dashboard = v.dashboard
-          report:
-            chart:
-              animation: false
-              zoom: false
-          container: '#container'
-          resource: self.uri
-          success: ->
-            self.selfDashboard = @
-            self.data = @data()
-            self.components = @data().components
-            self.container = @container()
+    _processSuccess: (dashboard) =>
+      @data = dashboard.data()
+      @components = @data.components
+      @container = dashboard.container()
+      @_configureComponents()
+      @_defineComponentsClickEvent()
+      @callback.onLoadDone(@components)
 
-            self._configureComponents()
-            self._defineComponentsClickEvent()
-            self.callback.onLoadDone(self.components)
-          linkOptions:
-            events:
-              click: self._clickCallback
-          error: (e) ->
-            self.logger.log error
-            self.callback.onLoadError error
+    _processErrors: (error) ->
+      js_mobile.log JSON.stringify error
+      @callback.onLoadError error.message
 
     _scaleDashboard: ->
       js_mobile.log "Scale dashboard"
