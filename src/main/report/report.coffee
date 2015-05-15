@@ -23,11 +23,19 @@ define 'js.mobile.report', (require) ->
       @_instance._configure options
       @_instance
 
-    @destroy: ->
-      @_instance._destroyReport()
+    # 'uri' report uri  // default pages = '1'
+    # 'params' specific report paramaters
+    # 'pages' by default '1'. Acceptable format '2' or '2-10'
+    run: (options) ->
+      options.session = @session
+      @_controller = new ReportController @callback, @scaler, options
+      @_controller.runReport()
 
     @run: (options) ->
       @_instance.run options
+
+    @destroy: ->
+      @_instance._destroyReport()
 
     @selectPage: (page) ->
       @_instance._selectPage page
@@ -55,16 +63,6 @@ define 'js.mobile.report', (require) ->
 
     _destroyReport: ->
       @_controller.destroyReport()
-
-    # 'uri' report uri  // default pages = '1'
-    # 'params' specific report paramaters
-    # 'pages' by default '1'. Acceptable format '2' or '2-10'
-    run: (options) ->
-      options.session = @session
-      options.callback = @callback
-      options.scaler = @scaler
-      @_controller = new ReportController options
-      @_controller.runReport()
 
     _selectPage: (page) ->
       if @_controller
