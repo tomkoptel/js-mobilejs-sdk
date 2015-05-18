@@ -30,7 +30,7 @@ define 'js.mobile.callback_dispatcher', ->
       if @queue.length == 0
         @_removeInterval()
       else
-        @queue.pop().call @
+        @queue.shift().call @
 
     _createInterval: (eventLoop) ->
       @dispatchTimeInterval = window.setInterval eventLoop, 200
