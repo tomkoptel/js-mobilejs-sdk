@@ -31,7 +31,7 @@ define 'js.mobile.report', (require) ->
       @_controller = new ReportController @callback, @scaler, options
       @_controller.runReport()
 
-    @run: (options) ->
+    @run: (options) ->      
       @_instance.run options
 
     @destroy: ->
@@ -51,7 +51,7 @@ define 'js.mobile.report', (require) ->
 
     constructor: (args) ->
       {@callback} = args
-      @scaler = ScaleManager.getReportManager
+      @scaler = ScaleManager.getReportManager()
       @callback.onScriptLoaded()
 
     _authorize: (options) ->
