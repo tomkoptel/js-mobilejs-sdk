@@ -60,7 +60,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     constructor: (args) ->
       {@callback} = args
-      @scaler = ScaleManager.getDashboardManager
+      @scaler = ScaleManager.getDashboardManager()
       @callback.onScriptLoaded()
 
     # Private methods
