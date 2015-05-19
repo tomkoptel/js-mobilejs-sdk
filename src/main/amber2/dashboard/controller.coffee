@@ -94,7 +94,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @
-      $(@container).find("[data-componentId] > .dashlet").parent().on 'click', () ->
+      $(@container).find("[#{dashboardId}] > .dashlet").parent().on 'click', () ->
         $('.show_chartTypeSelector_wrapper').show()
 
         id = $(this).attr dashboardId
