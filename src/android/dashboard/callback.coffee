@@ -50,6 +50,6 @@ define 'js.mobile.android.dashboard.callback', (require) ->
       @dispatch () -> Android.onWindowResizeStart()
       return
 
-    onWindowResizeEnd: ->
+    onWindowResizeEnd: =>
       @dispatch () -> Android.onWindowResizeEnd()
       return
