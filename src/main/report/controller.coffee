@@ -10,6 +10,7 @@ define 'js.mobile.report.controller', (reqiure) ->
       {@session, @uri, @params, @pages} = options
       js_mobile.log @uri
 
+      @currentWidth = window.innerWidth
       @params ||= {}
       @totalPages = 0
       @pages ||= '1'
@@ -121,6 +122,7 @@ define 'js.mobile.report.controller', (reqiure) ->
             .done () => @_processSuccess(parameters)
       actualParams = jQuery.extend {}, defaultParams, params
       @report = visualize.report actualParams
+      @_adjustScaleForReport @report
 
     _executeFailedCallback: (error) =>
       js_mobile.log error.message
@@ -225,3 +227,9 @@ define 'js.mobile.report.controller', (reqiure) ->
         when "LocalAnchor" then @_navigateToAnchor link
         when "LocalPage" then @_navigateToPage link
         when "Reference" then @_openRemoteLink link
+
+    _adjustScaleForReport: (report) ->
+      jQuery(window).resize () =>
+        if @currentWidth isnt window.innerWidth
+          @currentWidth = window.innerWidth
+          report.scale("width").run()
