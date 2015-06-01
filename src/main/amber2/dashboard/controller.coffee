@@ -61,7 +61,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         success: -> processSuccess @
         linkOptions:
           events:
-            click: self._clickCallback
+            click: @_clickCallback
         error: @_processErrors
 
     _processSuccess: (dashboard) =>
