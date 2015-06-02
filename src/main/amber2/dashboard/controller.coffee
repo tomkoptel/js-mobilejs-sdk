@@ -74,7 +74,10 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
 
     _processErrors: (error) =>
       js_mobile.log JSON.stringify error
-      @callback.onLoadError error.message
+      if error.errorCode is "authentication.error"
+        @callback.onAuthError error.message
+      else
+        @callback.onLoadError error.message
 
     _scaleDashboard: ->
       js_mobile.log "Scale dashboard"

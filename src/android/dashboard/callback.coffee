@@ -53,3 +53,7 @@ define 'js.mobile.android.dashboard.callback', (require) ->
     onWindowResizeEnd: ->
       @dispatch () -> Android.onWindowResizeEnd()
       return
+
+    onAuthError: (message) ->
+      @dispatch () -> Android.onAuthError(message)
+      return
