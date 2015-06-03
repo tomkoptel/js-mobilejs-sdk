@@ -33,10 +33,10 @@ define 'js.mobile.ios.callback', (require) ->
       @_makeCallback "command:didWindowResizeStart"
       return
 
-    onWindowResizeEnd: ->
+    onWindowResizeEnd: =>
       @_makeCallback "command:didWindowResizeEnd"
       return
 
     _makeCallback: (command) ->
-      @dispatch () -> 
+      @dispatch () ->
         window.location.href = "http://jaspermobile.callback/" + command
