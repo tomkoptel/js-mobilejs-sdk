@@ -2,53 +2,53 @@ define 'js.mobile.android.report.callback', (require) ->
   CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
   class ReportCallback extends CallbackDispatcher
-    onScriptLoaded: ->
+    onScriptLoaded: =>
       @dispatch () -> Android.onScriptLoaded()
       return
 
-    onLoadStart: ->
+    onLoadStart: =>
       @dispatch () -> Android.onLoadStart()
       return
 
-    onLoadDone: (parameters) ->
+    onLoadDone: (parameters) =>
       @dispatch () -> Android.onLoadDone(parameters)
       return
 
-    onLoadError: (error) ->
+    onLoadError: (error) =>
       @dispatch () -> Android.onLoadError(error)
       return
 
-    onReportCompleted: (status, pages, error) ->
+    onReportCompleted: (status, pages, error) =>
       Android.onReportCompleted(status, pages, error)
       return
 
-    onTotalPagesLoaded: (pages) ->
+    onTotalPagesLoaded: (pages) =>
       return
 
-    onPageChange: (page) ->
+    onPageChange: (page) =>
       @dispatch () -> Android.onPageChange(page)
       return
 
-    onReferenceClick: (location) ->
+    onReferenceClick: (location) =>
       @dispatch () -> Android.onReferenceClick(location)
       return
 
-    onReportExecutionClick: (reportUri, params) ->
+    onReportExecutionClick: (reportUri, params) =>
       @dispatch () -> Android.onReportExecutionClick(reportUri, params)
       return
 
-    onExportGetResourcePath: (link) ->
+    onExportGetResourcePath: (link) =>
       @dispatch () -> Android.onExportGetResourcePath(link)
       return
 
-    onRefreshSuccess: ->
+    onRefreshSuccess: =>
       @dispatch () -> Android.onRefreshSuccess()
       return
 
-    onRefreshError: (error) ->
+    onRefreshError: (error) =>
       @dispatch () -> Android.onRefreshError(error)
       return
 
-    onMultiPageStateObtained: (isMultiPage) ->
+    onMultiPageStateObtained: (isMultiPage) =>
       @dispatch () -> Android.onMultiPageStateObtained(isMultiPage)
       return
