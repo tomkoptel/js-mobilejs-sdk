@@ -49,6 +49,12 @@ define 'js.mobile.report', (require) ->
     @applyReportParams: (params) ->
       @_instance._applyReportParams params
 
+    @updateComponent: (chartType) ->
+      @_instance._updateComponent(chartType)
+      
+    @getChartTypeList: () ->
+      @_instance._getChartTypeList()
+
     constructor: (args) ->
       {@callback} = args
       @scaler = ScaleManager.getReportManager()
@@ -76,5 +82,11 @@ define 'js.mobile.report', (require) ->
 
     _applyReportParams: (params) ->
       @_controller.applyReportParams params
+      
+    _updateComponent: (chartType) ->
+      @_controller._updateComponent(chartType)
+      
+    _getChartTypeList: () =>
+      @_controller._getChartTypeList()      
 
   window.MobileReport = MobileReport
