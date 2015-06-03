@@ -68,18 +68,20 @@ module.exports = (grunt) ->
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/lib/#{properties.outputs.dashboard.ios_amber}"
-          include: ['ios/amber/dashboard/main.js']
+          include: ['ios/dashboard/amber/main.js']
           paths:
-            'js.mobile.amber.ios.dashboard.client': 'ios/amber/dashboard/client'
-            'js.mobile.ios.viewport.dashboard.amber' : 'ios/viewport/amber/viewport'
+            'js.mobile.amber.ios.dashboard.client': 'ios/dashboard/amber/client'
+            'js.mobile.amber.ios.dashboard.callback': 'ios/dashboard/amber/callback'
+            'js.mobile.ios.viewport.dashboard.amber' : 'ios/dashboard/amber/viewport'
 
       ios_amber2_dashboard_script:
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/lib/#{properties.outputs.dashboard.ios_amber2}"
-          include: ['ios/amber2/dashboard/main.js']
+          include: ['ios/dashboard/amber2/main.js']
           paths:
-            'js.mobile.amber2.ios.dashboard.client': 'ios/amber2/dashboard/client'
+            'js.mobile.amber2.ios.dashboard.client': 'ios/dashboard/amber2/client'
+            'js.mobile.amber2.ios.dashboard.callback': 'ios/dashboard/amber2/callback'
 
       ios_report_script:
         options:
@@ -94,18 +96,18 @@ module.exports = (grunt) ->
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/lib/#{properties.outputs.dashboard.android_amber2}"
-          include: ['android/amber2/dashboard/main.js']
+          include: ['android/dashboard/amber2/main.js']
           paths:
-            'js.mobile.amber2.android.dashboard.client': 'android/amber2/dashboard/client'
+            'js.mobile.amber2.android.dashboard.client': 'android/dashboard/amber2/client'
 
       android_amber_dashboard_script:
         options:
           mainConfigFile: 'build/config/requirejs_config.js'
           out: "build/lib/#{properties.outputs.dashboard.android_amber}"
-          include: ['android/amber/dashboard/main.js']
+          include: ['android/dashboard/amber/main.js']
           paths:
-            'js.mobile.amber.android.dashboard.client': 'android/amber/dashboard/client'
-            'js.mobile.android.viewport.dashboard.amber' : 'android/viewport/amber/viewport'
+            'js.mobile.amber.android.dashboard.client': 'android/dashboard/amber/client'
+            'js.mobile.android.viewport.dashboard.amber' : 'android/dashboard/amber/viewport'
 
       android_report_script:
         options:

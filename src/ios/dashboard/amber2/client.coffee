@@ -1,5 +1,5 @@
 define 'js.mobile.amber2.ios.dashboard.client', (require) ->
-  IosCallback = require 'js.mobile.ios.callbacks.WebKitCallback'
+  IosCallback = require 'js.mobile.amber2.ios.dashboard.callback'
   MobileDashboard = require 'js.mobile.amber2.dashboard'
 
   class IosClient
