@@ -2,54 +2,58 @@ define 'js.mobile.android.dashboard.callback', (require) ->
   CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
   class AndroidCallback extends CallbackDispatcher
-    onMaximizeStart: (title) ->
+    onMaximizeStart: (title) =>
       @dispatch () -> Android.onMaximizeStart(title)
       return
 
-    onMaximizeEnd: (title) ->
+    onMaximizeEnd: (title) =>
       @dispatch () -> Android.onMaximizeEnd(title)
       return
 
-    onMaximizeFailed: (error) ->
+    onMaximizeFailed: (error) =>
       @dispatch () -> Android.onMaximizeFailed(error)
       return
 
-    onMinimizeStart: ->
+    onMinimizeStart: =>
       @dispatch () -> Android.onMinimizeStart()
       return
 
-    onMinimizeEnd: ->
+    onMinimizeEnd: =>
       @dispatch () -> Android.onMinimizeEnd()
       return
 
-    onMinimizeFailed: (error) ->
+    onMinimizeFailed: (error) =>
       @dispatch () -> Android.onMinimizeFailed(error)
       return
 
-    onScriptLoaded: ->
+    onScriptLoaded: =>
       @dispatch () -> Android.onScriptLoaded()
       return
 
-    onLoadStart: ->
+    onLoadStart: =>
       @dispatch () -> Android.onLoadStart()
       return
 
-    onLoadDone: (components) ->
+    onLoadDone: (components) =>
       @dispatch () -> Android.onLoadDone()
       return
 
-    onLoadError: (error) ->
+    onLoadError: (error) =>
       @dispatch () -> Android.onLoadError(error)
       return
 
-    onReportExecution: (data) ->
+    onReportExecution: (data) =>
       @dispatch () -> Android.onReportExecution(data)
       return
 
-    onWindowResizeStart: ->
+    onWindowResizeStart: =>
       @dispatch () -> Android.onWindowResizeStart()
       return
 
     onWindowResizeEnd: =>
       @dispatch () -> Android.onWindowResizeEnd()
+      return
+
+    onAuthError: (message) =>
+      @dispatch () -> Android.onAuthError(message)
       return
