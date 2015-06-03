@@ -54,5 +54,17 @@ define 'js.mobile.ios.report.callback', (require) ->
       @dispatch () ->
         @_makeCallback "reportDidObtaineMultipageState&isMultiPage=" + isMultipage
 
+    onChartTypeListObtained: (chartTypes) ->
+      @dispatch () ->
+        @_makeCallback "reportDidObtaineChartTypeList&chartTypeList=" + chartTypes
+        
+    onChartTypeChangedSuccess: () ->
+      @dispatch () ->
+        @_makeCallback "reportDidChangeChartTypeSuccessfull"
+        
+    onChartTypeChangedFail: (error) ->
+      @dispatch () ->
+        @_makeCallback "reportDidChangeChartTypeFailed&error=" + error
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command
