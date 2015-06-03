@@ -27,7 +27,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_instance
 
     _configure: (configs) ->
-      @scaler = ScaleManager.getDashboardManager options.diagonal
+      @scaler = ScaleManager.getDashboardManager configs.diagonal
 
     # Deprecated. We will not expose run as class method in future.
     # 'uri' represents dashboard adress
@@ -37,7 +37,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
     # It is temp solution. Remove this config as soon as @authorize will be removed
     _legacyRun: (params) ->
       params.session = @session
-      scaler = ScaleManager.getDashboardManager options.diagonal
+      scaler = ScaleManager.getDashboardManager params.diagonal
 
       @_controller = new DashboardController @callback, scaler, params
       @_controller.runDashboard()
@@ -60,7 +60,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
 
     constructor: (args) ->
       {@callback} = args
-      @scaler = ScaleManager.getDashboardManager
+      @scaler = ScaleManager.getDashboardManager()
       @callback.onScriptLoaded()
 
     # Private methods

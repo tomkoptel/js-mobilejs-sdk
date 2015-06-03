@@ -46,6 +46,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       if @session?
         visualize @session.authOptions(), @_executeDashboard, @_processErrors
       else
+        js_mobile.log "Without session"
         visualize @_executeDashboard, @_processErrors
 
     _executeDashboard: (@v) =>
@@ -60,7 +61,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         success: -> processSuccess @
         linkOptions:
           events:
-            click: self._clickCallback
+            click: @_clickCallback
         error: @_processErrors
 
     _processSuccess: (dashboard) =>
@@ -71,9 +72,12 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @_defineComponentsClickEvent()
       @callback.onLoadDone(@components)
 
-    _processErrors: (error) ->
+    _processErrors: (error) =>
       js_mobile.log JSON.stringify error
-      @callback.onLoadError error.message
+      if error.errorCode is "authentication.error"
+        @callback.onAuthError error.message
+      else
+        @callback.onLoadError error.message
 
     _scaleDashboard: ->
       js_mobile.log "Scale dashboard"
