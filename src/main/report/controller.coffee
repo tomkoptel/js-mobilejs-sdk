@@ -10,7 +10,6 @@ define 'js.mobile.report.controller', (reqiure) ->
       {@session, @uri, @params, @pages} = options
       js_mobile.log @uri
 
-      @currentWidth = window.innerWidth
       @params ||= {}
       @totalPages = 0
       @pages ||= '1'
@@ -230,6 +229,4 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _adjustScaleForReport: (report) ->
       jQuery(window).resize () =>
-        if @currentWidth isnt window.innerWidth
-          @currentWidth = window.innerWidth
-          report.scale("width").run()
+        report.scale("width").run()
