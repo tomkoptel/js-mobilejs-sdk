@@ -10,13 +10,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       {@callback, @viewport, @scaler} = args
 
     initialize: ->
-      @callback.onLoadStart()
+      @_injectViewport()
+      @callback.onLoadStart()      
       jQuery( document ).ready( () =>
         js_mobile.log "document ready"
-        @scaler.applyScale()
+        @_attachDashletLoadListeners()        
         @_removeRedundantArtifacts()
-        @_injectViewport()
-        @_attachDashletLoadListeners()
       )
 
     minimizeDashlet: ->
@@ -88,12 +87,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       js_mobile.log "attaching dashlet listener"
       dashboardElInterval = window.setInterval () =>
         dashboardContainer = jQuery('.dashboardCanvas')
-
+        
         if dashboardContainer.length > 0
           window.clearInterval dashboardElInterval
           DOMTreeObserver.lastModify(@_configureDashboard).wait()
           @_scaleDashboard()
-      , 500
+      , 50
 
     _configureDashboard: =>
       js_mobile.log "_configureDashboard"
@@ -104,6 +103,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @callback.onLoadDone()
 
     _scaleDashboard: ->
+      @scaler.applyScale()
       js_mobile.log "_scaleDashboard #{jQuery('.dashboardCanvas').length}"
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
@@ -171,4 +171,4 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
        @_getOverlay().removeClass "originalDashletInScaledCanvas"
 
     _getOverlay: ->
-      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
+      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")      
