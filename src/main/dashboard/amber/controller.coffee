@@ -10,13 +10,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       {@callback, @viewport, @scaler} = args
 
     initialize: ->
+      @_injectViewport()
       @callback.onLoadStart()
       jQuery( document ).ready( () =>
         js_mobile.log "document ready"
-        @scaler.applyScale()
-        @_removeRedundantArtifacts()
-        @_injectViewport()
         @_attachDashletLoadListeners()
+        @_removeRedundantArtifacts()
       )
 
     minimizeDashlet: ->
@@ -25,6 +24,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @_removeOriginalScale()
       @_disableDashlets()
       @_hideDashletChartTypeSelector()
+      @_showDashlets()
 
       @callback.onMinimizeStart()
       DOMTreeObserver.lastModify( () =>
@@ -93,7 +93,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
           window.clearInterval dashboardElInterval
           DOMTreeObserver.lastModify(@_configureDashboard).wait()
           @_scaleDashboard()
-      , 500
+      , 50
 
     _configureDashboard: =>
       js_mobile.log "_configureDashboard"
@@ -104,6 +104,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @callback.onLoadDone()
 
     _scaleDashboard: ->
+      @scaler.applyScale()
       js_mobile.log "_scaleDashboard #{jQuery('.dashboardCanvas').length}"
       jQuery('.dashboardCanvas').addClass 'scaledCanvas'
 
@@ -140,12 +141,14 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       self = @
 
       dashlets.click ->
-        dashlet = jQuery(@).parent()
+        overlay = jQuery(@)
+        dashlet = overlay.parent()
         innerLabel = dashlet.find('.innerLabel > p')
         if innerLabel? and innerLabel.text?
           title = innerLabel.text()
           if title? and title.length > 0
             self._maximizeDashlet dashlet, title
+            self._hideDashlets overlay
 
     _maximizeDashlet: (dashlet, title) ->
       js_mobile.log "maximizing dashlet"
@@ -172,3 +175,12 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _getOverlay: ->
       jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
+
+    _showDashlets: ->
+      jQuery('.customOverlay').parent().css("opacity", 1)
+
+    _hideDashlets: (overlay) ->
+      jQuery('.customOverlay')
+        .not(overlay)
+        .parent()
+        .css("opacity", 0)
