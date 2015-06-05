@@ -177,10 +177,9 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
 
     _showDashlets: ->
-      jQuery('.customOverlay').parent().show()
+      jQuery('.customOverlay').parent().css("opacity", 1)
 
     _hideDashlets: (overlay) ->
       jQuery('.customOverlay')
         .not(overlay)
-        .parent()
-        .hide()
+        .css("opacity", 0)
