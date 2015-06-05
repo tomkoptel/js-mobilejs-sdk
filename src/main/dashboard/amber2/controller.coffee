@@ -22,7 +22,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(component.id)
 
     minimizeDashlet: ->
-      @_getDashlets().css("opacity", 1)
+      @_showDashlets()
       $('.show_chartTypeSelector_wrapper').hide()
 
       dashboardId = @v.dashboard.componentIdDomAttribute
@@ -104,7 +104,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         dashlet = $(this)
         id = dashlet.attr dashboardId
         component = self._getComponentById id
-        self._getDashlets(dashboardId).not(dashlet).css("opacity", 0)
+        self._hideDashlets(dashboardId, dashlet)
 
         if component and !component.maximized
           $(self.container)
@@ -151,3 +151,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         $(@container).find("[#{dashboardId}] > .dashlet").parent()
       else
         $(@container).find(".dashlet").parent()
+
+    _hideDashlets: (dashboardId, dashlet) ->
+      @_getDashlets(dashboardId).not(dashlet).css("opacity", 0)
+
+    _showDashlets: ->
+      @_getDashlets().css("opacity", 1)
