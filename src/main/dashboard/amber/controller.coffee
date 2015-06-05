@@ -182,4 +182,5 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     _hideDashlets: (overlay) ->
       jQuery('.customOverlay')
         .not(overlay)
+        .parent()
         .css("opacity", 0)
