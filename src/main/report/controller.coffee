@@ -140,16 +140,13 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onReportExecutionClick reportUri, paramsAsString
 
     _navigateToAnchor: (link) =>
-      js_mobile.log "_navigateToAnchor, link: #{JSON.stringify link}"
       @report.pages({anchor: link.anchor})
              .run()
 
     _navigateToPage: (link) =>
-      js_mobile.log "_navigateToPage, link: #{JSON.stringify link}"
       @_loadPage link.pages
 
     _openRemoteLink: (link) =>
-      js_mobile.log "_openRemoteLink, link: #{JSON.stringify link}"
       href = link.href
       @callback.onReferenceClick href
 
@@ -219,8 +216,6 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _processLinkClicks: (event, link) =>
       type = link.type
-      js_mobile.log "_processLinkClicks"
-      js_mobile.log "type: #{type}"
 
       switch type
         when "ReportExecution" then @_startReportExecution link
