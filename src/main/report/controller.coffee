@@ -140,15 +140,11 @@ define 'js.mobile.report.controller', (reqiure) ->
       @callback.onReportExecutionClick reportUri, paramsAsString
 
     _navigateToAnchor: (link) =>
-      window.location.hash = link.href
+      @report.pages({anchor: link.anchor})
+             .run()
 
     _navigateToPage: (link) =>
-      href = link.href
-      numberPattern = /\d+/g
-      matches = href.match numberPattern
-      if matches?
-        pageNumber = matches.join ""
-        @_loadPage pageNumber
+      @_loadPage link.pages
 
     _openRemoteLink: (link) =>
       href = link.href
