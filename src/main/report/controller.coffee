@@ -134,11 +134,21 @@ define 'js.mobile.report.controller', (reqiure) ->
           @_processMultipageState(false)
 
     _startReportExecution: (link) =>
-      params = link.parameters
-      reportUri = params._report
-      paramsAsString = JSON.stringify params, null, 2
-      @callback.onReportExecutionClick reportUri, paramsAsString
+      data =
+        resource: link.parameters._report
+        params: @_collectReportParams link
+      dataString = JSON.stringify(data, null, 4)
+      @callback.onReportExecution dataString 
 
+    _collectReportParams: (link) ->
+      params = {}
+      for key of link.parameters
+        if key != '_report'
+          isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
+          params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
+      params
+        
+        
     _navigateToAnchor: (link) =>
       @report.pages({anchor: link.anchor})
              .run()

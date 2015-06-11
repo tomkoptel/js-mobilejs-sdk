@@ -3,7 +3,7 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
 
   class IosCallback extends CallbackDispatcher
     onMaximizeStart: (title) ->
-      @_makeCallback "command:maximize&title:#{title}"
+      @_makeCallback "didStartMaximazeDashlet&title=#{title}"
       return
 
     onMaximizeEnd: (title) ->
@@ -16,25 +16,25 @@ define 'js.mobile.ios.callbacks.IosCallback', (require) ->
       return
 
     onScriptLoaded: ->
-      @_makeCallback "command:didScriptLoad"
+      @_makeCallback "scriptDidLoad"
       return
 
     onLoadStart: ->
       return
 
     onLoadDone: ->
-      @_makeCallback "command:didEndLoading"
+      @_makeCallback "onLoadDone"
       return
 
     onLoadError: (error) ->
       return
 
     onWindowResizeStart: ->
-      @_makeCallback "command:didWindowResizeStart"
+      @_makeCallback "windowDidStartResize"
       return
 
     onWindowResizeEnd: =>
-      @_makeCallback "command:didWindowResizeEnd"
+      @_makeCallback "windowDidEndResize"
       return
 
     _makeCallback: (command) ->
