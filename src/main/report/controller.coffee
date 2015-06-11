@@ -102,7 +102,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _executeReportForAmber: (visualize) =>
       @_executeReport visualize, {}
 
-    _executeReport: (visualize, params) =>
+    _executeReport: (@v, params) =>
       js_mobile.log "_executeReport"
       defaultParams =
         resource: @uri
@@ -120,9 +120,9 @@ define 'js.mobile.report.controller', (reqiure) ->
             .render()
             .done () => @_processSuccess(parameters)
       actualParams = jQuery.extend {}, defaultParams, params
-      @report = visualize.report actualParams
+      @report = @v.report actualParams
       @_adjustScaleForReport @report
-
+      
     _executeFailedCallback: (error) =>
       js_mobile.log error.message
 
@@ -198,6 +198,21 @@ define 'js.mobile.report.controller', (reqiure) ->
       for digit, index in digits
         result += digit * Math.pow(10, index * -1)
       return result
+  
+    _updateComponent: (chartType) =>    
+       chartID = @report.data().components[0].id   
+       @report.updateComponent(chartID, {chartType: chartType})
+              .done( (component) =>
+                @callback.onChartTypeChangedSuccess()
+                return)
+              .fail( (error) =>
+                @callback.onChartTypeChangedFail error
+                return)
+    
+    _getChartTypeList: () =>
+      js_mobile.log "_getChartTypeList"
+      chartTypeList = @v.report.chart.types
+      @callback.onChartTypeListObtained chartTypeList
 
   #---------------------------------------------------------------------
   # Method callbacks

@@ -22,6 +22,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(component.id)
 
     minimizeDashlet: ->
+      @_showDashlets()
       $('.show_chartTypeSelector_wrapper').hide()
 
       dashboardId = @v.dashboard.componentIdDomAttribute
@@ -97,11 +98,13 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @
-      $(@container).find("[#{dashboardId}] > .dashlet").parent().on 'click', () ->
+      @_getDashlets(dashboardId).on 'click', () ->
         $('.show_chartTypeSelector_wrapper').show()
 
-        id = $(this).attr dashboardId
+        dashlet = $(this)
+        id = dashlet.attr dashboardId
         component = self._getComponentById id
+        self._hideDashlets(dashboardId, dashlet)
 
         if component and !component.maximized
           $(self.container)
@@ -142,3 +145,15 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
             isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
             params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
         params
+
+    _getDashlets: (dashboardId) ->
+      if dashboardId?
+        $(@container).find("[#{dashboardId}] > .dashlet").parent()
+      else
+        $(@container).find(".dashlet").parent()
+
+    _hideDashlets: (dashboardId, dashlet) ->
+      @_getDashlets(dashboardId).not(dashlet).css("opacity", 0)
+
+    _showDashlets: ->
+      @_getDashlets().css("opacity", 1)

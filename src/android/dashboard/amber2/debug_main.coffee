@@ -1,6 +1,6 @@
 require [
-    'js.mobile.amber.android.dashboard.client'
-    'js.mobile.release_log'
+    'js.mobile.amber2.android.dashboard.client'
+    'js.mobile.debug_log'
   ]
   , (AndroidClient, Log) ->
     (($) ->

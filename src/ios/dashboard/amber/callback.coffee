@@ -1,4 +1,4 @@
-define 'js.mobile.ios.callbacks.IosCallback', (require) ->
+define 'js.mobile.ios.callback', (require) ->
   CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
   class IosCallback extends CallbackDispatcher

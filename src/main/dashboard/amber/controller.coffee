@@ -11,10 +11,10 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     initialize: ->
       @_injectViewport()
-      @callback.onLoadStart()      
+      @callback.onLoadStart()
       jQuery( document ).ready( () =>
         js_mobile.log "document ready"
-        @_attachDashletLoadListeners()        
+        @_attachDashletLoadListeners()
         @_removeRedundantArtifacts()
       )
 
@@ -24,6 +24,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       @_removeOriginalScale()
       @_disableDashlets()
       @_hideDashletChartTypeSelector()
+      @_showDashlets()
 
       @callback.onMinimizeStart()
       DOMTreeObserver.lastModify( () =>
@@ -87,7 +88,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       js_mobile.log "attaching dashlet listener"
       dashboardElInterval = window.setInterval () =>
         dashboardContainer = jQuery('.dashboardCanvas')
-        
+
         if dashboardContainer.length > 0
           window.clearInterval dashboardElInterval
           DOMTreeObserver.lastModify(@_configureDashboard).wait()
@@ -140,12 +141,14 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       self = @
 
       dashlets.click ->
-        dashlet = jQuery(@).parent()
+        overlay = jQuery(@)
+        dashlet = overlay.parent()
         innerLabel = dashlet.find('.innerLabel > p')
         if innerLabel? and innerLabel.text?
           title = innerLabel.text()
           if title? and title.length > 0
             self._maximizeDashlet dashlet, title
+            self._hideDashlets overlay
 
     _maximizeDashlet: (dashlet, title) ->
       js_mobile.log "maximizing dashlet"
@@ -171,4 +174,13 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
        @_getOverlay().removeClass "originalDashletInScaledCanvas"
 
     _getOverlay: ->
-      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")      
+      jQuery(".dashboardCanvas > .content > .body div.canvasOverlay")
+
+    _showDashlets: ->
+      jQuery('.customOverlay').parent().css("opacity", 1)
+
+    _hideDashlets: (overlay) ->
+      jQuery('.customOverlay')
+        .not(overlay)
+        .parent()
+        .css("opacity", 0)
