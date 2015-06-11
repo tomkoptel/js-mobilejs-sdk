@@ -33,9 +33,15 @@ define 'js.mobile.ios.report.callback', (require) ->
         @_makeCallback "handleReferenceClick&location=" + location
       return
 
-    onReportExecutionClick: (reportUri, params) ->
+#    onReportExecutionClick: (reportUri, params) ->
+#      @dispatch () ->
+#        @_makeCallback "runReport&params=" + params
+#      return
+
+    onReportExecution: (data) ->
+      console.log "onReportExecution: #{data}"
       @dispatch () ->
-        @_makeCallback "runReport&params=" + params
+        @_makeCallback "runReport&data=" + data
       return
 
     onExportGetResourcePath: (link) ->
