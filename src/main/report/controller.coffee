@@ -115,6 +115,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         error: @_processErrors
         events:
           reportCompleted: @_processReportComplete
+          changePagesState: @_processCurrentPageChanged
         success: (parameters) =>
           @report.container("#container")
             .render()
@@ -167,7 +168,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         .done(@_notifyPageChange)
 
     _notifyPageChange: =>
-      @callback.onPageChange @report.pages()
+      @callback.onPageChange parseInt(@report.pages())
 
     _exportReport: (format) ->
       js_mobile.log("export with format: " + format)
@@ -220,6 +221,10 @@ define 'js.mobile.report.controller', (reqiure) ->
     _processReportComplete: (status, error) =>
       js_mobile.log "onReportCompleted"
       @callback.onReportCompleted status, @report.data().totalPages, error
+
+    _processCurrentPageChanged: (page) =>
+      js_mobile.log "Current page changed: #{page}"
+      @callback.onPageChange page
 
     _processMultipageState: (isMultipage) =>
       js_mobile.log "multi #{isMultipage}"
