@@ -137,9 +137,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       
       switch type
         when "ReportExecution" then @_startReportExecution link
-        when "LocalAnchor" then @_navigateToAnchor link
-        when "LocalPage" then @_navigateToPage link
         when "Reference" then @_openRemoteLink link
+        when "LocalAnchor" then defaultHandler.call @
+        when "LocalPage" then defaultHandler.call @
         else defaultHandler.call @
     
     _startReportExecution: (link) =>
@@ -158,22 +158,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
           isValueNotArray = Object::toString.call(parameters) != '[object Array]'          
           params[key] = if isValueNotArray then [parameters] else parameters
       params
-
-    _navigateToAnchor: (link) =>
-      js_mobile.log "_navigateToAnchor"
-#      @report.pages({anchor: link.anchor})
-#             .run()
-
-    _navigateToPage: (link) =>
-      js_mobile.log "_navigateToPage"
-      @_loadPage link.pages
       
-    _loadPage: (page) ->
-#      @report.pages(page)
-#        .run()
-#        .fail(js_mobile.log "_loadPage failed")
-#        .done(js_mobile.log "_loadPage done")
-        
     _openRemoteLink: (link) =>
       js_mobile.log "_openRemoteLink"
       href = link.href
