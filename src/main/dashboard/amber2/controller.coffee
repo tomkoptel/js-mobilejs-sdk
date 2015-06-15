@@ -62,7 +62,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         success: -> processSuccess @
         linkOptions:
           events:
-            click: @_clickCallback
+            click: @_processLinkClicks
         error: @_processErrors
 
     _processSuccess: (dashboard) =>
@@ -129,22 +129,55 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       )[0]
 
 # Click events
-
-    _clickCallback: (event, link) =>
-      if link.type is "ReportExecution"
-        data =
-          resource: link.parameters._report
-          params: @_collectReportParams link
-        dataString = JSON.stringify(data, null, 4)
-        @callback.onReportExecution dataString
+  	
+    _processLinkClicks: (event, link, defaultHandler) =>
+      type = link.type
+      js_mobile.log "_processLinkClicks: #{JSON.stringify link}"
+      js_mobile.log "type: #{type}"
+      
+      switch type
+        when "ReportExecution" then @_startReportExecution link
+        when "LocalAnchor" then @_navigateToAnchor link
+        when "LocalPage" then @_navigateToPage link
+        when "Reference" then @_openRemoteLink link
+        else defaultHandler.call @
+    
+    _startReportExecution: (link) =>
+      js_mobile.log "_startReportExecution"
+      js_mobile.log "resource: #{link.parameters._report}"
+      data = 
+        resource : link.parameters._report
+        params : @_collectReportParams link
+      @callback.onReportExecution data  
 
     _collectReportParams: (link) ->
-        params = {}
-        for key of link.parameters
-          if key != '_report'
-            isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
-            params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
-        params
+      params = {}
+      for key of link.parameters
+        if key != '_report'
+          parameters = link.parameters[key]
+          isValueNotArray = Object::toString.call(parameters) != '[object Array]'          
+          params[key] = if isValueNotArray then [parameters] else parameters
+      params
+
+    _navigateToAnchor: (link) =>
+      js_mobile.log "_navigateToAnchor"
+#      @report.pages({anchor: link.anchor})
+#             .run()
+
+    _navigateToPage: (link) =>
+      js_mobile.log "_navigateToPage"
+      @_loadPage link.pages
+      
+    _loadPage: (page) ->
+#      @report.pages(page)
+#        .run()
+#        .fail(js_mobile.log "_loadPage failed")
+#        .done(js_mobile.log "_loadPage done")
+        
+    _openRemoteLink: (link) =>
+      js_mobile.log "_openRemoteLink"
+      href = link.href
+      @callback.onReferenceClick href
 
     _getDashlets: (dashboardId) ->
       if dashboardId?

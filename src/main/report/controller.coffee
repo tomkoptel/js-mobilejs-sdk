@@ -252,6 +252,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         when "LocalAnchor" then @_navigateToAnchor link
         when "LocalPage" then @_navigateToPage link
         when "Reference" then @_openRemoteLink link
+        else defaultHandler.call @
 
     _adjustScaleForReport: (report) ->
       jQuery(window).resize () =>
