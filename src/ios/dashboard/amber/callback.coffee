@@ -1,4 +1,4 @@
-define 'js.mobile.ios.callback', (require) ->
+define 'js.mobile.amber.ios.dashboard.callback', (require) ->
   CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
   class IosCallback extends CallbackDispatcher
