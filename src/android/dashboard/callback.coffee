@@ -35,8 +35,7 @@ define 'js.mobile.android.dashboard.callback', (require) ->
       return
 
     onLoadDone: (components) =>
-      componentsString = JSON.stringify components, null, 4
-      @dispatch () -> Android.onLoadDone(componentsString)
+      @dispatch () -> Android.onLoadDone()
       return
 
     onLoadError: (error) =>

@@ -39,11 +39,8 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     _removeRedundantArtifacts: ->
       js_mobile.log "remove artifacts"
       customStyle = "
-        .header, .dashletToolbar {
+        .header, .dashletToolbar, .show_chartTypeSelector_wrapper, .heartbeatOptin, #mainNavigation {
             display: none !important;
-        }
-        .show_chartTypeSelector_wrapper {
-            display: none;
         }
         .column.decorated {
             margin: 0 !important;
@@ -53,9 +50,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
         .column.decorated>.content>.body,
         .column>.content>.body {
               top: 0 !important;
-        }
-        #mainNavigation{
-          display: none !important;
         }
         .customOverlay {
           position: absolute;
