@@ -140,6 +140,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         when "Reference" then @_openRemoteLink link
         when "LocalAnchor" then defaultHandler.call @
         when "LocalPage" then defaultHandler.call @
+        when "AdHocExecution" then @_adHocHandler link, defaultHandler
         else defaultHandler.call @
     
     _startReportExecution: (link) =>
@@ -163,6 +164,10 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       js_mobile.log "_openRemoteLink"
       href = link.href
       @callback.onReferenceClick href
+
+    _adHocHandler: (link, defaultHandler) =>
+      js_mobile.log "_adHocHandler"        
+      defaultHandler.call @
 
     _getDashlets: (dashboardId) ->
       if dashboardId?
