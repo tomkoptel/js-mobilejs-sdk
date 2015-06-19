@@ -26,6 +26,8 @@ define 'js.mobile.ios.report.callback', (require) ->
       return
 
     onPageChange: (page) ->
+      @dispatch () ->
+        @_makeCallback "reportOnPageChange&page=#{page}"
       return
 
     onReferenceClick: (location) ->
