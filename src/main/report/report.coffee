@@ -1,7 +1,6 @@
 define 'js.mobile.report', (require) ->
   Session = require 'js.mobile.session'
   ReportController = require 'js.mobile.report.controller'
-  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -56,8 +55,7 @@ define 'js.mobile.report', (require) ->
       @_instance._getChartTypeList()
 
     constructor: (args) ->
-      {@callback} = args
-      @scaler = ScaleManager.getReportManager()
+      {@callback, @scaler} = args
       @callback.onScriptLoaded()
 
     _authorize: (options) ->

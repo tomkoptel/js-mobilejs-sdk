@@ -19,6 +19,12 @@ requirejs.config
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
+    'js.mobile.android.scale.style.dashboard': 'android/dashboard/scale_style_dashboard'
+    'js.mobile.android.scale.style.report': 'android/dashboard/scale_style_report'
+
+    #  Common iOS components
+    'js.mobile.ios.scale.style.dashboard': 'ios/dashboard/scale_style_dashboard'
+    'js.mobile.ios.scale.style.report': 'ios/dashboard/scale_style_report'
 
     # Amber Dashboard components
     'js.mobile.amber.dashboard': 'main/dashboard/amber/dashboard'

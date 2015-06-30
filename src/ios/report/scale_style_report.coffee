@@ -1,4 +1,4 @@
-define 'js.mobile.scale.style.report', ->
+define 'js.mobile.ios.scale.style.report', ->
   class ScaleStyleReport
     applyFor: (factor) ->
       jQuery("#scale_style").remove()

@@ -1,7 +1,6 @@
 define 'js.mobile.amber2.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber2.dashboard.controller'
   Session = require 'js.mobile.session'
-  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -59,8 +58,7 @@ define 'js.mobile.amber2.dashboard', (require) ->
       @_instance._refresh()
 
     constructor: (args) ->
-      {@callback} = args
-      @scaler = ScaleManager.getDashboardManager()
+      {@callback, @scaler} = args
       @callback.onScriptLoaded()
 
     # Private methods
