@@ -10,7 +10,6 @@ define 'js.mobile.report.controller', (reqiure) ->
       {@session, @uri, @params, @pages} = options
       js_mobile.log @uri
 
-      @currentWidth = window.innerWidth
       @params ||= {}
       @totalPages = 0
       @pages ||= '1'
@@ -103,7 +102,7 @@ define 'js.mobile.report.controller', (reqiure) ->
     _executeReportForAmber: (visualize) =>
       @_executeReport visualize, {}
 
-    _executeReport: (visualize, params) =>
+    _executeReport: (@v, params) =>
       js_mobile.log "_executeReport"
       defaultParams =
         resource: @uri
@@ -116,14 +115,15 @@ define 'js.mobile.report.controller', (reqiure) ->
         error: @_processErrors
         events:
           reportCompleted: @_processReportComplete
+          changePagesState: @_processCurrentPageChanged
         success: (parameters) =>
           @report.container("#container")
             .render()
             .done () => @_processSuccess(parameters)
       actualParams = jQuery.extend {}, defaultParams, params
-      @report = visualize.report actualParams
+      @report = @v.report actualParams
       @_adjustScaleForReport @report
-
+      
     _executeFailedCallback: (error) =>
       js_mobile.log error.message
 
@@ -135,21 +135,27 @@ define 'js.mobile.report.controller', (reqiure) ->
           @_processMultipageState(false)
 
     _startReportExecution: (link) =>
-      params = link.parameters
-      reportUri = params._report
-      paramsAsString = JSON.stringify params, null, 2
-      @callback.onReportExecutionClick reportUri, paramsAsString
+      data =
+        resource: link.parameters._report
+        params: @_collectReportParams link
+      dataString = JSON.stringify(data, null, 4)
+      @callback.onReportExecution dataString 
 
+    _collectReportParams: (link) ->
+      params = {}
+      for key of link.parameters
+        if key != '_report'
+          isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
+          params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
+      params
+        
+        
     _navigateToAnchor: (link) =>
-      window.location.hash = link.href
+      @report.pages({anchor: link.anchor})
+             .run()
 
     _navigateToPage: (link) =>
-      href = link.href
-      numberPattern = /\d+/g
-      matches = href.match numberPattern
-      if matches?
-        pageNumber = matches.join ""
-        @_loadPage pageNumber
+      @_loadPage link.pages
 
     _openRemoteLink: (link) =>
       href = link.href
@@ -162,7 +168,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         .done(@_notifyPageChange)
 
     _notifyPageChange: =>
-      @callback.onPageChange @report.pages()
+      @callback.onPageChange parseInt(@report.pages())
 
     _exportReport: (format) ->
       js_mobile.log("export with format: " + format)
@@ -193,6 +199,21 @@ define 'js.mobile.report.controller', (reqiure) ->
       for digit, index in digits
         result += digit * Math.pow(10, index * -1)
       return result
+  
+    _updateComponent: (chartType) =>    
+       chartID = @report.data().components[0].id   
+       @report.updateComponent(chartID, {chartType: chartType})
+              .done( (component) =>
+                @callback.onChartTypeChangedSuccess()
+                return)
+              .fail( (error) =>
+                @callback.onChartTypeChangedFail error
+                return)
+    
+    _getChartTypeList: () =>
+      js_mobile.log "_getChartTypeList"
+      chartTypeList = @v.report.chart.types
+      @callback.onChartTypeListObtained chartTypeList
 
   #---------------------------------------------------------------------
   # Method callbacks
@@ -200,6 +221,10 @@ define 'js.mobile.report.controller', (reqiure) ->
     _processReportComplete: (status, error) =>
       js_mobile.log "onReportCompleted"
       @callback.onReportCompleted status, @report.data().totalPages, error
+
+    _processCurrentPageChanged: (page) =>
+      js_mobile.log "Current page changed: #{page}"
+      @callback.onPageChange page
 
     _processMultipageState: (isMultipage) =>
       js_mobile.log "multi #{isMultipage}"
@@ -227,9 +252,8 @@ define 'js.mobile.report.controller', (reqiure) ->
         when "LocalAnchor" then @_navigateToAnchor link
         when "LocalPage" then @_navigateToPage link
         when "Reference" then @_openRemoteLink link
+        else defaultHandler.call @
 
     _adjustScaleForReport: (report) ->
       jQuery(window).resize () =>
-        if @currentWidth isnt window.innerWidth
-          @currentWidth = window.innerWidth
-          report.scale("width").run()
+        report.scale("width").run()

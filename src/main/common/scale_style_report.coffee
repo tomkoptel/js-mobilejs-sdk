@@ -4,10 +4,17 @@ define 'js.mobile.scale.style.report', ->
       jQuery("#scale_style").remove()
 
       scaledCanvasCss =
-        "#container {
-           position: absolute;
-           width: #{100 / factor}%;
-           height: #{100 / factor}%;
+        "#container {     
+           transform-origin: 0 0 0;
+           -ms-transform-origin: 0 0 0;
+           -webkit-transform-origin: 0 0 0;
+
+           transform: scale( #{factor} );
+           -ms-transform: scale( #{factor} );
+           -webkit-transform: scale( #{factor} );
+
+           width: #{100 / factor}% !important;
+           height: #{100 / factor}% !important;
          }"
 
       jQuery('<style id="scale_style"></style>').text(scaledCanvasCss).appendTo 'head'

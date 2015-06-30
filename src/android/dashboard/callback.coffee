@@ -43,7 +43,8 @@ define 'js.mobile.android.dashboard.callback', (require) ->
       return
 
     onReportExecution: (data) =>
-      @dispatch () -> Android.onReportExecution(data)
+      dataString = JSON.stringify data, null, 4
+      @dispatch () -> Android.onReportExecution(dataString)
       return
 
     onWindowResizeStart: =>
