@@ -1,5 +1,5 @@
-define 'js.mobile.scale.calculator', ->
-  class ScaleCalculator
+define 'js.mobile.factor.calculator', ->
+  class FactorCalculator
     constructor: (@diagonal) ->
       @diagonal || = 10.1
 

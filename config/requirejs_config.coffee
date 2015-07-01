@@ -11,14 +11,18 @@ requirejs.config
     'js.mobile.module': 'main/common/module'
     'js.mobile.debug_log': 'main/common/debug_log'
     'js.mobile.release_log': 'main/common/release_log'
-    
-    'js.mobile.scale.calculator': 'main/common/scale_calculator'
+
+    'js.mobile.factor.calculator': 'main/common/factor_calculator'
     'js.mobile.scale.manager': 'main/common/scale_manager'
-    'js.mobile.scale.style.dashboard': 'main/common/scale_style_dashboard'
-    'js.mobile.scale.style.report': 'main/common/scale_style_report'
 
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
+    'js.mobile.android.scale.style.dashboard': 'android/dashboard/scale_style_dashboard'
+    'js.mobile.android.scale.style.report': 'android/report/scale_style_report'
+
+    #  Common iOS components
+    'js.mobile.ios.scale.style.dashboard': 'ios/dashboard/scale_style_dashboard'
+    'js.mobile.ios.scale.style.report': 'ios/report/scale_style_report'
 
     # Amber Dashboard components
     'js.mobile.amber.dashboard': 'main/dashboard/amber/dashboard'

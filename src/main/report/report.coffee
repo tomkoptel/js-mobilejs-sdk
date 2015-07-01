@@ -31,7 +31,7 @@ define 'js.mobile.report', (require) ->
       @_controller = new ReportController @callback, @scaler, options
       @_controller.runReport()
 
-    @run: (options) ->      
+    @run: (options) ->
       @_instance.run options
 
     @destroy: ->
@@ -51,20 +51,24 @@ define 'js.mobile.report', (require) ->
 
     @updateComponent: (chartType) ->
       @_instance._updateComponent(chartType)
-      
+
     @getChartTypeList: () ->
       @_instance._getChartTypeList()
 
     constructor: (args) ->
-      {@callback} = args
-      @scaler = ScaleManager.getReportManager()
+      {@callback, @scale_style} = args
+      @scaler = new ScaleManager
+        scale_style: @scale_style
+
       @callback.onScriptLoaded()
 
     _authorize: (options) ->
       @session = new Session options
 
     _configure: (options) ->
-      @scaler = ScaleManager.getReportManager options.diagonal
+      @scaler = new ScaleManager
+        scale_style: @scale_style
+        diagonal: options.diagonal
       @session = new Session options.auth
 
     _destroyReport: ->
@@ -82,11 +86,11 @@ define 'js.mobile.report', (require) ->
 
     _applyReportParams: (params) ->
       @_controller.applyReportParams params
-      
+
     _updateComponent: (chartType) ->
       @_controller._updateComponent(chartType)
-      
+
     _getChartTypeList: () =>
-      @_controller._getChartTypeList()      
+      @_controller._getChartTypeList()
 
   window.MobileReport = MobileReport

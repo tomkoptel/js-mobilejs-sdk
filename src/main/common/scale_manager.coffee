@@ -1,18 +1,11 @@
-define 'js.mobile.scale.manager', (require) ->
-  ScaleCalculator = require 'js.mobile.scale.calculator'
-  ScaleStyleReport = require 'js.mobile.scale.style.report'
-  ScaleStyleDashboard = require 'js.mobile.scale.style.dashboard'
+define 'js.mobile.scale.manager', ->
+  ScaleFactor = require 'js.mobile.factor.calculator'
 
   class ScaleManager
-    @getReportManager: (diagonal) ->
-      new ScaleManager diagonal, new ScaleStyleReport()
-
-    @getDashboardManager: (diagonal) ->
-      new ScaleManager diagonal, new ScaleStyleDashboard()
-
-    constructor: (diagonal, @scaleStyle) ->
-      @calculator = new ScaleCalculator diagonal
+    constructor: (configs) ->
+      {@scale_style, diagonal} = configs
+      @calculator = new ScaleFactor diagonal
 
     applyScale: ->
       factor = @calculator.calculateFactor()
-      @scaleStyle.applyFor factor
+      @scale_style.applyFor factor

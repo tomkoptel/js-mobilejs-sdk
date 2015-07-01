@@ -1,4 +1,4 @@
-define 'js.mobile.scale.style.dashboard', ->
+define 'js.mobile.android.scale.style.dashboard', ->
   class ScaleStyleDashboard
     applyFor: (factor) ->
       jQuery("#scale_style").remove()

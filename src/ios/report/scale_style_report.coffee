@@ -1,10 +1,10 @@
-define 'js.mobile.scale.style.report', ->
+define 'js.mobile.ios.scale.style.report', ->
   class ScaleStyleReport
     applyFor: (factor) ->
       jQuery("#scale_style").remove()
 
       scaledCanvasCss =
-        "#container {     
+        "#container {
            transform-origin: 0 0 0;
            -ms-transform-origin: 0 0 0;
            -webkit-transform-origin: 0 0 0;
