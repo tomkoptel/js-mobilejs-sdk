@@ -117,13 +117,13 @@ define 'js.mobile.report.controller', (reqiure) ->
           reportCompleted: @_processReportComplete
           changePagesState: @_processCurrentPageChanged
         success: (parameters) =>
+          @_adjustScaleForReport @report
           @report.container("#container")
             .render()
             .done () => @_processSuccess(parameters)
       actualParams = jQuery.extend {}, defaultParams, params
       @report = @v.report actualParams
-      @_adjustScaleForReport @report
-      
+
     _executeFailedCallback: (error) =>
       js_mobile.log error.message
 
