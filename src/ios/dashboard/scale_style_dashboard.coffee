@@ -26,8 +26,8 @@ define 'js.mobile.ios.scale.style.dashboard', ->
           -ms-transform: scale( #{1 / factor} );
           -webkit-transform: scale( #{1 / factor} );
 
-          width: #{100 * @factor}% !important;
-          height: #{100 * @factor}% !important;
+          width: #{100 * factor}% !important;
+          height: #{100 * factor}% !important;
         }"
       jQuery('<style id="scale_style"></style>').text(scaledCanvasCss + originalDashletInScaledCanvasCss).appendTo 'head'
       return
