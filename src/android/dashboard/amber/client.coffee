@@ -9,4 +9,4 @@ define 'js.mobile.amber.android.dashboard.client', (require) ->
       MobileDashboard.newInstance
         viewport: new Viewport()
         callback: new AndroidCallback()
-        scaler: new ScaleStyleDashboard()
+        scale_style: new ScaleStyleDashboard()

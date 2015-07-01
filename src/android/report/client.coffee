@@ -7,4 +7,4 @@ define 'js.mobile.android.report.client', (require) ->
     run: ->
       MobileReport.getInstance
         callback: new ReportCallback()
-        scaler: new ScaleStyleReport()
+        scale_style: new ScaleStyleReport()

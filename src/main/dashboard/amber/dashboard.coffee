@@ -1,5 +1,6 @@
 define 'js.mobile.amber.dashboard', (require) ->
   DashboardController = require 'js.mobile.amber.dashboard.controller'
+  ScaleManager = require 'js.mobile.scale.manager'
   lifecycle = require 'js.mobile.lifecycle'
   Module = require 'js.mobile.module'
 
@@ -40,6 +41,10 @@ define 'js.mobile.amber.dashboard', (require) ->
         @_controller.minimizeDashlet()
 
     _initController: ->
+      @args.scaler = new ScaleManager
+        scale_style: @args.scale_style
+        diagonal: @options.diagonal
+
       @_controller = new DashboardController @args
       @_controller.initialize()
 

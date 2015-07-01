@@ -7,4 +7,4 @@ define 'js.mobile.amber2.android.dashboard.client', (require) ->
     run: ->
       MobileDashboard.getInstance
         callback: new DashboardCallback()
-        scaler: new ScaleStyleDashboard()
+        scale_style: new ScaleStyleDashboard()
