@@ -52,3 +52,7 @@ define 'js.mobile.android.report.callback', (require) ->
     onMultiPageStateObtained: (isMultiPage) =>
       @dispatch () -> Android.onMultiPageStateObtained(isMultiPage)
       return
+
+    onWindowError: (message) =>
+      @dispatch () -> Android.onWindowError(message)
+      return

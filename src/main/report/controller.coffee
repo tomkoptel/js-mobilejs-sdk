@@ -19,6 +19,7 @@ define 'js.mobile.report.controller', (reqiure) ->
   #---------------------------------------------------------------------
     runReport: ->
       js_mobile.log "runReport"
+      @_setGlobalErrorListener()
       @scaler.applyScale()
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
@@ -257,3 +258,8 @@ define 'js.mobile.report.controller', (reqiure) ->
     _adjustScaleForReport: (report) ->
       jQuery(window).resize () =>
         report.scale("width").run()
+
+    _setGlobalErrorListener: ->
+      window.onerror = (errorMsg, url, lineNumber) =>
+        @callback.onWindowError(errorMsg);
+

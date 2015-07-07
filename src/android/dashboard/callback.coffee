@@ -58,3 +58,7 @@ define 'js.mobile.android.dashboard.callback', (require) ->
     onAuthError: (message) =>
       @dispatch () -> Android.onAuthError(message)
       return
+
+    onWindowError: (message) =>
+      @dispatch () -> Android.onWindowError(message)
+      return

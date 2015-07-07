@@ -42,6 +42,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
           @callback.onMinimizeFailed(error)
 
     runDashboard: ->
+      @_setGlobalErrorListener()
       @_scaleDashboard()
       @callback.onLoadStart()
       if @session?
@@ -180,3 +181,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
 
     _showDashlets: ->
       @_getDashlets().css("opacity", 1)
+
+    _setGlobalErrorListener: ->
+      window.onerror = (errorMsg, url, lineNumber) =>
+        @callback.onWindowError(errorMsg);
