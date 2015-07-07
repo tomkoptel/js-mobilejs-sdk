@@ -58,7 +58,10 @@ define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
       
     onAdHocExecution: ->
       @_makeCallback {"command" : "onAdHocExecution", "parameters" : {}}
-    
+
+    onWindowError: (error) ->
+      @_makeCallback {"command" : "onAdHocExecution", "onWindowError" : {"error": error}}
+
     _makeCallback: (command) ->
       @dispatch () ->
         window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify command
