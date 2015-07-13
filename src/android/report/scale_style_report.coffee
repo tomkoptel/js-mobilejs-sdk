@@ -3,12 +3,7 @@ define 'js.mobile.android.scale.style.report', ->
     applyFor: (factor) ->
       jQuery("#scale_style").remove()
 
-      scaledCanvasCss =
-        "#container {
-           position: absolute;
-           width: #{100 / factor}%;
-           height: #{100 / factor}%;
-         }"
+      scaledCanvasCss = "#container {}"
 
       jQuery('<style id="scale_style"></style>').text(scaledCanvasCss).appendTo 'head'
       return
