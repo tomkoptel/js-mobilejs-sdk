@@ -180,6 +180,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @_getDashlets(dashboardId).not(dashlet).css("opacity", 0)
 
     _showDashlets: ->
+      document.activeElement.blur()
       @_getDashlets().css("opacity", 1)
 
     _setGlobalErrorListener: ->
