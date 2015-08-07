@@ -194,10 +194,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       # bad kostyl    
       timeout = window.setTimeout () =>
          divHeight = jQuery(".msPlaceholder > div").css("height")
-         if divHeight
+         if divHeight != 'undefined'
            window.clearInterval timeout           
-           jQuery(".msPlaceholder > div").css("height", "")                  
-         return       
+           jQuery(".msPlaceholder > div").css("height", "")                       
       , 500      
       jQuery(".filterRow > div > div").css("height", "")      
       return
