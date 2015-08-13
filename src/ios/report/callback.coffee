@@ -26,6 +26,8 @@ define 'js.mobile.ios.report.callback', (require) ->
       return
 
     onPageChange: (page) ->
+      @dispatch () ->
+        @_makeCallback "reportOnPageChange&page=#{page}"
       return
 
     onReferenceClick: (location) ->
@@ -33,9 +35,15 @@ define 'js.mobile.ios.report.callback', (require) ->
         @_makeCallback "handleReferenceClick&location=" + location
       return
 
-    onReportExecutionClick: (reportUri, params) ->
+#    onReportExecutionClick: (reportUri, params) ->
+#      @dispatch () ->
+#        @_makeCallback "runReport&params=" + params
+#      return
+
+    onReportExecution: (data) ->
+      console.log "onReportExecution: #{data}"
       @dispatch () ->
-        @_makeCallback "runReport&params=" + params
+        @_makeCallback "runReport&data=" + data
       return
 
     onExportGetResourcePath: (link) ->
@@ -53,6 +61,18 @@ define 'js.mobile.ios.report.callback', (require) ->
     onMultiPageStateObtained: (isMultipage) ->
       @dispatch () ->
         @_makeCallback "reportDidObtaineMultipageState&isMultiPage=" + isMultipage
+
+    onChartTypeListObtained: (chartTypes) ->
+      @dispatch () ->
+        @_makeCallback "reportDidObtaineChartTypeList&chartTypeList=" + chartTypes
+        
+    onChartTypeChangedSuccess: () ->
+      @dispatch () ->
+        @_makeCallback "reportDidChangeChartTypeSuccessfull"
+        
+    onChartTypeChangedFail: (error) ->
+      @dispatch () ->
+        @_makeCallback "reportDidChangeChartTypeFailed&error=" + error
 
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

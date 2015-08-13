@@ -33,8 +33,8 @@ define 'js.mobile.android.report.callback', (require) ->
       @dispatch () -> Android.onReferenceClick(location)
       return
 
-    onReportExecutionClick: (reportUri, params) =>
-      @dispatch () -> Android.onReportExecutionClick(reportUri, params)
+    onReportExecution: (data) =>
+      @dispatch () -> Android.onReportExecutionClick(data)
       return
 
     onExportGetResourcePath: (link) =>

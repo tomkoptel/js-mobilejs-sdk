@@ -20,17 +20,13 @@ requirejs.config
     #  Common Android components
     'js.mobile.android.dashboard.callback': 'android/dashboard/callback'
 
-    # Common Ios components
-    'js.mobile.ios.callbacks.WebKitCallback': 'ios/callbacks/WebKitCallback'
-    'js.mobile.ios.callbacks.IosCallback': 'ios/callbacks/IosCallback'
-
     # Amber Dashboard components
-    'js.mobile.amber.dashboard': 'main/amber/dashboard/dashboard'
-    'js.mobile.amber.dashboard.controller': 'main/amber/dashboard/controller'
+    'js.mobile.amber.dashboard': 'main/dashboard/amber/dashboard'
+    'js.mobile.amber.dashboard.controller': 'main/dashboard/amber/controller'
 
     # Amber2 Dashboard components
-    'js.mobile.amber2.dashboard': 'main/amber2/dashboard/dashboard'
-    'js.mobile.amber2.dashboard.controller': 'main/amber2/dashboard/controller'
+    'js.mobile.amber2.dashboard': 'main/dashboard/amber2/dashboard'
+    'js.mobile.amber2.dashboard.controller': 'main/dashboard/amber2/controller'
 
     #  Report components
     'js.mobile.report': 'main/report/report'

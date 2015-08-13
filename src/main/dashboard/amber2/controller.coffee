@@ -22,6 +22,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(component.id)
 
     minimizeDashlet: ->
+      @_showDashlets()
       $('.show_chartTypeSelector_wrapper').hide()
 
       dashboardId = @v.dashboard.componentIdDomAttribute
@@ -61,7 +62,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         success: -> processSuccess @
         linkOptions:
           events:
-            click: @_clickCallback
+            click: @_processLinkClicks
         error: @_processErrors
 
     _processSuccess: (dashboard) =>
@@ -97,11 +98,13 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @
-      $(@container).find("[#{dashboardId}] > .dashlet").parent().on 'click', () ->
+      @_getDashlets(dashboardId).on 'click', () ->
         $('.show_chartTypeSelector_wrapper').show()
 
-        id = $(this).attr dashboardId
+        dashlet = $(this)
+        id = dashlet.attr dashboardId
         component = self._getComponentById id
+        self._hideDashlets(dashboardId, dashlet)
 
         if component and !component.maximized
           $(self.container)
@@ -126,19 +129,54 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       )[0]
 
 # Click events
-
-    _clickCallback: (event, link) =>
-      if link.type is "ReportExecution"
-        data =
-          resource: link.parameters._report
-          params: @_collectReportParams link
-        dataString = JSON.stringify(data, null, 4)
-        @callback.onReportExecution dataString
+  	
+    _processLinkClicks: (event, link, defaultHandler) =>
+      type = link.type
+      js_mobile.log "_processLinkClicks: #{JSON.stringify link}"
+      js_mobile.log "type: #{type}"
+      
+      switch type
+        when "ReportExecution" then @_startReportExecution link
+        when "Reference" then @_openRemoteLink link
+        when "LocalAnchor" then defaultHandler.call @
+        when "LocalPage" then defaultHandler.call @
+        when "AdHocExecution" then @_adHocHandler link, defaultHandler
+        else defaultHandler.call @
+    
+    _startReportExecution: (link) =>
+      js_mobile.log "_startReportExecution"
+      js_mobile.log "resource: #{link.parameters._report}"
+      data = 
+        resource : link.parameters._report
+        params : @_collectReportParams link
+      @callback.onReportExecution data  
 
     _collectReportParams: (link) ->
-        params = {}
-        for key of link.parameters
-          if key != '_report'
-            isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
-            params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
-        params
+      params = {}
+      for key of link.parameters
+        if key != '_report'
+          parameters = link.parameters[key]
+          isValueNotArray = Object::toString.call(parameters) != '[object Array]'          
+          params[key] = if isValueNotArray then [parameters] else parameters
+      params
+      
+    _openRemoteLink: (link) =>
+      js_mobile.log "_openRemoteLink"
+      href = link.href
+      @callback.onReferenceClick href
+
+    _adHocHandler: (link, defaultHandler) =>
+      js_mobile.log "_adHocHandler"        
+      defaultHandler.call @
+
+    _getDashlets: (dashboardId) ->
+      if dashboardId?
+        $(@container).find("[#{dashboardId}] > .dashlet").parent()
+      else
+        $(@container).find(".dashlet").parent()
+
+    _hideDashlets: (dashboardId, dashlet) ->
+      @_getDashlets(dashboardId).not(dashlet).css("opacity", 0)
+
+    _showDashlets: ->
+      @_getDashlets().css("opacity", 1)

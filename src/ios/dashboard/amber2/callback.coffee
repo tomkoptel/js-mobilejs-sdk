@@ -1,4 +1,4 @@
-define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
+define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
   CallbackDispatcher = require 'js.mobile.callback_dispatcher'
 
   class IosCallback extends CallbackDispatcher
@@ -50,6 +50,15 @@ define 'js.mobile.ios.callbacks.WebKitCallback', (require) ->
       @_makeCallback {"command" : "onWindowResizeEnd", "parameters" : {}}
       return
 
+    onReportExecution: (data) ->
+      @_makeCallback {"command" : "onReportExecution", "parameters" : data}
+      
+    onReferenceClick: (href) ->
+      @_makeCallback {"command" : "onReferenceClick", "parameters" : {"href": href}}
+      
+    onAdHocExecution: ->
+      @_makeCallback {"command" : "onAdHocExecution", "parameters" : {}}
+    
     _makeCallback: (command) ->
       @dispatch () ->
-        window.webkit.messageHandlers.callback.postMessage(command)
+        window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify command
