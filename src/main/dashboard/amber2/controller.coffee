@@ -72,6 +72,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @container = dashboard.container()
       @_configureComponents()
       @_defineComponentsClickEvent()
+      @_setupFiltersApperance()
       @callback.onLoadDone(@components)
 
     _processErrors: (error) =>
@@ -186,3 +187,16 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
     _setGlobalErrorListener: ->
       window.onerror = (errorMsg, url, lineNumber) =>
         @callback.onWindowError(errorMsg);
+
+
+    _setupFiltersApperance: ->
+      js_mobile.log "setup filters appearence"
+      # bad kostyl    
+      timeout = window.setTimeout () =>
+         divHeight = jQuery(".msPlaceholder > div").css("height")
+         if divHeight != 'undefined'
+           window.clearInterval timeout           
+           jQuery(".msPlaceholder > div").css("height", "")                       
+      , 500      
+      jQuery(".filterRow > div > div").css("height", "")      
+      return
