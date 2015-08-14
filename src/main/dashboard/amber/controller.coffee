@@ -12,7 +12,6 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
     initialize: ->
       @_setGlobalErrorListener()
       @_injectViewport()
-      @_overrideApplyButton()
       @callback.onLoadStart()
       jQuery( document ).ready( () =>
         js_mobile.log "document ready"
@@ -136,13 +135,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       dashlets.unbind()
       self = @
 
-      dashlets.click (event) ->
-        targetClass = jQuery(event.target).attr 'class'
-        # This is a hack!
-        # Ignore click on submit controls inside dashlet
-        if targetClass isnt 'overlay'
-          return
-
+      dashlets.click ->
         overlay = jQuery(@)
         dashlet = overlay.parent()
         innerLabel = dashlet.find('.innerLabel > p')
@@ -189,8 +182,4 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _setGlobalErrorListener: ->
       window.onerror = (errorMsg, url, lineNumber) =>
-        @callback.onWindowError(errorMsg);
-
-    _overrideApplyButton: ->
-      jQuery(".applyButton").click =>
-        @minimizeDashlet()
+        @callback.onWindowError(errorMsg)
