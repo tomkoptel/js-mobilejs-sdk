@@ -182,4 +182,4 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
 
     _setGlobalErrorListener: ->
       window.onerror = (errorMsg, url, lineNumber) =>
-        @callback.onWindowError(errorMsg);
+        @callback.onWindowError(errorMsg)

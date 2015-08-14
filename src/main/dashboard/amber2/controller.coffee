@@ -73,6 +73,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @_configureComponents()
       @_defineComponentsClickEvent()
       @_setupFiltersApperance()
+      @_overrideApplyButton()
       @callback.onLoadDone(@components)
 
     _processErrors: (error) =>
@@ -100,7 +101,13 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       dashboardId = @v.dashboard.componentIdDomAttribute
 
       self = @
-      @_getDashlets(dashboardId).on 'click', () ->
+      @_getDashlets(dashboardId).on 'click', (event) ->
+        targetClass = jQuery(event.target).attr 'class'
+        # This is a hack!
+        # Ignore click on submit controls inside dashlet
+        if targetClass isnt 'overlay'
+          return
+
         $('.show_chartTypeSelector_wrapper').show()
 
         dashlet = $(this)
@@ -131,12 +138,12 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       )[0]
 
 # Click events
-  	
+
     _processLinkClicks: (event, link, defaultHandler) =>
       type = link.type
       js_mobile.log "_processLinkClicks: #{JSON.stringify link}"
       js_mobile.log "type: #{type}"
-      
+
       switch type
         when "ReportExecution" then @_startReportExecution link
         when "Reference" then @_openRemoteLink link
@@ -144,31 +151,31 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         when "LocalPage" then defaultHandler.call @
         when "AdHocExecution" then @_adHocHandler link, defaultHandler
         else defaultHandler.call @
-    
+
     _startReportExecution: (link) =>
       js_mobile.log "_startReportExecution"
       js_mobile.log "resource: #{link.parameters._report}"
-      data = 
+      data =
         resource : link.parameters._report
         params : @_collectReportParams link
-      @callback.onReportExecution data  
+      @callback.onReportExecution data
 
     _collectReportParams: (link) ->
       params = {}
       for key of link.parameters
         if key != '_report'
           parameters = link.parameters[key]
-          isValueNotArray = Object::toString.call(parameters) != '[object Array]'          
+          isValueNotArray = Object::toString.call(parameters) != '[object Array]'
           params[key] = if isValueNotArray then [parameters] else parameters
       params
-      
+
     _openRemoteLink: (link) =>
       js_mobile.log "_openRemoteLink"
       href = link.href
       @callback.onReferenceClick href
 
     _adHocHandler: (link, defaultHandler) =>
-      js_mobile.log "_adHocHandler"        
+      js_mobile.log "_adHocHandler"
       defaultHandler.call @
 
     _getDashlets: (dashboardId) ->
@@ -188,15 +195,18 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       window.onerror = (errorMsg, url, lineNumber) =>
         @callback.onWindowError(errorMsg);
 
-
     _setupFiltersApperance: ->
       js_mobile.log "setup filters appearence"
-      # bad kostyl    
+      # bad kostyl
       timeout = window.setTimeout () =>
          divHeight = jQuery(".msPlaceholder > div").css("height")
          if divHeight != 'undefined'
-           window.clearInterval timeout           
-           jQuery(".msPlaceholder > div").css("height", "")                       
-      , 500      
-      jQuery(".filterRow > div > div").css("height", "")      
+           window.clearInterval timeout
+           jQuery(".msPlaceholder > div").css("height", "")
+      , 500
+      jQuery(".filterRow > div > div").css("height", "")
       return
+
+    _overrideApplyButton: ->
+      jQuery(".applyButton").click =>
+        @minimizeDashlet()
