@@ -45,6 +45,8 @@ define 'js.mobile.report.controller', (reqiure) ->
         @report
           .pages(page)
           .run()
+          .done(@_notifyPageChange)
+          .fail(@_notifyPageChange)
 
     exportReport: (format) ->
       @report.export({ outputFormat: format })
