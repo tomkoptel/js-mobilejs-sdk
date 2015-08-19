@@ -77,5 +77,8 @@ define 'js.mobile.ios.report.callback', (require) ->
     onWindowError: (error) ->
       @_makeCallback "onWindowError&error=#{error}"
 
+    onPageLoadError: (error) ->
+      return
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

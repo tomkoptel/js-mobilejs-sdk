@@ -56,3 +56,7 @@ define 'js.mobile.android.report.callback', (require) ->
     onWindowError: (message) =>
       @dispatch () -> Android.onWindowError(message)
       return
+
+    onPageLoadError: (error, page) =>
+          @dispatch () -> Android.onPageLoadError(error, page)
+          return
