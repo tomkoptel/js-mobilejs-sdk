@@ -46,7 +46,7 @@ define 'js.mobile.report.controller', (reqiure) ->
           .pages(page)
           .run()
           .done(@_notifyPageChange)
-          .fail(@_notifyPageChange)
+          .fail(@_notifyPageChangeError)
 
     exportReport: (format) ->
       @report.export({ outputFormat: format })
@@ -152,7 +152,6 @@ define 'js.mobile.report.controller', (reqiure) ->
           params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
       params
 
-
     _navigateToAnchor: (link) =>
       @report.pages({anchor: link.anchor})
              .run()
@@ -172,6 +171,9 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _notifyPageChange: =>
       @callback.onPageChange parseInt(@report.pages())
+
+    _notifyPageChangeError: (error) =>
+      @callback.onPageLoadError error.message, parseInt(@report.pages())
 
     _exportReport: (format) ->
       js_mobile.log("export with format: " + format)
