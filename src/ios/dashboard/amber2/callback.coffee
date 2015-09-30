@@ -56,15 +56,23 @@ define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
 
     onReportExecution: (data) ->
       @_makeCallback {"command" : "onReportExecution", "parameters" : data}
+      return
       
     onReferenceClick: (href) ->
       @_makeCallback {"command" : "onReferenceClick", "parameters" : {"href": href}}
+      return
       
     onAdHocExecution: ->
       @_makeCallback {"command" : "onAdHocExecution", "parameters" : {}}
+      return
 
     onWindowError: (error) ->
-      @_makeCallback {"command" : "onAdHocExecution", "onWindowError" : {"error": error}}
+      @_makeCallback {"command" : "onWindowError", "parameters" : {"error": error}}
+      return
+
+    logging: (message) ->
+      @_makeCallback {"command" : "logging", "parameters" : {"message" : message}}
+      return
 
     _makeCallback: (command) ->
       @dispatch () ->

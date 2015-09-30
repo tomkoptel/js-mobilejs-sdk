@@ -18,7 +18,7 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(@maximizedComponent.id)
 
     refresh: ->
-      @dashboard.refresh().fail(@_processErrors)
+      @dashboard.refresh().done(@_refreshSuccess).fail(@_processErrors)
 
     minimizeDashlet: ->
       @_showDashlets()
@@ -73,6 +73,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
       @_defineComponentsClickEvent()
       @_setupFiltersApperance()
       @_overrideApplyButton()
+      @callback.onLoadDone(@components)
+    
+    _refreshSuccess: (dashboard) => 
       @callback.onLoadDone(@components)
 
     _processErrors: (error) =>
