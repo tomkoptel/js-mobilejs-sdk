@@ -38,6 +38,10 @@ define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
       @_makeCallback {"command" : "onLoadDone", "parameters" : {"components" : components}}
       return
 
+    onAuthError: (error) ->
+      @_makeCallback {"command" : "onAuthError", "parameters" : {"error" : error}}
+      return
+
     onLoadError: (error) ->
       @_makeCallback {"command" : "onLoadError", "parameters" : {"error" : error}}
       return

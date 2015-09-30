@@ -18,8 +18,9 @@ define 'js.mobile.amber2.dashboard.controller', (require) ->
         @dashboard.refresh(@maximizedComponent.id)
 
     refresh: ->
-      @components.forEach (component) =>
-        @dashboard.refresh(component.id).fail(@_processErrors)
+      @dashboard.refresh().fail(@_processErrors)
+      #@components.forEach (component) =>
+      #  @dashboard.refresh(component.id).fail(@_processErrors)
 
     minimizeDashlet: ->
       @_showDashlets()
