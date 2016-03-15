@@ -38,6 +38,10 @@ define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
       @_makeCallback {"command" : "onLoadDone", "parameters" : {"components" : components}}
       return
 
+    onAuthError: (error) ->
+      @_makeCallback {"command" : "onAuthError", "parameters" : {"error" : error}}
+      return
+
     onLoadError: (error) ->
       @_makeCallback {"command" : "onLoadError", "parameters" : {"error" : error}}
       return
@@ -52,13 +56,24 @@ define 'js.mobile.amber2.ios.dashboard.callback', (require) ->
 
     onReportExecution: (data) ->
       @_makeCallback {"command" : "onReportExecution", "parameters" : data}
+      return
       
     onReferenceClick: (href) ->
       @_makeCallback {"command" : "onReferenceClick", "parameters" : {"href": href}}
+      return
       
     onAdHocExecution: ->
       @_makeCallback {"command" : "onAdHocExecution", "parameters" : {}}
-    
+      return
+
+    onWindowError: (error) ->
+      @_makeCallback {"command" : "onWindowError", "parameters" : {"error": error}}
+      return
+
+    logging: (message) ->
+      @_makeCallback {"command" : "logging", "parameters" : {"message" : message}}
+      return
+
     _makeCallback: (command) ->
       @dispatch () ->
         window.location.href = "http://jaspermobile.callback/json&" + JSON.stringify command

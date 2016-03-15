@@ -10,6 +10,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
       {@callback, @viewport, @scaler} = args
 
     initialize: ->
+      @_setGlobalErrorListener()
       @_injectViewport()
       @callback.onLoadStart()
       jQuery( document ).ready( () =>
@@ -178,3 +179,7 @@ define 'js.mobile.amber.dashboard.controller',(require) ->
         .not(overlay)
         .parent()
         .css("opacity", 0)
+
+    _setGlobalErrorListener: ->
+      window.onerror = (errorMsg, url, lineNumber) =>
+        @callback.onWindowError(errorMsg)

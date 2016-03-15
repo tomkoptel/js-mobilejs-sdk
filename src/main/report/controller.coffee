@@ -19,6 +19,7 @@ define 'js.mobile.report.controller', (reqiure) ->
   #---------------------------------------------------------------------
     runReport: ->
       js_mobile.log "runReport"
+      @_setGlobalErrorListener()
       @scaler.applyScale()
       @callback.onLoadStart()
       @_getServerVersion @_runReportOnTheVersionBasis
@@ -44,6 +45,8 @@ define 'js.mobile.report.controller', (reqiure) ->
         @report
           .pages(page)
           .run()
+          .done(@_notifyPageChange)
+          .fail(@_notifyPageChangeError)
 
     exportReport: (format) ->
       @report.export({ outputFormat: format })
@@ -117,7 +120,7 @@ define 'js.mobile.report.controller', (reqiure) ->
           reportCompleted: @_processReportComplete
           changePagesState: @_processCurrentPageChanged
         success: (parameters) =>
-          @_adjustScaleForReport @report
+          @_adjustScaleForReport()
           @report.container("#container")
             .render()
             .done () => @_processSuccess(parameters)
@@ -139,7 +142,7 @@ define 'js.mobile.report.controller', (reqiure) ->
         resource: link.parameters._report
         params: @_collectReportParams link
       dataString = JSON.stringify(data, null, 4)
-      @callback.onReportExecution dataString 
+      @callback.onReportExecution dataString
 
     _collectReportParams: (link) ->
       params = {}
@@ -148,8 +151,7 @@ define 'js.mobile.report.controller', (reqiure) ->
           isValueNotArray = Object::toString.call(link.parameters[key]) != '[object Array]'
           params[key] = if isValueNotArray then [ link.parameters[key] ] else link.parameters[key]
       params
-        
-        
+
     _navigateToAnchor: (link) =>
       @report.pages({anchor: link.anchor})
              .run()
@@ -169,6 +171,9 @@ define 'js.mobile.report.controller', (reqiure) ->
 
     _notifyPageChange: =>
       @callback.onPageChange parseInt(@report.pages())
+
+    _notifyPageChangeError: (error) =>
+      @callback.onPageLoadError error.message, parseInt(@report.pages())
 
     _exportReport: (format) ->
       js_mobile.log("export with format: " + format)
@@ -199,9 +204,9 @@ define 'js.mobile.report.controller', (reqiure) ->
       for digit, index in digits
         result += digit * Math.pow(10, index * -1)
       return result
-  
-    _updateComponent: (chartType) =>    
-       chartID = @report.data().components[0].id   
+
+    _updateComponent: (chartType) =>
+       chartID = @report.data().components[0].id
        @report.updateComponent(chartID, {chartType: chartType})
               .done( (component) =>
                 @callback.onChartTypeChangedSuccess()
@@ -209,7 +214,7 @@ define 'js.mobile.report.controller', (reqiure) ->
               .fail( (error) =>
                 @callback.onChartTypeChangedFail error
                 return)
-    
+
     _getChartTypeList: () =>
       js_mobile.log "_getChartTypeList"
       chartTypeList = @v.report.chart.types
@@ -254,6 +259,13 @@ define 'js.mobile.report.controller', (reqiure) ->
         when "Reference" then @_openRemoteLink link
         else defaultHandler.call @
 
-    _adjustScaleForReport: (report) ->
+    _adjustScaleForReport: ->
       jQuery(window).resize () =>
-        report.scale("width").run()
+        container = jQuery("#container")[0]
+        container.style.display = 'none'
+        container.offsetHeight
+        container.style.display = ''
+
+    _setGlobalErrorListener: ->
+      window.onerror = (errorMsg, url, lineNumber) =>
+        @callback.onWindowError(errorMsg);

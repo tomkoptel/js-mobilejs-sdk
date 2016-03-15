@@ -74,5 +74,11 @@ define 'js.mobile.ios.report.callback', (require) ->
       @dispatch () ->
         @_makeCallback "reportDidChangeChartTypeFailed&error=" + error
 
+    onWindowError: (error) ->
+      @_makeCallback "onWindowError&error=#{error}"
+
+    onPageLoadError: (error) ->
+      return
+
     _makeCallback: (command) ->
       window.location.href = "http://jaspermobile.callback/" + command

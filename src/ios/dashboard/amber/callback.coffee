@@ -37,6 +37,9 @@ define 'js.mobile.amber.ios.dashboard.callback', (require) ->
       @_makeCallback "windowDidEndResize"
       return
 
+    onWindowError: (error) ->
+      @_makeCallback "onWindowError&error=#{error}"
+
     _makeCallback: (command) ->
       @dispatch () ->
         window.location.href = "http://jaspermobile.callback/" + command
