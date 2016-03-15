@@ -1,7 +1,7 @@
 {
   "name": "js-mobilejs-sdk",
   "version": "0.0.1",
-  "homepage": "https://github.com/Jaspersoft/js-mobilejs-sdk",
+  "homepage": "https://github.com/tomkoptel/js-mobilejs-sdk",
   "authors": [
     "Tom Koptel <tom.koptel@gmail.com>"
   ],
@@ -19,7 +19,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.3",
-    "requirejs": "~2.1.16"
+    "deferred-js": "~1.0.4"
   }
 }

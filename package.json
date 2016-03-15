@@ -3,15 +3,7 @@
   "version": "0.0.1",
   "description": "Wrapper all around Visualize.js calls",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-coffee": "^0.13.0",
-    "grunt-contrib-requirejs": "^0.4.4",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-karma": "^0.10.1",
-    "jasmine-core": "^2.2.0",
-    "karma": "^0.12.31",
-    "karma-jasmine": "^0.3.5",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "karma-requirejs": "^0.2.2"
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0"
   }
 }
